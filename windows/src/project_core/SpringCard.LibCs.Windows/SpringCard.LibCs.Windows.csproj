@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+	 <BaseOutputPath>C:\dev\client.scopus.blackbox\_output</BaseOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\appconfig.cs" Link="appconfig.cs" />
+    <Compile Include="..\..\appmru.cs" Link="appmru.cs" />
+    <Compile Include="..\..\apputils.cs" Link="apputils.cs" />
+    <Compile Include="..\..\ble.cs" Link="ble.cs" />
+    <Compile Include="..\..\console.cs" Link="console.cs" />
+    <Compile Include="..\..\devicemanagement.cs" Link="devicemanagement.cs" />
+    <Compile Include="..\..\devicenotification.cs" Link="devicenotification.cs" />
+    <Compile Include="..\..\drivers.cs" Link="drivers.cs" />
+    <Compile Include="..\..\hid.cs" Link="hid.cs" />
+    <Compile Include="..\..\imageconvert.cs" Link="imageconvert.cs" />
+    <Compile Include="..\..\kernel32.cs" Link="kernel32.cs" />
+    <Compile Include="..\..\LICENSE.cs" Link="LICENSE.cs" />
+    <Compile Include="..\..\mailslotclient.cs" Link="mailslotclient.cs" />
+    <Compile Include="..\..\mailslotserver.cs" Link="mailslotserver.cs" />
+    <Compile Include="..\..\rawprinterhelper.cs" Link="rawprinterhelper.cs" />
+    <Compile Include="..\..\registry.cs" Link="registry.cs" />
+    <Compile Include="..\..\registryconfig.cs" Link="registryconfig.cs" />
+    <Compile Include="..\..\serial.cs" Link="serial.cs" />
+    <Compile Include="..\..\services.cs" Link="services.cs" />
+    <Compile Include="..\..\setupapi.cs" Link="setupapi.cs" />
+    <Compile Include="..\..\setupapi_v1.cs" Link="setupapi_v1.cs" />
+    <Compile Include="..\..\sysinfo.cs" Link="sysinfo.cs" />
+    <Compile Include="..\..\uac.cs" Link="uac.cs" />
+    <Compile Include="..\..\usb.cs" Link="usb.cs" />
+    <Compile Include="..\..\winutils.cs" Link="winutils.cs" />
+    <Compile Include="..\..\wmi.cs" Link="wmi.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="System.IO.Ports" Version="6.0.0" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
+    <PackageReference Include="System.Security.Permissions" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\utils\project_core\SpringCard.LibCs.Translations\SpringCard.LibCs.Translations.csproj" />
+    <ProjectReference Include="..\..\..\utils\project_core\SpringCard.LibCs\SpringCard.LibCs.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) C:\dev\_libraries\dotnet\$(TargetFrameWork)&#xD;&#xA;%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) C:\dev\client.scopus.blackbox\_output\$(TargetFrameWork)" />
+  </Target>
+
+</Project>

@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{AF872A31-915B-4DFF-978E-16D5017FFEFE}</ProjectGuid>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SpringCard.PCSC.Forms</RootNamespace>
+    <AssemblyName>SpringCard.PCSC.Forms</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>..\..\_output</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\..\_output</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>..\..\_output</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="SpringCard.Bluetooth">
+      <HintPath>..\..\..\_libraries\net48\SpringCard.Bluetooth.dll</HintPath>
+    </Reference>
+    <Reference Include="SpringCard.LibCs, Version=19.8.7193.32067, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_libraries\net48\SpringCard.LibCs.dll</HintPath>
+    </Reference>
+    <Reference Include="SpringCard.LibCs.GetText">
+      <HintPath>..\..\..\_libraries\net48\SpringCard.LibCs.GetText.dll</HintPath>
+    </Reference>
+    <Reference Include="SpringCard.LibCs.Translations">
+      <HintPath>..\..\..\_libraries\net48\SpringCard.LibCs.Translations.dll</HintPath>
+    </Reference>
+    <Reference Include="SpringCard.LibCs.Windows, Version=19.2.7193.32070, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_libraries\net48\SpringCard.LibCs.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="SpringCard.LibCs.Windows.Forms, Version=19.2.7193.32071, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_libraries\net48\SpringCard.LibCs.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\Forms\ReaderSelectAnyForm.cs">
+      <Link>ReaderSelectAnyForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ReaderSelectAnyForm.Designer.cs">
+      <Link>ReaderSelectAnyForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ReaderSelectForm.cs">
+      <Link>ReaderSelectForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ReaderSelectForm.Designer.cs">
+      <Link>ReaderSelectForm.Designer.cs</Link>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SpringCard.PCSC.ZeroDriver\SpringCard.PCSC.ZeroDriver.csproj">
+      <Project>{044a8bab-fc28-4ebc-9aa5-ab958efa6c76}</Project>
+      <Name>SpringCard.PCSC.ZeroDriver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpringCard.PCSC\SpringCard.PCSC.csproj">
+      <Project>{eec59d80-1ae3-4771-981e-15518cbef5ca}</Project>
+      <Name>SpringCard.PCSC</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\src\Forms\ReaderSelectAnyForm.resx">
+      <Link>ReaderSelectAnyForm.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\ReaderSelectForm.resx">
+      <Link>ReaderSelectForm.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net48</PostBuildEvent>
+  </PropertyGroup>
+</Project>

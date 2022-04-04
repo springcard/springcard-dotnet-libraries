@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.LibCs", "SpringCard.LibCs\SpringCard.LibCs.csproj", "{D9558EB9-6481-40D0-AD4A-8C1E21F56E2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.LibCs.Translations", "SpringCard.LibCs.Translations\SpringCard.LibCs.Translations.csproj", "{10A7B335-9F94-46C0-B9E1-B7E3B676C12C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.LibCs.GetText", "SpringCard.LibCs.GetText\SpringCard.LibCs.GetText.csproj", "{6FB6787E-307C-4FAC-B0FC-5627F368EB93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.LibCs.Crypto", "SpringCard.LibCs.Crypto\SpringCard.LibCs.Crypto.csproj", "{A1882142-226D-4D4E-8F9F-501836447CD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.LibCs.Net.Telnet", "SpringCard.LibCs.Net.Telnet\SpringCard.LibCs.Net.Telnet.csproj", "{949C5211-BBB5-4219-A06F-10460AD06E2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9558EB9-6481-40D0-AD4A-8C1E21F56E2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9558EB9-6481-40D0-AD4A-8C1E21F56E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9558EB9-6481-40D0-AD4A-8C1E21F56E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9558EB9-6481-40D0-AD4A-8C1E21F56E2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10A7B335-9F94-46C0-B9E1-B7E3B676C12C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10A7B335-9F94-46C0-B9E1-B7E3B676C12C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10A7B335-9F94-46C0-B9E1-B7E3B676C12C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10A7B335-9F94-46C0-B9E1-B7E3B676C12C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FB6787E-307C-4FAC-B0FC-5627F368EB93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FB6787E-307C-4FAC-B0FC-5627F368EB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FB6787E-307C-4FAC-B0FC-5627F368EB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FB6787E-307C-4FAC-B0FC-5627F368EB93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1882142-226D-4D4E-8F9F-501836447CD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1882142-226D-4D4E-8F9F-501836447CD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1882142-226D-4D4E-8F9F-501836447CD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1882142-226D-4D4E-8F9F-501836447CD0}.Release|Any CPU.Build.0 = Release|Any CPU		
+		{949C5211-BBB5-4219-A06F-10460AD06E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{949C5211-BBB5-4219-A06F-10460AD06E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{949C5211-BBB5-4219-A06F-10460AD06E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{949C5211-BBB5-4219-A06F-10460AD06E2A}.Release|Any CPU.Build.0 = Release|Any CPU				
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F101D720-CFE4-4716-83B9-327AB2E417FE}
+	EndGlobalSection
+EndGlobal

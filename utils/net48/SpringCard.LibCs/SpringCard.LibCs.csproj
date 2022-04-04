@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{D9558EB9-6481-40D0-AD4A-8C1E21F56E2B}</ProjectGuid>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SpringCard.LibCs</RootNamespace>
+    <AssemblyName>SpringCard.LibCs</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>False</DebugSymbols>
+    <OutputPath>..\..\..\_output\net48\</OutputPath>
+    <IntermediateOutputPath>..\..\..\_obj\net48\</IntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\appcheck.cs">
+      <Link>appcheck.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\appinfo.cs">
+      <Link>appinfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\appupdater.cs">
+      <Link>appupdater.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\asn1tlv.cs">
+      <Link>asn1tlv.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\binconvert.cs">
+      <Link>binconvert.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\binutils.cs">
+      <Link>binutils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\cfgfile.cs">
+      <Link>cfgfile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\cliutils.cs">
+      <Link>cliutils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\commsettings.cs">
+      <Link>commsettings.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\config.cs">
+      <Link>config.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\csvfile.cs">
+      <Link>csvfile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\fileutils.cs">
+      <Link>fileutils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\gelf.cs">
+      <Link>gelf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\getopt.cs">
+      <Link>getopt.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\getoptlong.cs">
+      <Link>getoptlong.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\hash.cs">
+      <Link>hash.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\inifile.cs">
+      <Link>inifile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\interactions.cs">
+      <Link>interactions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\json.cs">
+      <Link>json.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\jsonconfig.cs">
+      <Link>jsonconfig.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\keyvalue.cs">
+      <Link>keyvalue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\LICENSE.cs">
+      <Link>LICENSE.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\logger-win.cs">
+      <Link>logger-win.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\logger.cs">
+      <Link>logger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\phpdefinefile.cs">
+      <Link>phpdefinefile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\ping.cs">
+      <Link>ping.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\random.cs">
+      <Link>random.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\rawdata.cs">
+      <Link>rawdata.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\restclient.cs">
+      <Link>restclient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\strutils.cs">
+      <Link>strutils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\syslog.cs">
+      <Link>syslog.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\systemexec.cs">
+      <Link>systemexec.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\systeminfo.cs">
+      <Link>systeminfo.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\src\Gnu.Getopt.MessagesBundle.resx">
+      <Link>Gnu.Getopt.MessagesBundle.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist $(TargetDir)fr mkdir $(TargetDir)fr
+copy $(ProjectDir)..\..\src\po\fr\*.mo $(TargetDir)fr /y
+call %25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net48
+call %25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetDir)fr\*.mo I:\projects\binaries\libraries\net48\fr\
+</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SpringCard.LibCs.Windows\n"
+"POT-Creation-Date: 2020-08-13 11:24+0200\n"
+"PO-Revision-Date: 2020-08-13 11:25+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3.1\n"
+"X-Poedit-Basepath: ../..\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-KeywordsList: ;T\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: Forms/AboutForm.cs:46
+msgid "Libraries"
+msgstr "Librairies"
+
+#: Forms/AboutForm.cs:47
+msgid "Drivers"
+msgstr "Pilotes"
+
+#: Forms/AboutForm.cs:48
+msgid "System"
+msgstr "Système"
+
+#: Forms/AboutForm.cs:49
+msgid "License"
+msgstr "Licences"
+
+#: Forms/AboutForm.cs:50
+msgid "Trademarks"
+msgstr "Trademarks"
+
+#: Forms/AboutForm.cs:51
+msgid "Credits"
+msgstr "Crédits"
+
+#: Forms/AboutForm.cs:52
+msgid "More..."
+msgstr "Plus..."
+
+#: Forms/AboutForm.cs:54
+msgid "Copy information to clipboard"
+msgstr "Copier vers le presse-papier"
+
+#: Forms/AboutForm.cs:56
+msgid "About..."
+msgstr "A propos..."
+
+#: Forms/AboutForm.cs:63
+#, csharp-format
+msgid "About {0}"
+msgstr "A propos de {0}"
+
+#: Forms/CreatePassphraseForm.cs:24
+msgid "Encrypt content"
+msgstr "Crypter le contenu"
+
+#: Forms/CreatePassphraseForm.cs:25
+msgid ""
+"This content will be protected by a passphrase. It is important that you "
+"keep this passphrase secret, and do not forget it."
+msgstr ""
+"Ce contenu doit être protégé par une passphrase (\"phrase de passe\"). Il "
+"est important que cette passphrase reste secrète, mais vous ne devez surtout "
+"pas l'oublier."
+
+#: Forms/CreatePassphraseForm.cs:26 Forms/EnterPassphraseForm.cs:26
+msgid "Passphrase:"
+msgstr "Phrase secrète:"
+
+#: Forms/CreatePassphraseForm.cs:29 Forms/EnterPassphraseForm.cs:30
+msgid "OK"
+msgstr "OK"
+
+#: Forms/CreatePassphraseForm.cs:30 Forms/EnterPassphraseForm.cs:31
+#: Forms/WizardParentForm.cs:108
+msgid "Cancel"
+msgstr "Annuler"
+
+#: Forms/EnterPassphraseForm.cs:24
+msgid "Encrypted content"
+msgstr "Contenu crypté"
+
+#: Forms/EnterPassphraseForm.cs:25
+msgid "This content is protected. Please enter the passphrase to decrypt it."
+msgstr ""
+"Ce contenu est protégé par une phrase secrète (passphrase). Veuillez saisir "
+"la phrase secrète pour le décrypter."
+
+#: Forms/EnterPassphraseForm.cs:27
+msgid "Show passphrase"
+msgstr "Afficher la phrase secrète"
+
+#: Forms/EnterPassphraseForm.cs:28
+msgid "Remember this passphrase until I close the application"
+msgstr ""
+"Ne plus me redemander la phrase secrète  jusqu'à la fermeture de "
+"l'application"
+
+#: Forms/WizardParentForm.cs:111
+msgid "Close"
+msgstr "Fermer"
+
+#: Forms/WizardParentForm.cs:114
+msgid "Exit"
+msgstr "Sortir"
+
+#: Forms/WizardParentForm.cs:117 Forms/WizardParentForm.cs:168
+msgid "Terminate"
+msgstr "Terminer"
+
+#: Forms/WizardParentForm.cs:159
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: Forms/WizardParentForm.cs:162
+msgid "Apply"
+msgstr "Appliquer"
+
+#: Forms/WizardParentForm.cs:165
+msgid "Save"
+msgstr "Enregistrer"
+
+#~ msgid "Clear list"
+#~ msgstr "Vider la liste"
+
+#~ msgid "Bad argument"
+#~ msgstr "Argument incorrect"
+
+#~ msgid "This is a fatal error. The application will now terminate."
+#~ msgstr "Ceci est une erreur fatale. L'application va se terminer."
+
+#~ msgid "Versions"
+#~ msgstr "Versions"

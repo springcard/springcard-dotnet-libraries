@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6FB6787E-307C-4FAC-B0FC-5627F368EB93}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SpringCard.LibCs.GetText</RootNamespace>
+    <AssemblyName>SpringCard.LibCs.GetText</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>false</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>False</DebugSymbols>
+    <OutputPath>..\..\..\_output\net48\</OutputPath>
+	<IntermediateOutputPath >..\..\..\_obj\net48\</IntermediateOutputPath>	
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\GetText\Catalog.cs">
+      <Link>Catalog.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\ICatalog.cs">
+      <Link>ICatalog.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Loaders\BigEndianBinaryReader.cs">
+      <Link>BigEndianBinaryReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Loaders\CatalogLoadingException.cs">
+      <Link>CatalogLoadingException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Loaders\ContentType.cs">
+      <Link>ContentType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Loaders\ILoader.cs">
+      <Link>ILoader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Loaders\MoAstPluralLoader.cs">
+      <Link>MoAstPluralLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Loaders\MoFile.cs">
+      <Link>MoFile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Loaders\MoFileParser.cs">
+      <Link>MoFileParser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Loaders\MoLoader.cs">
+      <Link>MoLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Loaders\ReadOnlyStreamWrapper.cs">
+      <Link>ReadOnlyStreamWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\AstPluralRule.cs">
+      <Link>AstPluralRule.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\AstPluralRuleGenerator.cs">
+      <Link>AstPluralRuleGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\Ast\AstTokenParser.cs">
+      <Link>AstTokenParser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\Ast\ParserException.cs">
+      <Link>ParserException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\Ast\Token.cs">
+      <Link>Token.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\Ast\TokenDefinition.cs">
+      <Link>TokenDefinition.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\Ast\TokenType.cs">
+      <Link>TokenType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\DefaultPluralRuleGenerator.cs">
+      <Link>DefaultPluralRuleGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\IPluralRule.cs">
+      <Link>IPluralRule.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\IPluralRuleGenerator.cs">
+      <Link>IPluralRuleGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\IPluralRuleTextParser.cs">
+      <Link>IPluralRuleTextParser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\PluralRule.cs">
+      <Link>PluralRule.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\GetText\Plural\PluralRuleEvaluatorDelegate.cs">
+      <Link>PluralRuleEvaluatorDelegate.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SpringCard.LibCs\SpringCard.LibCs.csproj">
+      <Project>{d9558eb9-6481-40d0-ad4a-8c1e21f56e2b}</Project>
+      <Name>SpringCard.LibCs</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net48</PostBuildEvent>
+  </PropertyGroup>
+</Project>

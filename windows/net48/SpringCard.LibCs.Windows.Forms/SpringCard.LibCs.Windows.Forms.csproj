@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1FFC44E3-6F7E-4970-9A22-2E6E744DF81D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SpringCard.LibCs.Windows.Forms</RootNamespace>
+    <AssemblyName>SpringCard.LibCs.Windows.Forms</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\_output\net48</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\_output\net48</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="SpringCard.LibCs, Version=19.8.7193.32067, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_libraries\net48\SpringCard.LibCs.dll</HintPath>
+    </Reference>
+    <Reference Include="SpringCard.LibCs.Translations, Version=19.3.7193.32068, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_libraries\net48\SpringCard.LibCs.Translations.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\Forms\AboutForm.cs">
+      <Link>AboutForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\AboutForm.designer.cs">
+      <Link>AboutForm.designer.cs</Link>
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\CreatePassphraseForm.cs">
+      <Link>CreatePassphraseForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\CreatePassphraseForm.designer.cs">
+      <Link>CreatePassphraseForm.designer.cs</Link>
+      <DependentUpon>CreatePassphraseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\CreatePasswordForm.cs">
+      <Link>CreatePasswordForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\CreatePasswordForm.designer.cs">
+      <Link>CreatePasswordForm.designer.cs</Link>
+      <DependentUpon>CreatePasswordForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\EnterPassphraseForm.cs">
+      <Link>EnterPassphraseForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\EnterPassphraseForm.designer.cs">
+      <Link>EnterPassphraseForm.designer.cs</Link>
+      <DependentUpon>EnterPassphraseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\EnterPasswordForm.cs">
+      <Link>EnterPasswordForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\EnterPasswordForm.designer.cs">
+      <Link>EnterPasswordForm.designer.cs</Link>
+      <DependentUpon>EnterPasswordForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\FormStyle.cs">
+      <Link>FormStyle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Forms\InfoForm.cs">
+      <Link>InfoForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\InfoForm.Designer.cs">
+      <Link>InfoForm.Designer.cs</Link>
+      <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\InputDialogForm.cs">
+      <Link>InputDialogForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\InputDialogForm.designer.cs">
+      <Link>InputDialogForm.designer.cs</Link>
+      <DependentUpon>InputDialogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\Interactions.cs">
+      <Link>Interactions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ProgressForm.cs">
+      <Link>ProgressForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ProgressForm.designer.cs">
+      <Link>ProgressForm.designer.cs</Link>
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ShadowForm.cs">
+      <Link>ShadowForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ShadowForm.designer.cs">
+      <Link>ShadowForm.designer.cs</Link>
+      <DependentUpon>ShadowForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\SplashForm.cs">
+      <Link>SplashForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\SplashForm.designer.cs">
+      <Link>SplashForm.designer.cs</Link>
+      <DependentUpon>SplashForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\TextForm.cs">
+      <Link>TextForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\TextForm.designer.cs">
+      <Link>TextForm.designer.cs</Link>
+      <DependentUpon>TextForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ToastForm.cs">
+      <Link>ToastForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ToastForm.designer.cs">
+      <Link>ToastForm.designer.cs</Link>
+      <DependentUpon>ToastForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\WizardChildForm.cs">
+      <Link>WizardChildForm.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Forms\WizardParentForm.cs">
+      <Link>WizardParentForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\WizardParentForm.designer.cs">
+      <Link>WizardParentForm.designer.cs</Link>
+      <DependentUpon>WizardParentForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\src\Forms\AboutForm.fr.resx">
+      <Link>AboutForm.fr.resx</Link>
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\AboutForm.resx">
+      <Link>AboutForm.resx</Link>
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\CreatePassphraseForm.resx">
+      <Link>CreatePassphraseForm.resx</Link>
+      <DependentUpon>CreatePassphraseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\CreatePasswordForm.resx">
+      <Link>CreatePasswordForm.resx</Link>
+      <DependentUpon>CreatePasswordForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\EnterPassphraseForm.resx">
+      <Link>EnterPassphraseForm.resx</Link>
+      <DependentUpon>EnterPassphraseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\EnterPasswordForm.resx">
+      <Link>EnterPasswordForm.resx</Link>
+      <DependentUpon>EnterPasswordForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\InfoForm.resx">
+      <Link>InfoForm.resx</Link>
+      <DependentUpon>InfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\InputDialogForm.resx">
+      <Link>InputDialogForm.resx</Link>
+      <DependentUpon>InputDialogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\ProgressForm.resx">
+      <Link>ProgressForm.resx</Link>
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\ShadowForm.resx">
+      <Link>ShadowForm.resx</Link>
+      <DependentUpon>ShadowForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\SplashForm.resx">
+      <Link>SplashForm.resx</Link>
+      <DependentUpon>SplashForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\TextForm.resx">
+      <Link>TextForm.resx</Link>
+      <DependentUpon>TextForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\ToastForm.resx">
+      <Link>ToastForm.resx</Link>
+      <DependentUpon>ToastForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\WizardParentForm.resx">
+      <Link>WizardParentForm.resx</Link>
+      <DependentUpon>WizardParentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SpringCard.LibCs.Windows\SpringCard.LibCs.Windows.csproj">
+      <Project>{a87c6e07-75ed-45af-9587-767289896057}</Project>
+      <Name>SpringCard.LibCs.Windows</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IPAddressControl\" />
+    <Folder Include="NewFolder1\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net48
+call %25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetDir)fr\*.mo I:\projects\binaries\libraries\net48\fr\
+call %25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetDir)fr\*.dll I:\projects\binaries\libraries\net48\fr\</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

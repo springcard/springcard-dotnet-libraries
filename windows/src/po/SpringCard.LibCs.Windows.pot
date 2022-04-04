@@ -1,0 +1,188 @@
+# LANGUAGE translation of SpringCard.LibCs
+# Copyright 2014-2015 Springcard <contact@springcard.com>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: SpringCard.LibCs\n"
+"POT-Creation-Date: 2022-03-15 16:03+0100\n"
+"PO-Revision-Date: 2017-11-23T16:19:46\n"
+"Last-Translator: Hervé Thouzard <support@springcard.com>\n"
+"Language-Team: \n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n>1);\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: T._\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: Forms/AboutForm.cs:47
+msgid "Libraries"
+msgstr ""
+
+#: Forms/AboutForm.cs:48
+msgid "Drivers"
+msgstr ""
+
+#: Forms/AboutForm.cs:49
+msgid "System"
+msgstr ""
+
+#: Forms/AboutForm.cs:50
+msgid "License"
+msgstr ""
+
+#: Forms/AboutForm.cs:51
+msgid "Trademarks"
+msgstr ""
+
+#: Forms/AboutForm.cs:52
+msgid "Credits"
+msgstr ""
+
+#: Forms/AboutForm.cs:53
+msgid "More..."
+msgstr ""
+
+#: Forms/AboutForm.cs:55
+msgid "Copy information to clipboard"
+msgstr ""
+
+#: Forms/AboutForm.cs:57
+msgid "About..."
+msgstr ""
+
+#: Forms/AboutForm.cs:64
+#, csharp-format
+msgid "About {0}"
+msgstr ""
+
+#: Forms/CreatePassphraseForm.cs:24 Forms/CreatePasswordForm.cs:24
+msgid "Encrypt content"
+msgstr ""
+
+#: Forms/CreatePassphraseForm.cs:25
+msgid "This content will be protected by a passphrase. It is important that you keep this passphrase secret, and do not forget it."
+msgstr ""
+
+#: Forms/CreatePassphraseForm.cs:26 Forms/EnterPassphraseForm.cs:26
+msgid "Passphrase:"
+msgstr ""
+
+#: Forms/CreatePassphraseForm.cs:29 Forms/CreatePasswordForm.cs:29
+#: Forms/EnterPassphraseForm.cs:30 Forms/EnterPasswordForm.cs:30
+#: Forms/InputDialogForm.cs:26
+msgid "OK"
+msgstr ""
+
+#: Forms/CreatePassphraseForm.cs:30 Forms/CreatePasswordForm.cs:30
+#: Forms/EnterPassphraseForm.cs:31 Forms/EnterPasswordForm.cs:31
+#: Forms/InputDialogForm.cs:27 Forms/ProgressForm.cs:27
+#: Forms/WizardParentForm.cs:109
+msgid "Cancel"
+msgstr ""
+
+#: Forms/CreatePasswordForm.cs:25
+msgid "This content will be protected by a password. It is important that you keep this password secret, and do not forget it."
+msgstr ""
+
+#: Forms/CreatePasswordForm.cs:26 Forms/EnterPasswordForm.cs:26
+msgid "Password:"
+msgstr ""
+
+#: Forms/EnterPassphraseForm.cs:24 Forms/EnterPasswordForm.cs:24
+msgid "Encrypted content"
+msgstr ""
+
+#: Forms/EnterPassphraseForm.cs:25
+msgid "This content is protected. Please enter the passphrase to decrypt it."
+msgstr ""
+
+#: Forms/EnterPassphraseForm.cs:27
+msgid "Show passphrase"
+msgstr ""
+
+#: Forms/EnterPassphraseForm.cs:28
+msgid "Remember this passphrase until I close the application"
+msgstr ""
+
+#: Forms/EnterPasswordForm.cs:25
+msgid "This content is protected. Please enter the password to decrypt it."
+msgstr ""
+
+#: Forms/EnterPasswordForm.cs:27
+msgid "Show password"
+msgstr ""
+
+#: Forms/EnterPasswordForm.cs:28
+msgid "Remember this password until I close the application"
+msgstr ""
+
+#: Forms/InputDialogForm.cs:24
+msgid "Input dialog"
+msgstr ""
+
+#: Forms/InputDialogForm.cs:25
+msgid "This is a generic prompt. Please personalize."
+msgstr ""
+
+#: Forms/ProgressForm.cs:24 Forms/ProgressForm.cs:25 Forms/ProgressForm.cs:26
+#: Forms/ProgressForm.cs:49 Forms/ProgressForm.cs:63
+msgid "Please wait..."
+msgstr ""
+
+#: Forms/ProgressForm.cs:73
+#, csharp-format
+msgid "{0}% complete"
+msgstr ""
+
+#: Forms/ProgressForm.cs:83
+msgid "Done"
+msgstr ""
+
+#: Forms/SplashForm.cs:52
+msgid "This application is a free, unsupported software."
+msgstr ""
+
+#: Forms/SplashForm.cs:53
+msgid "See the LICENSE.txt file or the \"About\" box for details."
+msgstr ""
+
+#: Forms/WizardParentForm.cs:112
+msgid "Close"
+msgstr ""
+
+#: Forms/WizardParentForm.cs:115
+msgid "Exit"
+msgstr ""
+
+#: Forms/WizardParentForm.cs:118 Forms/WizardParentForm.cs:169
+msgid "Terminate"
+msgstr ""
+
+#: Forms/WizardParentForm.cs:160
+msgid "Confirm"
+msgstr ""
+
+#: Forms/WizardParentForm.cs:163
+msgid "Apply"
+msgstr ""
+
+#: Forms/WizardParentForm.cs:166
+msgid "Save"
+msgstr ""
+
+#: appmru.cs:119
+msgid "Clear list"
+msgstr ""
+
+#: appmru.cs:227
+msgid "Bad argument"
+msgstr ""
+
+#: winutils.cs:22
+msgid "This is a fatal error. The application will now terminate."
+msgstr ""

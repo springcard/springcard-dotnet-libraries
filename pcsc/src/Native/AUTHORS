@@ -1,0 +1,18 @@
+pcsc-sharp:
+-----------------------------------------------------------
+Main author:
+- Daniel Mueller <daniel@danm.de>
+
+Various contributors providing bugfixes and new features. 
+  Please see git log at github.com!
+
+Type and attribute description for pcsc-sharp
+-----------------------------------------------------------
+- Daniel Mueller <daniel@danm.de>
+
+Parts of the documentation taken from PC/SC-Lite:
+	Main authors:
+		- David Corcoran <corcoran@linuxnet.com>
+		- Ludovic Rousseau <ludovic.rousseau@free.fr>
+		- Damien Sauveron <sauveron@labri.fr>
+

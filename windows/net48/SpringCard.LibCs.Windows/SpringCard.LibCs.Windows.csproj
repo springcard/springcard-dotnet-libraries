@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{A87C6E07-75ED-45AF-9587-767289896057}</ProjectGuid>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SpringCard.LibCs.Windows</RootNamespace>
+    <AssemblyName>SpringCard.LibCs.Windows</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworkProfile />
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>..\..\..\_output\net48</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\..\..\_output\net48</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>..\..\..\_output\net48</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="SpringCard.LibCs, Version=19.8.7193.32067, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_libraries\net48\SpringCard.LibCs.dll</HintPath>
+    </Reference>
+    <Reference Include="SpringCard.LibCs.Translations, Version=19.3.7193.32068, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_libraries\net48\SpringCard.LibCs.Translations.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\appconfig.cs">
+      <Link>appconfig.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\appmru.cs">
+      <Link>appmru.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\apputils.cs">
+      <Link>apputils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\console.cs">
+      <Link>console.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Controls\ColorWheel\ColorChangedEventArgs.cs">
+      <Link>Controls\ColorWheel\ColorChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Controls\ColorWheel\ColorChooser.cs">
+      <Link>Controls\ColorWheel\ColorChooser.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Controls\ColorWheel\ColorChooser.Designer.cs">
+      <Link>Controls\ColorWheel\ColorChooser.Designer.cs</Link>
+      <DependentUpon>ColorChooser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Controls\ColorWheel\ColorHelper.cs">
+      <Link>Controls\ColorWheel\ColorHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Controls\ColorWheel\ColorWheel.cs">
+      <Link>Controls\ColorWheel\ColorWheel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Controls\ColorWheel\HSV.cs">
+      <Link>Controls\ColorWheel\HSV.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Controls\ColorWheel\RGB.cs">
+      <Link>Controls\ColorWheel\RGB.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Controls\ColorWheel\ScreenColorPicker.cs">
+      <Link>Controls\ColorWheel\ScreenColorPicker.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Controls\ColorWheel\ScreenColorPicker.Designer.cs">
+      <Link>Controls\ColorWheel\ScreenColorPicker.Designer.cs</Link>
+      <DependentUpon>ScreenColorPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Controls\DataGrid\DataGridButtonCellEx.cs">
+      <Link>Controls\DataGridButtonCellEx\DataGridButtonCellEx.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\Controls\EXListView\EXComboBox.cs">
+      <Link>Controls\EXListView\EXComboBox.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Controls\EXListView\EXListView.cs">
+      <Link>Controls\EXListView\EXListView.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\..\src\devicemanagement.cs">
+      <Link>devicemanagement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\drivers.cs">
+      <Link>drivers.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\hid.cs">
+      <Link>hid.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\imageconvert.cs">
+      <Link>imageconvert.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\kernel32.cs">
+      <Link>kernel32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\LICENSE.cs">
+      <Link>LICENSE.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\mailslotclient.cs">
+      <Link>mailslotclient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\mailslotserver.cs">
+      <Link>mailslotserver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\registry.cs">
+      <Link>registry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\registryconfig.cs">
+      <Link>registryconfig.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\serial.cs">
+      <Link>serial.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\services.cs">
+      <Link>services.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\setupapi.cs">
+      <Link>setupapi.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\sysinfo.cs">
+      <Link>sysinfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\uac.cs">
+      <Link>uac.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\usb.cs">
+      <Link>usb.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\winutils.cs">
+      <Link>winutils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\wmi.cs">
+      <Link>wmi.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\src\Controls\ColorWheel\ColorChooser.resx">
+      <Link>Controls\ColorWheel\ColorChooser.resx</Link>
+      <DependentUpon>ColorChooser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Controls\ColorWheel\ScreenColorPicker.resx">
+      <Link>Controls\ColorWheel\ScreenColorPicker.resx</Link>
+      <DependentUpon>ScreenColorPicker.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist $(TargetDir)fr mkdir $(TargetDir)fr
+copy $(ProjectDir)..\..\src\po\fr\*.mo $(TargetDir)fr /y
+call %25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net48
+call %25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetDir)fr\*.mo I:\projects\binaries\libraries\net48\fr\</PostBuildEvent>
+  </PropertyGroup>
+</Project>
