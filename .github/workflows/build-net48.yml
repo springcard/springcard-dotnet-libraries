@@ -32,7 +32,23 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
 
-    # Run build-net48.cmd
-    - name: Build libraries
-      run: build-net48.cmd
+    # Show where we are 
+    - name: Show where we are 
+      run: dir /s
 
+    # Build the libraries one after the other
+
+    - name: Build main utility library
+      run: msbuild utils\net48\SpringCard.LibCs.sln /target:Build /property:Configuration=Release
+
+    - name: Building Windows utility library
+      run: msbuild windows\net48\SpringCard.LibCs.Windows.sln /target:Build /property:Configuration=Release
+
+    - name: Building Bluetooth library
+      run: msbuild bluetooth\net48\SpringCard.Bluetooth.sln /target:Build /property:Configuration=Release
+
+    - name: Building PC/SC library
+      run: msbuild pcsc\net48\SpringCard.PCSC.sln /target:Build /property:Configuration=Release
+
+    - name: Building PC/SC helper libraries
+      run: msbuild pcsc-helpers\net48\SpringCard.PCSC-Helpers.sln /target:Build /property:Configuration=Release
