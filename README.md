@@ -2,11 +2,9 @@
 
 This repository stores all the .NET libraries that are referenced by SpringCard's SDK and related software.
 
-## Documentation
+## Legal disclaimer
 
-All these libraries are self-documented using Doxygen.
-
-Official documantions are published by SpringCard on [https://docs.springcard.com/](https://docs.springcard.com/).
+THE SDK IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ## License
 
@@ -68,3 +66,12 @@ Projects have been created with Visual Studio 2022.
 
 Building from the command line is easy using `DOTNET.EXE`. Use the `BUILD-NET60.CMD` file at the root to build all the projects in a row.
 
+## Documentation
+
+All the libraries are self-documented using Doxygen.
+
+Official documentation is published by SpringCard on [docs.springcard.com/](https://docs.springcard.com/).
+
+## How to contact us
+
+Retrieve all our contact details on [www.springcard.com/contact](https://www.springcard.com/en/contact).
