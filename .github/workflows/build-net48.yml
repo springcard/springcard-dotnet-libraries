@@ -39,7 +39,7 @@ jobs:
     # Build the libraries one after the other
 
     - name: Restore packages for main utility library
-      run: msbuild utils\net48\SpringCard.LibCs.sln /target:Restore
+      run: msbuild utils\net48\SpringCard.LibCs.sln /target:Restore /property:Configuration=Release 
 
     - name: Build main utility library
       run: msbuild utils\net48\SpringCard.LibCs.sln /target:Build /property:Configuration=Release /property:PostBuildEvent=
@@ -48,7 +48,7 @@ jobs:
       run: xcopy /s /e /y _output\net48 _libraries\net48
 
     - name: Restore packages for Windows utility library
-      run: msbuild utils\net48\SpringCard.LibCs.Windows.sln /target:Restore
+      run: msbuild utils\net48\SpringCard.LibCs.Windows.sln /target:Restore /property:Configuration=Release 
 
     - name: Building Windows utility library
       run: msbuild windows\net48\SpringCard.LibCs.Windows.sln /target:Build /property:Configuration=Release /property:PostBuildEvent=
@@ -57,7 +57,7 @@ jobs:
       run: xcopy /s /e /y _output\net48 _libraries\net48
 
     - name: Restore packages for Bluetooth library
-      run: msbuild utils\net48\SpringCard.Bluetooth.sln /target:Restore
+      run: msbuild utils\net48\SpringCard.Bluetooth.sln /target:Restore /property:Configuration=Release 
 
     - name: Building Bluetooth library
       run: msbuild bluetooth\net48\SpringCard.Bluetooth.sln /target:Build /property:Configuration=Release /property:PostBuildEvent=
@@ -66,7 +66,7 @@ jobs:
       run: xcopy /s /e /y _output\net48 _libraries\net48
 
     - name: Restore packages for PC/SC library
-      run: msbuild utils\net48\SpringCard.PCSC.sln /target:Restore
+      run: msbuild utils\net48\SpringCard.PCSC.sln /target:Restore /property:Configuration=Release 
 
     - name: Building PC/SC library
       run: msbuild pcsc\net48\SpringCard.PCSC.sln /target:Build /property:Configuration=Release /property:PostBuildEvent=
@@ -75,7 +75,7 @@ jobs:
       run: xcopy /s /e /y _output\net48 _libraries\net48
       
     - name: Restore packages for PC/SC helper libraries
-      run: msbuild utils\net48\SpringCard.PCSC-Helpers.sln /target:Restore     
+      run: msbuild utils\net48\SpringCard.PCSC-Helpers.sln /target:Restore /property:Configuration=Release
 
     - name: Building PC/SC helper libraries
       run: msbuild pcsc-helpers\net48\SpringCard.PCSC-Helpers.sln /target:Build /property:Configuration=Release /property:PostBuildEvent=
