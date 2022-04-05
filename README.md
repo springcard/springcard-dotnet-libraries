@@ -66,6 +66,10 @@ Projects have been created with Visual Studio 2022.
 
 Building from the command line is easy using `DOTNET.EXE`. Use the `BUILD-NET60.CMD` file at the root to build all the projects in a row.
 
+## Downloading pre-compiled binaries
+
+Pre-compiled binaries are regularly released on [github.com/springcard/springcard-dotnet-libraries/releases](https://github.com/springcard/springcard-dotnet-libraries/releases).
+
 ## Documentation
 
 All the libraries are self-documented using Doxygen.
