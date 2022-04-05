@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputPath>..\..\..\_output\net60</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <DebugType>none</DebugType>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	<Deterministic>false</Deterministic>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net60&#xD;&#xA;" />
+	</Target>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV.cs" Link="SamAV.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_activation.cs" Link="SamAV_activation.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_authentication.cs" Link="SamAV_authentication.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_commands.cs" Link="SamAV_commands.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_consts.cs" Link="SamAV_consts.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_crypto.cs" Link="SamAV_crypto.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_desfire.cs" Link="SamAV_desfire.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_entries.cs" Link="SamAV_entries.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_enums.cs" Link="SamAV_enums.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_exchange.cs" Link="SamAV_exchange.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_files.cs" Link="SamAV_files.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_info.cs" Link="SamAV_info.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_interfaces.cs" Link="SamAV_interfaces.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_KUC.cs" Link="SamAV_KUC.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_lock_unlock.cs" Link="SamAV_lock_unlock.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_management.cs" Link="SamAV_management.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_offline.cs" Link="SamAV_offline.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_PKI.cs" Link="SamAV_PKI.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_transmit.cs" Link="SamAV_transmit.cs" />
+    <Compile Include="..\..\src\CardHelpers\SamAV\SamAV_utils.cs" Link="SamAV_utils.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpringCard.PCSC.CardHelpers.Desfire\SpringCard.PCSC.CardHelpers.Desfire.csproj" />
+    <ProjectReference Include="..\SpringCard.PCSC.CardHelpers\SpringCard.PCSC.CardHelpers.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="SpringCard.LibCs">
+	    <HintPath>..\..\..\_libraries\net60\SpringCard.LibCs.dll</HintPath>
+	  </Reference>
+	  <Reference Include="SpringCard.LibCs">
+	    <HintPath>..\..\..\_libraries\net60\SpringCard.LibCs.Crypto.dll</HintPath>
+	  </Reference>		
+	  <Reference Include="SpringCard.PCSC">
+	    <HintPath>..\..\..\_libraries\net60\SpringCard.PCSC.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+</Project>

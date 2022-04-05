@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <OutputPath>..\..\..\_output\net60</OutputPath>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	  <DebugType>none</DebugType>
+	  <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	  <Deterministic>false</Deterministic>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net60&#xD;&#xA;" />
+  </Target>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\GetText\Catalog.cs" Link="Catalog.cs" />
+    <Compile Include="..\..\src\GetText\ICatalog.cs" Link="ICatalog.cs" />
+    <Compile Include="..\..\src\GetText\Loaders\BigEndianBinaryReader.cs" Link="BigEndianBinaryReader.cs" />
+    <Compile Include="..\..\src\GetText\Loaders\CatalogLoadingException.cs" Link="CatalogLoadingException.cs" />
+    <Compile Include="..\..\src\GetText\Loaders\ContentType.cs" Link="ContentType.cs" />
+    <Compile Include="..\..\src\GetText\Loaders\ILoader.cs" Link="ILoader.cs" />
+    <Compile Include="..\..\src\GetText\Loaders\MoAstPluralLoader.cs" Link="MoAstPluralLoader.cs" />
+    <Compile Include="..\..\src\GetText\Loaders\MoFile.cs" Link="MoFile.cs" />
+    <Compile Include="..\..\src\GetText\Loaders\MoFileParser.cs" Link="MoFileParser.cs" />
+    <Compile Include="..\..\src\GetText\Loaders\MoLoader.cs" Link="MoLoader.cs" />
+    <Compile Include="..\..\src\GetText\Loaders\ReadOnlyStreamWrapper.cs" Link="ReadOnlyStreamWrapper.cs" />
+    <Compile Include="..\..\src\GetText\Plural\AstPluralRule.cs" Link="AstPluralRule.cs" />
+    <Compile Include="..\..\src\GetText\Plural\AstPluralRuleGenerator.cs" Link="AstPluralRuleGenerator.cs" />
+    <Compile Include="..\..\src\GetText\Plural\Ast\AstTokenParser.cs" Link="AstTokenParser.cs" />
+    <Compile Include="..\..\src\GetText\Plural\Ast\ParserException.cs" Link="ParserException.cs" />
+    <Compile Include="..\..\src\GetText\Plural\Ast\Token.cs" Link="Token.cs" />
+    <Compile Include="..\..\src\GetText\Plural\Ast\TokenDefinition.cs" Link="TokenDefinition.cs" />
+    <Compile Include="..\..\src\GetText\Plural\Ast\TokenType.cs" Link="TokenType.cs" />
+    <Compile Include="..\..\src\GetText\Plural\DefaultPluralRuleGenerator.cs" Link="DefaultPluralRuleGenerator.cs" />
+    <Compile Include="..\..\src\GetText\Plural\IPluralRule.cs" Link="IPluralRule.cs" />
+    <Compile Include="..\..\src\GetText\Plural\IPluralRuleGenerator.cs" Link="IPluralRuleGenerator.cs" />
+    <Compile Include="..\..\src\GetText\Plural\IPluralRuleTextParser.cs" Link="IPluralRuleTextParser.cs" />
+    <Compile Include="..\..\src\GetText\Plural\PluralRule.cs" Link="PluralRule.cs" />
+    <Compile Include="..\..\src\GetText\Plural\PluralRuleEvaluatorDelegate.cs" Link="PluralRuleEvaluatorDelegate.cs" />
+  </ItemGroup>
+
+
+</Project>

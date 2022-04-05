@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputPath>..\..\..\_output\net60</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <DebugType>none</DebugType>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	<Deterministic>false</Deterministic>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net60&#xD;&#xA;" />
+	</Target>
+
+	<ItemGroup>
+    <Compile Include="..\..\src\appinfo.cs" Link="appinfo.cs" />
+    <Compile Include="..\..\src\appupdater.cs" Link="appupdater.cs" />
+    <Compile Include="..\..\src\asn1tlv.cs" Link="asn1tlv.cs" />
+    <Compile Include="..\..\src\binconvert.cs" Link="binconvert.cs" />
+    <Compile Include="..\..\src\binutils.cs" Link="binutils.cs" />
+    <Compile Include="..\..\src\cfgfile.cs" Link="cfgfile.cs" />
+    <Compile Include="..\..\src\cliutils.cs" Link="cliutils.cs" />
+    <Compile Include="..\..\src\commsettings.cs" Link="commsettings.cs" />
+    <Compile Include="..\..\src\config.cs" Link="config.cs" />
+    <Compile Include="..\..\src\csvfile.cs" Link="csvfile.cs" />
+    <Compile Include="..\..\src\fileutils.cs" Link="fileutils.cs" />
+    <Compile Include="..\..\src\gelf.cs" Link="gelf.cs" />
+    <Compile Include="..\..\src\getopt.cs" Link="getopt.cs" />
+    <Compile Include="..\..\src\getoptlong.cs" Link="getoptlong.cs" />
+    <Compile Include="..\..\src\hash.cs" Link="hash.cs" />
+    <Compile Include="..\..\src\inifile.cs" Link="inifile.cs" />
+    <Compile Include="..\..\src\interactions.cs" Link="interactions.cs" />
+    <Compile Include="..\..\src\json.cs" Link="json.cs" />
+    <Compile Include="..\..\src\jsonconfig.cs" Link="jsonconfig.cs" />
+    <Compile Include="..\..\src\keyvalue.cs" Link="keyvalue.cs" />
+    <Compile Include="..\..\src\LICENSE.cs" Link="LICENSE.cs" />
+    <Compile Include="..\..\src\logger.cs" Link="logger.cs" />
+    <Compile Include="..\..\src\phpdefinefile.cs" Link="phpdefinefile.cs" />
+    <Compile Include="..\..\src\ping.cs" Link="ping.cs" />
+    <Compile Include="..\..\src\random.cs" Link="random.cs" />
+    <Compile Include="..\..\src\rawdata.cs" Link="rawdata.cs" />
+    <Compile Include="..\..\src\restclient.cs" Link="restclient.cs" />
+    <Compile Include="..\..\src\strutils.cs" Link="strutils.cs" />
+    <Compile Include="..\..\src\syslog.cs" Link="syslog.cs" />
+    <Compile Include="..\..\src\systemexec.cs" Link="systemexec.cs" />
+    <Compile Include="..\..\src\systeminfo.cs" Link="systeminfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\src\Gnu.Getopt.MessagesBundle.resx" Link="Gnu.Getopt.MessagesBundle.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="6.0.0" />
+    <PackageReference Include="System.IO.Ports" Version="6.0.0" />
+    <PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
+  </ItemGroup>
+
+</Project>

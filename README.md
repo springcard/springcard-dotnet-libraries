@@ -10,6 +10,7 @@ Official documantions are published by SpringCard on [https://docs.springcard.co
 
 ## License
 
+```text
 This software is part of SPRINGCARD SDKs
 
 Redistribution and use in source (source code) and binary (object code) forms, with or without modification, are permitted provided that the following conditions are met :
@@ -27,6 +28,7 @@ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WA
 SPRINGCARD DOES NOT WARRANT THAT THE FUNCTIONS CONTAINED IN THIS SOFTWARE WILL MEET THE USER'S REQUIREMENTS OR THAT THE OPERATION OF IT WILL BE UNINTERRUPTED OR ERROR-FREE.
 
 IN NO EVENT SHALL SPRINGCARD BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```
 
 ## Available libraries
 
@@ -50,15 +52,27 @@ Platform-agnostic utilities.
 
 Utilities for the Windows platform.
 
-## Target platform
+## Target platforms
 
-All these libraries target .NET Framework 4.8 (net48).
+All the libraries target .NET Framework 4.8 (`net48`).
+
+Some of the libraries target the .NET Core 6 (`net60`) as well.
 
 ## Building the libraries
 
-Every library comes with its project for the Microsoft Visual Studio IDE (.sln and .csproj).
+## Net48 targets
+
+Every library comes with its project for the Microsoft Visual Studio IDE (.sln and .csproj) in a subdirectory named `net48`.
 
 Projects have been created with Visual Studio 2017, then updated with Visual Studio 2019, and finally have updated with Visual Studio 2022.
 
-Building from the command line is easy using `MSBUILD.EXE`. Use the `BUILD.CMD` file at the root to build all the projects in a row.
+Building from the command line is easy using `MSBUILD.EXE`. Use the `BUILD-NET48.CMD` file at the root to build all the projects in a row.
+
+### Net60 targets
+
+Every library comes with its project for the Microsoft Visual Studio IDE (.sln and .csproj) in a subdirectory named `net60`.
+
+Projects have been created with Visual Studio 2022.
+
+Building from the command line is easy using `DOTNET.EXE`. Use the `BUILD-NET60.CMD` file at the root to build all the projects in a row.
 

@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputPath>..\..\..\_output\net60</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <DebugType>none</DebugType>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	<Deterministic>false</Deterministic>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net60&#xD;&#xA;" />
+	</Target>
+
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath></OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\Native\ISCardAPI.cs" Link="Native\ISCardAPI.cs" />
+    <Compile Include="..\..\src\Native\Linux\DLOPEN_FLAGS.cs" Link="Native\Linux\DLOPEN_FLAGS.cs" />
+    <Compile Include="..\..\src\Native\Linux\LinuxNativeMethods.cs" Link="Native\Linux\LinuxNativeMethods.cs" />
+    <Compile Include="..\..\src\Native\Linux\PCSCliteLinux.cs" Link="Native\Linux\PCSCliteLinux.cs" />
+    <Compile Include="..\..\src\Native\Linux\SCARD_IO_REQUEST.cs" Link="Native\Linux\SCARD_IO_REQUEST.cs" />
+    <Compile Include="..\..\src\Native\Linux\SCARD_READERSTATE.cs" Link="Native\Linux\SCARD_READERSTATE.cs" />
+    <Compile Include="..\..\src\Native\MacOSX\DLOPEN_FLAGS.cs" Link="Native\MacOSX\DLOPEN_FLAGS.cs" />
+    <Compile Include="..\..\src\Native\MacOSX\MacOsxNativeMethods.cs" Link="Native\MacOSX\MacOsxNativeMethods.cs" />
+    <Compile Include="..\..\src\Native\MacOSX\PCSCliteMacOsX.cs" Link="Native\MacOSX\PCSCliteMacOsX.cs" />
+    <Compile Include="..\..\src\Native\MacOSX\SCARD_IO_REQUEST.cs" Link="Native\MacOSX\SCARD_IO_REQUEST.cs" />
+    <Compile Include="..\..\src\Native\MacOSX\SCARD_READERSTATE.cs" Link="Native\MacOSX\SCARD_READERSTATE.cs" />
+    <Compile Include="..\..\src\Native\Platform.cs" Link="Native\Platform.cs" />
+    <Compile Include="..\..\src\Native\Unix\Native.cs" Link="Native\Unix\Native.cs" />
+    <Compile Include="..\..\src\Native\Windows\SCardStateWindows.cs" Link="Native\Windows\SCardStateWindows.cs" />
+    <Compile Include="..\..\src\Native\Windows\SCARD_IO_REQUEST.cs" Link="Native\Windows\SCARD_IO_REQUEST.cs" />
+    <Compile Include="..\..\src\Native\Windows\SCARD_READERSTATE.cs" Link="Native\Windows\SCARD_READERSTATE.cs" />
+    <Compile Include="..\..\src\Native\Windows\WinSCardAPI.cs" Link="Native\Windows\WinSCardAPI.cs" />
+    <Compile Include="..\..\src\SpringCardPCSC.cs" Link="SpringCardPCSC.cs" />
+    <Compile Include="..\..\src\SpringCardPCSC_CardBuffer.cs" Link="SpringCardPCSC_CardBuffer.cs" />
+    <Compile Include="..\..\src\SpringCardPCSC_CardChannel.cs" Link="SpringCardPCSC_CardChannel.cs" />
+    <Compile Include="..\..\src\SpringCardPCSC_CardReader.cs" Link="SpringCardPCSC_CardReader.cs" />
+    <Compile Include="..\..\src\SpringCardPCSC_Interfaces.cs" Link="SpringCardPCSC_Interfaces.cs" />
+    <Compile Include="..\..\src\SpringCardPCSC_ReaderList.cs" Link="SpringCardPCSC_ReaderList.cs" />
+    <Compile Include="..\..\src\SpringCardPCSC_Text.cs" Link="SpringCardPCSC_Text.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SpringCard.LibCs">
+      <HintPath>..\..\..\_libraries\net60\SpringCard.LibCs.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Native\Linux\" />
+    <Folder Include="Native\MacOSX\" />
+    <Folder Include="Native\Windows\" />
+    <Folder Include="Native\Unix\" />
+  </ItemGroup>
+
+</Project>

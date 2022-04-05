@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputPath>..\..\..\_output\net60</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <DebugType>none</DebugType>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	<Deterministic>false</Deterministic>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net60&#xD;&#xA;" />
+	</Target>
+
+	<ItemGroup>
+	  <Compile Include="..\..\src\CardHelpers\SpringCardPCSC_CardHelper.cs" Link="SpringCardPCSC_CardHelper.cs" />
+	  <Compile Include="..\..\src\CardHelpers\SpringCardPCSC_UserInteraction.cs" Link="SpringCardPCSC_UserInteraction.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="SpringCard.LibCs">
+	    <HintPath>..\..\..\_libraries\net60\SpringCard.LibCs.dll</HintPath>
+	  </Reference>
+	  <Reference Include="SpringCard.PCSC">
+	    <HintPath>..\..\..\_libraries\net60\SpringCard.PCSC.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+</Project>

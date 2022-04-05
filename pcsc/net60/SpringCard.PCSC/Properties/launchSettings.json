@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SpringCard.PCSC": {
+      "commandName": "Executable",
+      "executablePath": "C:\\dev\\client.scopus.blackbox\\_output\\$(TargetFrameWork)\\ScopusTools.exe",
+      "commandLineArgs": "list-readers -v6"
+    }
+  }
+}

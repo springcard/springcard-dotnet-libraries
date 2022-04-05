@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<OutputPath>..\..\..\_output\net60</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<DebugType>none</DebugType>
+		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+		<Deterministic>false</Deterministic>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net60&#xD;&#xA;" />
+	</Target>
+
+	<ItemGroup>
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire.cs" Link="DESFire.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_auth.cs" Link="DESFire_auth.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_cipher.cs" Link="DESFire_cipher.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_cmac.cs" Link="DESFire_cmac.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_const.cs" Link="DESFire_const.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_core.cs" Link="DESFire_core.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_crc.cs" Link="DESFire_crc.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_crypto.cs" Link="DESFire_crypto.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_entries.cs" Link="DESFire_entries.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_files.cs" Link="DESFire_files.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_keys.cs" Link="DESFire_keys.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_mac.cs" Link="DESFire_mac.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_mgmt.cs" Link="DESFire_mgmt.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_read.cs" Link="DESFire_read.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_records.cs" Link="DESFire_records.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_trans.cs" Link="DESFire_trans.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_types.cs" Link="DESFire_types.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_value.cs" Link="DESFire_value.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_wrap.cs" Link="DESFire_wrap.cs" />
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_write.cs" Link="DESFire_write.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpringCard.PCSC.CardHelpers\SpringCard.PCSC.CardHelpers.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="SpringCard.LibCs">
+			<HintPath>..\..\..\_libraries\net60\SpringCard.LibCs.dll</HintPath>
+		</Reference>
+		<Reference Include="SpringCard.PCSC">
+			<HintPath>..\..\..\_libraries\net60\SpringCard.PCSC.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+</Project>

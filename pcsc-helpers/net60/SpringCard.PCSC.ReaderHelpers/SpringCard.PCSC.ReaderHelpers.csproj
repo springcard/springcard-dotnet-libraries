@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<OutputPath>..\..\..\_output\net60</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<DebugType>none</DebugType>
+		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+		<Deterministic>false</Deterministic>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net60&#xD;&#xA;" />
+	</Target>
+
+	<ItemGroup>
+    <Compile Include="..\..\src\ReaderHelpers\SpringCardPCSC_BridgeStatus.cs" Link="SpringCardPCSC_BridgeStatus.cs" />
+    <Compile Include="..\..\src\ReaderHelpers\SpringCardPCSC_DriverProtect.cs" Link="SpringCardPCSC_DriverProtect.cs" />
+    <Compile Include="..\..\src\ReaderHelpers\SpringCardPCSC_NoSmartcardDriver.cs" Link="SpringCardPCSC_NoSmartcardDriver.cs" />
+    <Compile Include="..\..\src\ReaderHelpers\SpringCardPCSC_Reader.cs" Link="SpringCardPCSC_Reader.cs" />
+    <Compile Include="..\..\src\ReaderHelpers\SpringCardPCSC_ReaderControl.cs" Link="SpringCardPCSC_ReaderControl.cs" />
+    <Compile Include="..\..\src\ReaderHelpers\SpringCardPCSC_ReaderInfos.cs" Link="SpringCardPCSC_ReaderInfos.cs" />
+    <Compile Include="..\..\src\ReaderHelpers\SpringCardPCSC_Secure.cs" Link="SpringCardPCSC_Secure.cs" />
+    <Compile Include="..\..\src\ReaderHelpers\SpringCardPCSC_SpringCore.cs" Link="SpringCardPCSC_SpringCore.cs" />
+    <Compile Include="..\..\src\ReaderHelpers\SpringCardPCSC_SpringProx.cs" Link="SpringCardPCSC_SpringProx.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SpringCard.LibCs">
+      <HintPath>..\..\..\_libraries\net60\SpringCard.LibCs.dll</HintPath>
+    </Reference>
+    <Reference Include="SpringCard.PCSC">
+      <HintPath>..\..\..\_libraries\net60\SpringCard.PCSC.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <OutputPath>..\..\..\_output\net60</OutputPath>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	  <DebugType>none</DebugType>
+	  <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	  <Deterministic>false</Deterministic>
+	  <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="%25DGIT_DRIVE%25\Builder\Dgit\dgit-maybe-copy.cmd $(TargetPath) I:\projects\binaries\libraries\net60&#xD;&#xA;" />
+  </Target>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\Translations\translatable.cs" Link="translatable.cs" />
+    <Compile Include="..\..\src\Translations\translations.cs" Link="translations.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpringCard.LibCs.GetText\SpringCard.LibCs.GetText.csproj" />
+    <ProjectReference Include="..\SpringCard.LibCs\SpringCard.LibCs.csproj" />
+  </ItemGroup>
+
+</Project>
