@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SpringCard SAS, France")]
 [assembly: AssemblyProduct("SpringCard.PCSC (.NET framework 4.8)")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCopyright("Copyright ©  2019-2023")]
 [assembly: AssemblyTrademark ("This program is an unsupported sample software from SpringCard's SDK. You may use it freely, but only together with a genuine SpringCard device. Please read the associated LICENSE.txt file for further information.")]
 [assembly: AssemblyCulture("")]
 
@@ -23,5 +23,5 @@ using System.Runtime.InteropServices;
 //
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de build et de révision par défaut
 // en utilisant '*', comme indiqué ci-dessous :
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("10.0.*")]
+// [assembly: AssemblyVersion("23.02.*")]
+[assembly: AssemblyVersion("23.02.*")]

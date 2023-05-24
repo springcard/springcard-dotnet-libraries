@@ -44,6 +44,11 @@ namespace Test
             AboutForm.DoShowDialog(this, FormStyle.ModernWhite);
         }
 
+        private void btnAboutBlack_Click(object sender, EventArgs e)
+        {
+            AboutForm.DoShowDialog(this, FormStyle.ModernBlack);
+        }
+
         private void btnSplashClassic_Click(object sender, EventArgs e)
         {
             SplashForm.DoShowDialog(this, FormStyle.Classical);
@@ -69,6 +74,12 @@ namespace Test
             SplashForm.DoShowDialog(this, FormStyle.ModernWhite);
         }
 
+        private void btnSplashBlack_Click(object sender, EventArgs e)
+        {
+            SplashForm.DoShowDialog(this, FormStyle.ModernBlack);
+        }
+
+
         private void btnInputDialog_Click(object sender, EventArgs e)
         {
             if (InputDialogForm.Display("Entrez un texte", "S'il vous plait", "(Valeur par défaut)", out string Result, this))
@@ -81,17 +92,17 @@ namespace Test
         {
             Console.WriteLine("TEST USB");
 
-            List<WMI.DeviceInfo> devices = USB.EnumDevices_Serial();
+            List<USB.DeviceInfo> devices = USB.EnumDevices_Serial();
 
-            foreach (WMI.DeviceInfo device in devices)
+            foreach (USB.DeviceInfo device in devices)
             {
-                Console.WriteLine(device.Type);
+                Console.WriteLine(device.Mode);
                 Console.WriteLine(device.FriendlyName);
                 Console.WriteLine(device.Service);
                 Console.WriteLine(device.SerialNumber);
                 Console.WriteLine(device.Description);
-                Console.WriteLine("{0:X04} {1:X04}", device.wVendorID, device.wProductID);
-                string commPortName = Serial.GetDeviceCommPortName(device);
+                Console.WriteLine("{0:X04} {1:X04}", device.wVendorId, device.wProductId);
+                string commPortName = SERIAL.GetDeviceCommPortName(device);
                 Console.WriteLine(commPortName);
 
                 Console.WriteLine();
@@ -108,6 +119,59 @@ namespace Test
             {
                 MessageBox.Show(this, "Not private!");
             }
+        }
+
+        private void btnLogViewer_Click(object sender, EventArgs e)
+        {
+            ViewLoggerForm f = new ViewLoggerForm();
+            f.Show(this);
+        }
+
+        private void btnLogCatcher_Click(object sender, EventArgs e)
+        {
+            ViewLoggerForm f = new ViewLoggerForm();
+            f.BeginLive(true);
+            f.Show(this);
+        }
+
+        private void btnAboutAccent1Red_Click(object sender, EventArgs e)
+        {
+            AboutForm.DoShowDialog(this, FormStyle.ModernAccent1Red);
+        }
+
+        private void btnSplashAccent1Red_Click(object sender, EventArgs e)
+        {
+            SplashForm.DoShowDialog(this, FormStyle.ModernAccent1Red);
+        }
+
+        private void btnAboutAccent1_Click(object sender, EventArgs e)
+        {
+            AboutForm.DoShowDialog(this, FormStyle.ModernAccent1);
+        }
+
+        private void btnSplashAccent1_Click(object sender, EventArgs e)
+        {
+            SplashForm.DoShowDialog(this, FormStyle.ModernAccent1);
+        }
+
+        private void btnAboutAccent2Red_Click(object sender, EventArgs e)
+        {
+            AboutForm.DoShowDialog(this, FormStyle.ModernAccent2Red);
+        }
+
+        private void btnSplashAccent2Red_Click(object sender, EventArgs e)
+        {
+            SplashForm.DoShowDialog(this, FormStyle.ModernAccent2Red);
+        }
+
+        private void btnAboutAccent2_Click(object sender, EventArgs e)
+        {
+            AboutForm.DoShowDialog(this, FormStyle.ModernAccent2);
+        }
+
+        private void btnSplashAccent2_Click(object sender, EventArgs e)
+        {
+            SplashForm.DoShowDialog(this, FormStyle.ModernAccent2);
         }
     }
 }

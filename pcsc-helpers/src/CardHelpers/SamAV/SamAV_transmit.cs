@@ -11,16 +11,17 @@ namespace SpringCard.PCSC.CardHelpers
     {
         private RAPDU Transmit(CAPDU capdu)
         {
-            Logger.Debug("<{0}", capdu.AsString());
+            Logger.Debug("SAM<{0}", capdu.AsString());
             RAPDU result = samReader.Transmit(capdu);
             if (result == null)
             {
-                Logger.Debug(">!");
+                Logger.Debug("SAM> (PC/SC error)");
                 OnCommunicationError();
             }
             else
             {
-                Logger.Debug(">{0}", result.AsString());
+                Logger.Debug("SAM>{0}", result.AsString());
+                _StatusWord = result.SW;
             }
             return result;
         }

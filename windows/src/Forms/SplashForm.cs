@@ -8,6 +8,7 @@
  */
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -88,82 +89,85 @@ namespace SpringCard.LibCs.Windows.Forms
             form = new SplashForm();
             form.style = style;
 
-            form.imgSplashLight.Visible = false;
-            form.imgSplashRed.Visible = false;
-            form.imgSplashMarroon.Visible = false;
+            Forms.ApplyStyle(form, style);
+
+            Color backColor;
+            Color textColor;
+            Color accentColor;
 
             switch (style)
             {
                 case FormStyle.ModernMarroon:
-                    form.lbProduct.BackColor = Forms.MarroonColor;
-                    form.lbDisclaimer1.BackColor = Forms.MarroonColor;
-                    form.lbDisclaimer2.BackColor = Forms.MarroonColor;
-                    form.lbDisclaimer3.BackColor = Forms.MarroonColor;
-                    form.lbCopyright.BackColor = Forms.DarkMarroonColor;
-                    form.lbVersion.BackColor = Forms.DarkMarroonColor;
-                    form.lbProduct.ForeColor = Forms.WhiteColor;
-                    form.lbDisclaimer1.ForeColor = Forms.WhiteColor;
-                    form.lbDisclaimer2.ForeColor = Forms.WhiteColor;
-                    form.lbDisclaimer3.ForeColor = Forms.WhiteColor;
-                    form.lbCopyright.ForeColor = Forms.WhiteColor;
-                    form.lbVersion.ForeColor = Forms.WhiteColor;
-                    form.imgSplashMarroon.Visible = true;
+                    backColor = Forms.MarroonColor;
+                    accentColor = Forms.DarkMarroonColor;
+                    textColor = Forms.WhiteColor;
                     break;
 
                 case FormStyle.ModernRed:
-                    form.lbProduct.BackColor = Forms.RedColor;
-                    form.lbDisclaimer1.BackColor = Forms.RedColor;
-                    form.lbDisclaimer2.BackColor = Forms.RedColor;
-                    form.lbDisclaimer3.BackColor = Forms.RedColor;
-                    form.lbCopyright.BackColor = Forms.DarkRedColor;
-                    form.lbVersion.BackColor = Forms.DarkRedColor;
-                    form.lbProduct.ForeColor = Forms.WhiteColor;
-                    form.lbDisclaimer1.ForeColor = Forms.WhiteColor;
-                    form.lbDisclaimer2.ForeColor = Forms.WhiteColor;
-                    form.lbDisclaimer3.ForeColor = Forms.WhiteColor;
-                    form.lbCopyright.ForeColor = Forms.WhiteColor;
-                    form.lbVersion.ForeColor = Forms.WhiteColor;
-                    form.imgSplashRed.Visible = true;
+                    backColor = Forms.RedColor;
+                    accentColor = Forms.DarkRedColor;
+                    textColor = Forms.WhiteColor;
                     break;
 
                 case FormStyle.ModernWhite:
-                    form.BackColor = Forms.WhiteColor;
-                    form.lbProduct.BackColor = Forms.WhiteColor;
-                    form.lbDisclaimer1.BackColor = Forms.WhiteColor;
-                    form.lbDisclaimer2.BackColor = Forms.WhiteColor;
-                    form.lbDisclaimer3.BackColor = Forms.WhiteColor;
-                    form.lbCopyright.BackColor = Forms.DarkWhiteColor;
-                    form.lbVersion.BackColor = Forms.DarkWhiteColor;
-                    form.lbProduct.ForeColor = Forms.BlackColor;
-                    form.lbDisclaimer1.ForeColor = Forms.BlackColor;
-                    form.lbDisclaimer2.ForeColor = Forms.BlackColor;
-                    form.lbDisclaimer3.ForeColor = Forms.BlackColor;
-                    form.lbCopyright.ForeColor = Forms.BlackColor;
-                    form.lbVersion.ForeColor = Forms.BlackColor;
-                    form.pBottomWhite.BackColor = Forms.DarkWhiteColor;
-                    form.pBottomWhite.Visible = true;
-                    form.imgSplashWhite.Visible = true;
+                    backColor = Forms.WhiteColor;
+                    accentColor = Forms.DarkWhiteColor;
+                    textColor = Forms.BlackColor;
+                    break;
+
+                case FormStyle.ModernBlack:
+                    backColor = Forms.BlackColor;
+                    accentColor = Forms.GreyColor;
+                    textColor = Forms.WhiteColor;
+                    break;
+
+                case FormStyle.ModernAccent1Red:
+                case FormStyle.ModernAccent1:
+                    backColor = Forms.Accent1Color;
+                    accentColor = Forms.GreyColor;
+                    textColor = Forms.WhiteColor;
+                    break;
+
+                case FormStyle.ModernAccent2Red:
+                case FormStyle.ModernAccent2:
+                    backColor = Forms.Accent2Color;
+                    accentColor = Forms.GreyColor;
+                    textColor = Forms.WhiteColor;
                     break;
 
                 case FormStyle.Classical:
                 case FormStyle.Default:
                 case FormStyle.Modern:
                 default:
-                    form.lbProduct.BackColor = Forms.ClassicColor;
-                    form.lbDisclaimer1.BackColor = Forms.ClassicColor;
-                    form.lbDisclaimer2.BackColor = Forms.ClassicColor;
-                    form.lbDisclaimer3.BackColor = Forms.ClassicColor;
-                    form.lbCopyright.BackColor = Forms.DarkClassicColor;
-                    form.lbVersion.BackColor = Forms.DarkClassicColor;
-                    form.lbProduct.ForeColor = Forms.BlackColor;
-                    form.lbDisclaimer1.ForeColor = Forms.BlackColor;
-                    form.lbDisclaimer2.ForeColor = Forms.BlackColor;
-                    form.lbDisclaimer3.ForeColor = Forms.BlackColor;
-                    form.lbCopyright.ForeColor = Forms.BlackColor;
-                    form.lbVersion.ForeColor = Forms.BlackColor;
-                    form.imgSplashLight.Visible = true;
+                    backColor = Forms.ClassicColor;
+                    accentColor = Forms.DarkClassicColor;
+                    textColor = Forms.BlackColor;
                     break;
             }
+
+            form.BackColor = backColor;
+
+            form.lbProduct.BackColor = backColor;
+            form.lbDisclaimer1.BackColor = backColor;
+            form.lbDisclaimer2.BackColor = backColor;
+            form.lbDisclaimer3.BackColor = backColor;
+
+            form.pBottom.BackColor = accentColor;
+            form.lbCopyright.BackColor = accentColor;
+            form.lbVersion.BackColor = accentColor;
+
+            form.lbProduct.ForeColor = textColor;
+            form.lbDisclaimer1.ForeColor = textColor;
+            form.lbDisclaimer2.ForeColor = textColor;
+            form.lbDisclaimer3.ForeColor = textColor;
+            form.lbCopyright.ForeColor = textColor;
+            form.lbVersion.ForeColor = textColor;
+
+            form.lbPrivate.BackColor = textColor;
+            form.lbPrivate.ForeColor = accentColor;
+
+
+
             if (parent != null)
             {
                 form.StartPosition = FormStartPosition.CenterParent;

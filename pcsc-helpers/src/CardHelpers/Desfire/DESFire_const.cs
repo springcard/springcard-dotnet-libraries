@@ -23,13 +23,14 @@ namespace SpringCard.PCSC.CardHelpers
         const UInt32 SCARD_E_CARD_UNSUPPORTED = 0x8010001C;
 
         const byte APPLICATION_ID_SIZE = 3;
-        const int MAX_INFO_FRAME_SIZE = 60;
-
+        /* FSC=5 (64 bytes buffer), including the ISO overhead(PCB, optional CID and 2-byte EDC for the 16-bit CRC). */
+        const int MAX_INFO_FRAME_SIZE = 64;
         const byte INF = 0;
 
         const byte WANTS_OPERATION_OK = 0x01;
         const byte WANTS_ADDITIONAL_FRAME = 0x02;
 
+        const byte NO_CHECK_RESPONSE_LENGTH = 0x04;
         const byte FAST_CHAINING_ALLOWED = 0x08;
 
         const byte APPEND_COMMAND_CMAC = 0x10;
@@ -73,6 +74,7 @@ namespace SpringCard.PCSC.CardHelpers
         public const byte DF_AUTHENTICATE_ISO = 0x1A;
         public const byte DF_LIMITED_CREDIT = 0x1C;
         public const byte DF_WRITE_RECORD = 0x3B;
+        public const byte DF_READ_SIGN = 0x3C;
         public const byte DF_WRITE_DATA = 0x3D;
         public const byte DF_GET_KEY_SETTINGS = 0x45;
         public const byte DF_GET_CARD_UID = 0x51;
@@ -92,10 +94,15 @@ namespace SpringCard.PCSC.CardHelpers
         public const byte DF_GET_DF_NAMES = 0x6D;
         public const byte DF_GET_FREE_MEMORY = 0x6E;
         public const byte DF_GET_FILE_IDS = 0x6F;
-        public const byte DF_AUTHENTICATHE_EV2_FIRST = 0x71;
+        public const byte DF_AUTHENTICATE_EV2_FIRST = 0x71;
         public const byte DF_AUTHENTICATHE_EV2_NONFIRST = 0x77;
+        public const byte DF_WRITE_RECORD_ISO = 0x8B;
+        public const byte DF_WRITE_DATA_ISO = 0x8D;
         public const byte DF_ABORT_TRANSACTION = 0xA7;
         public const byte DF_AUTHENTICATE_AES = 0xAA;
+        public const byte DF_READ_RECORDS_ISO = 0xAB;
+        public const byte DF_READ_DATA_ISO = 0xAD;
+        public const byte DF_UPDATE_RECORD_ISO = 0xBA;
         public const byte DF_READ_RECORDS = 0xBB;
         public const byte DF_READ_DATA = 0xBD;
         public const byte DF_CREATE_CYCLIC_RECORD_FILE = 0xC0;
@@ -109,39 +116,51 @@ namespace SpringCard.PCSC.CardHelpers
         public const byte DF_CREATE_VALUE_FILE = 0xCC;
         public const byte DF_CREATE_STD_DATA_FILE = 0xCD;
         public const byte DF_DELETE_APPLICATION = 0xDA;
+        public const byte DF_UPDATE_RECORD = 0xDB;        
         public const byte DF_DEBIT = 0xDC;
         public const byte DF_DELETE_FILE = 0xDF;
         public const byte DF_CLEAR_RECORD_FILE = 0xEB;
+        public const byte DF_ECP2_END_SESSION = 0xEE;
         public const byte DF_GET_FILE_SETTINGS = 0xF5;
         public const byte DF_FORMAT_PICC = 0xFC;
 
+    /* Virtual Card Architecture Commands */
+        public const byte DF_CMD_PPC = 0xF0;   /*  EVx Prepare Proximity Check. */
+        public const byte DF_CMD_PC = 0xF2;   /*  EVx Proximity Check command. */
+        public const byte DF_CMD_VPC = 0xFD;   /*  EVx Verify Proximity Check command. */
 
-        /*
-         * DESFire status (codes returned by the PICC)
-         * -------------------------------------------
-         */
+        public const byte DF_CMD_ISOSVC = 0xA4;   /*< IsoSelect Virtual Card command code .*/
+        public const byte DF_CMD_ISOEXT_AUTH = 0x82;   /*< IsoExternalAuthenticate Virtual Card command code. */
 
-        /**d* DesfireAPI/DF_OPERATION_OK
-         *
-         * NAME
-         *   DF_OPERATION_OK
-         *
-         * DESCRIPTION
-         *   Function was executed without failure
-         *
-         **/
-        public const byte DF_OPERATION_OK = 0x00;
 
-        /**d* DesfireAPI/DF_NO_CHANGES
-         *
-         * NAME
-         *   DF_NO_CHANGES
-         *
-         * DESCRIPTION
-         *   Desfire error : no changes done to backup file, no need to commit/abort
-         *
-         **/
-        public const byte DF_NO_CHANGES = 0x0C;
+
+    /*
+     * DESFire status (codes returned by the PICC)
+     * -------------------------------------------
+     */
+
+    /**d* DesfireAPI/DF_OPERATION_OK
+     *
+     * NAME
+     *   DF_OPERATION_OK
+     *
+     * DESCRIPTION
+     *   Function was executed without failure
+     *
+     **/
+    public const byte DF_OPERATION_OK = 0x00;
+    public const byte DF_MORE_OPERATION_OK = 0x90;
+
+    /**d* DesfireAPI/DF_NO_CHANGES
+     *
+     * NAME
+     *   DF_NO_CHANGES
+     *
+     * DESCRIPTION
+     *   Desfire error : no changes done to backup file, no need to commit/abort
+     *
+     **/
+    public const byte DF_NO_CHANGES = 0x0C;
 
         /**d* DesfireAPI/DF_OUT_OF_EEPROM_ERROR
          *
@@ -545,6 +564,17 @@ namespace SpringCard.PCSC.CardHelpers
          **/
         public const int DFCARD_FUNC_NOT_AVAILABLE = DFCARD_ERROR + 14;
 
+        /**d* DesfireAPI/DFCARD_CONDITION_OF_USE
+         *
+         * NAME
+         *   DFCARD_CONDITION_OF_USE
+         *
+         * DESCRIPTION
+         *   Desfire error : card condition is not available
+         *
+         **/
+        public const int DFCARD_CONDITION_OF_USE = DFCARD_ERROR + 15;
+
         /*
          * DESFire file types
          * ------------------
@@ -605,7 +635,9 @@ namespace SpringCard.PCSC.CardHelpers
 
         const int DF_APPLICATION_ID_SIZE = 3;
 
-        const int DF_MAX_INFO_FRAME_SIZE = 59;
+        //const int DF_MAX_INFO_FRAME_SIZE = 59;
+        //const int DF_MAX_ISO_INFO_FRAME_SIZE = 59;
+
         const int DF_MAX_FILE_DATA_SIZE = 8192;
 
         public const int DF_ISO_WRAPPING_OFF = 0;
@@ -636,5 +668,12 @@ namespace SpringCard.PCSC.CardHelpers
         public const byte DF_SECURE_MODE_EV1 = 0x01;
         public const byte DF_SECURE_MODE_EV2 = 0x02;
 
-    }
+        /*
+        * DESFire Originality Check
+        * ---------------------------------------------
+        */
+        public const byte DF_SIG_LENGTH = 0x38;  /* NXP Originality Signature length */
+        public const byte DF_SIG_LENGTH_ENC = 0x40;   /* NXP Originality Signature length */
+
+  }
 }

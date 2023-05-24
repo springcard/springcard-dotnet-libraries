@@ -67,9 +67,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using SpringCard.PCSC;
-using SpringCard.LibCs.Windows;
 using System.Collections.Generic;
 using SpringCard.LibCs;
+using SpringCard.LibCs.Windows;
 
 namespace SpringCard.PCSC.Forms
 {
@@ -129,22 +129,6 @@ namespace SpringCard.PCSC.Forms
 					}
 				}
 			}
-		}
-
-		/**
-		 * \brief Create the form, specifying the color of the header (default is SpringCard-red)
-		 */
-		public ReaderSelectForm(Color headerColor) : this(new Settings())
-		{
-			pTop.BackColor = headerColor;
-		}
-
-		/**
-		 * \brief Create the form, specifying the color of the header (default is SpringCard-red)
-		 */
-		public ReaderSelectForm(Settings settings, Color headerColor) : this(settings)
-		{
-			pTop.BackColor = headerColor;
 		}
 
 		/**

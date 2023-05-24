@@ -38,9 +38,6 @@
     <Reference Include="Microsoft.CSharp">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="SpringCard.Bluetooth">
-      <HintPath>..\..\..\_libraries\net48\SpringCard.Bluetooth.dll</HintPath>
-    </Reference>
     <Reference Include="SpringCard.LibCs, Version=19.8.7193.32067, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\_libraries\net48\SpringCard.LibCs.dll</HintPath>
@@ -71,38 +68,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\src\Forms\ReaderSelectAnyForm.cs">
-      <Link>ReaderSelectAnyForm.cs</Link>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\..\src\Forms\ReaderSelectAnyForm.Designer.cs">
-      <Link>ReaderSelectAnyForm.Designer.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\Forms\ReaderSelectForm.cs">
       <Link>ReaderSelectForm.cs</Link>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="..\..\src\Forms\ReaderSelectForm.Designer.cs">
-      <Link>ReaderSelectForm.Designer.cs</Link>
+    <Compile Include="..\..\src\Forms\ReaderSelectForm.designer.cs">
+      <Link>ReaderSelectForm.designer.cs</Link>
+      <DependentUpon>ReaderSelectForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SpringCard.PCSC.ZeroDriver\SpringCard.PCSC.ZeroDriver.csproj">
-      <Project>{044a8bab-fc28-4ebc-9aa5-ab958efa6c76}</Project>
-      <Name>SpringCard.PCSC.ZeroDriver</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SpringCard.PCSC\SpringCard.PCSC.csproj">
       <Project>{eec59d80-1ae3-4771-981e-15518cbef5ca}</Project>
       <Name>SpringCard.PCSC</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\src\Forms\ReaderSelectAnyForm.resx">
-      <Link>ReaderSelectAnyForm.resx</Link>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\..\src\Forms\ReaderSelectForm.resx">
       <Link>ReaderSelectForm.resx</Link>
+      <DependentUpon>ReaderSelectForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

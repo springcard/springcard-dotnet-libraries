@@ -18,7 +18,6 @@ namespace SpringCard.PCSC.CardHelpers
 
     void SetKey(byte[] pbAccessKey)
     {
-      //session_key = pbAccessKey;
       SetSesAuthENCKey(pbAccessKey);
       SetSesAuthMACKey(pbAccessKey);
     }

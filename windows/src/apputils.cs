@@ -362,7 +362,7 @@ namespace SpringCard.LibCs.Windows
 				if (singleInstanceMutex == null)
 					DeclareInstance(uniqueName);
 			}
-			catch (TypeInitializationException ex)
+			catch (TypeInitializationException)
             {
 				DeclareInstance(uniqueName);
 			}
@@ -440,13 +440,15 @@ namespace SpringCard.LibCs.Windows
             string eventName = "Local\\SingleInstanceEvent_" + CompanyName + "_" + UniqueName;
             try
             {
-                logger.debug("Creating event {0}", eventName);
+				if (WinUtils.Debug)
+					logger.debug("Creating event {0}", eventName);
                 EventWaitHandle eventHandle = new EventWaitHandle(false, EventResetMode.AutoReset, eventName, out bool createdNew);
                 if (createdNew)
                 {
                     logger.debug("Waiting for event");
                     result = eventHandle.WaitOne();
-                    logger.debug("Wait done, rc={0}", result);
+					if (WinUtils.Debug)
+						logger.debug("Wait done, rc={0}", result);
                 }
                 else
                 {
@@ -512,12 +514,13 @@ namespace SpringCard.LibCs.Windows
 
 		public static void ApplicationExit()
 		{
-			Logger.Debug("Invoking garbagge collector...");
+			logger.debug("Invoking garbagge collector...");
 			GC.Collect();
 
 			ProcessThreadCollection currentThreads = Process.GetCurrentProcess().Threads;
 			if (currentThreads.Count > 0)
-				Logger.Debug("{0} thread(s) are still running, killing them...", currentThreads.Count);
+				if (WinUtils.Debug)
+					logger.debug("{0} thread(s) are still running, killing them...", currentThreads.Count);
 
 			foreach (ProcessThread thread in currentThreads)
 			{
@@ -534,9 +537,9 @@ namespace SpringCard.LibCs.Windows
 				}
 			}
 
-			Logger.Debug("Invoking garbagge collector again");
+			logger.debug("Invoking garbagge collector again");
 			GC.Collect();
-			Logger.Debug("Done exiting");
+			logger.debug("Done exiting");
 		}
 
 
@@ -623,10 +626,11 @@ namespace SpringCard.LibCs.Windows
 					{
 						VerifyAssemblies();
 
-						Logger.Debug("Selecting language {0}", lang);
+						if (WinUtils.Debug)
+							logger.debug("Selecting language {0}", lang);
 						Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
 						Translation.Culture = Thread.CurrentThread.CurrentUICulture;
-						Logger.Debug("Loading translations...");
+						logger.debug("Loading translations...");
 
 						bool result = true;
 

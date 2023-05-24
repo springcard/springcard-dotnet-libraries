@@ -1,4 +1,4 @@
-Copyright (c) 2000 - 2022 SpringCard SAS, FRANCE
+Copyright (c) 2000 - 2023 SpringCard SAS, FRANCE
 Please visit http://www.springcard.com for contact and legal information.
 
 Redistribution and use in source (source code) and binary (object code)

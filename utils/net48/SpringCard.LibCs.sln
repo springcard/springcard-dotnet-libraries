@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.LibCs.Crypto", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.LibCs.Net.Telnet", "SpringCard.LibCs.Net.Telnet\SpringCard.LibCs.Net.Telnet.csproj", "{949C5211-BBB5-4219-A06F-10460AD06E2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{1A226396-57F4-4E21-83B9-D3FD1F812223}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,11 +36,15 @@ Global
 		{A1882142-226D-4D4E-8F9F-501836447CD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A1882142-226D-4D4E-8F9F-501836447CD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1882142-226D-4D4E-8F9F-501836447CD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1882142-226D-4D4E-8F9F-501836447CD0}.Release|Any CPU.Build.0 = Release|Any CPU		
+		{A1882142-226D-4D4E-8F9F-501836447CD0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{949C5211-BBB5-4219-A06F-10460AD06E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{949C5211-BBB5-4219-A06F-10460AD06E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{949C5211-BBB5-4219-A06F-10460AD06E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{949C5211-BBB5-4219-A06F-10460AD06E2A}.Release|Any CPU.Build.0 = Release|Any CPU				
+		{949C5211-BBB5-4219-A06F-10460AD06E2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A226396-57F4-4E21-83B9-D3FD1F812223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A226396-57F4-4E21-83B9-D3FD1F812223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A226396-57F4-4E21-83B9-D3FD1F812223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A226396-57F4-4E21-83B9-D3FD1F812223}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

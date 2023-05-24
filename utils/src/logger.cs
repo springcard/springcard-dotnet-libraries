@@ -58,13 +58,9 @@ namespace SpringCard.LibCs
 	 */
 	public partial class Logger : ILogger
 	{
-#region Mutex
-		private static object ConsoleLock = new object();
-		private static Mutex LogFileMutex = null;
-#endregion
-#region Queue
-		private static ObservableCollection<LogObject> LogFifo = null;
-#endregion
+		private const string Context = "Logger";
+
+		private static ObservableCollection<Entry> LogFifo = null;
 
         /**
 		 * \brief The level of details in the output or log
@@ -83,60 +79,107 @@ namespace SpringCard.LibCs
 			All /*!< Log all messages (same as Debug) */
 		};
 
-		[Serializable]
-		private class LogSettings : ICloneable
-		{
-			public string context;
-			public Level debugLevel = Level.Trace;
-			public Level traceLevel = Level.Trace;
-			public Level consoleLevel = Level.None;
-			public bool consoleShowTime = true;
-			public bool consoleShowContext = true;
-			public bool consoleUseColors = true;
-			public Level logFileLevel;
-			public string logFileName;
-			public bool logFileNameWithDate;
-			public int logFileRetentionWeeks;
-			public Level gelfLevel = Level.Warning;
-			public Level eventLogLevel = Level.Warning;
-			public Level sysLogLevel = Level.Warning;
-			public SysLog.Facility sysLogFacility = SysLog.Facility.LocalUse0;
-			public string sysLogMachineName;
-			public string sysLogApplicationName;
+		public Level level = Level.All;
+		public string context = null;
+		public string instance = null;
 
-			public object Clone()
+		/**
+		 * \brief Level of details directed to Visual Studio's debug window if the program (or the library) is compiled with DEBUG active, and is launched from the IDE
+		 */
+		public static Level DebugLevel = Level.Debug;
+
+		/**
+		 * \brief Level of details directed to Visual Studio's output window if the program (or the library) is compiled with TRACE active, and is launched from the IDE
+		 */
+		public static Level TraceLevel = Level.Trace;
+
+		[Serializable]
+		public class Entry
+		{
+			public DateTime when { get; protected set; }
+			public string context { get; protected set; }
+			public Level level { get; protected set; }
+			public string message { get; protected set; }
+
+			protected Entry()
+            {
+
+            }
+
+			internal Entry(Level level, string context, string message, params object[] args)
+            {
+				this.when = DateTime.UtcNow;
+				this.level = level;
+				this.context = context;
+				if (args == null)
+					this.message = message;
+				else
+					this.message = string.Format(message, args);
+            }
+
+			public string ToLine()
 			{
-				return this.MemberwiseClone();
+				string prefix = when.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\t" + level.ToString() + "\t";
+
+				if (!string.IsNullOrEmpty(context))
+					prefix += context + "\t";
+				else
+					prefix += "\t";
+
+				return prefix + message;
+			}
+
+			public List<string> ToLines()
+            {
+				List<string> result = new List<string>();
+
+				string prefix = when.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\t" + level.ToString() + "\t";
+
+				if (!string.IsNullOrEmpty(context))
+					prefix += context + "\t";
+				else
+					prefix += "\t";
+
+				foreach (string messageToken in message.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+				{
+					result.Add(prefix + messageToken);
+				}
+
+				return result;
 			}
 		}
 
-		private ISyslogMessageSerializer sysLogSerializer = null;
-		private ISyslogMessageSender sysLogSender = null;
+		private static ConsoleSink consoleSink = new ConsoleSink(Level.Info, true, true, true);
+		private static List<Sink> sinks = new List<Sink>() { consoleSink };
 
-		public Level level
+		public static void AddSink(Sink sink, bool exclusive)
+        {
+			lock (sinks)
+            {
+				if (exclusive)
+				{
+					for (int i = sinks.Count - 1; i >= 0; i--)
+					{
+						if (sinks[i].GetType().FullName == sink.GetType().FullName)
+							sinks.RemoveAt(i);
+					}
+				}
+				sinks.Add(sink);
+			}
+        }
+
+		public static void RemoveSink(Sink sink)
 		{
-			set
+			lock (sinks)
 			{
-				logSettings.consoleLevel = value;
-				logSettings.logFileLevel = value;
-				logSettings.gelfLevel = value;
-				logSettings.eventLogLevel = value;
-				logSettings.sysLogLevel = value;
+				if (sinks.Contains(sink))
+					sinks.Remove(sink);
 			}
 		}
 
-		private LogSettings logSettings = new LogSettings();
 
-		[Serializable]
-		private class LogObject
-		{
-			public Logger instance;
-			public DateTime when;
-			public string context;
-			public Level level;
-			public string message;
-			public object[] args;
-		}
+
+
 		private static void LogFifo_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 		{
 			if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -147,9 +190,9 @@ namespace SpringCard.LibCs
 					{
 						while (LogFifo.Count > 0)
 						{
-							LogObject logObject = LogFifo[0];
+							Entry entry = LogFifo[0];
 							LogFifo.RemoveAt(0);
-							logObject.instance.loggerCore(logObject);
+							Core(entry);
 						}
 					}
 				}
@@ -163,10 +206,13 @@ namespace SpringCard.LibCs
 		/**
 		 * \brief Load the Logger settings from the program's command line
 		 */
-		public void readArgs(string[] args)
+		public static void ReadArgs(string[] args)
 		{
 			try
 			{
+				string fileName = null;
+				Level fileLevel = Level.Trace;
+
 				if (args != null)
 				{
 					for (int i = 0; i < args.Length; i++)
@@ -174,34 +220,32 @@ namespace SpringCard.LibCs
 						string s = args[i].ToLower();
 						if (s.Equals("--console"))
 						{
-							if (logSettings.consoleLevel < Level.Info)
-								logSettings.consoleLevel = Level.Info;
+							if (ConsoleLevel < Level.Info)
+								ConsoleLevel = Level.Info;
 						}
 						else if (s.Equals("--debug"))
 						{
-							if (logSettings.consoleLevel < Level.Debug)
-								logSettings.consoleLevel = Level.Debug;
+							if (ConsoleLevel < Level.Debug)
+								ConsoleLevel = Level.Debug;
 						}
 						else if (s.StartsWith("--verbose") || (s.StartsWith("-v")))
 						{
-							if (logSettings.consoleLevel < Level.Trace)
-								logSettings.consoleLevel = Level.Trace;
+							if (ConsoleLevel < Level.Trace)
+								ConsoleLevel = Level.Trace;
 							s = s.Substring(s.Length - 1);
 							if (s.StartsWith("=")) s = s.Substring(1);
 							if (s.Length > 0)
 							{
 								int v;
 								if (int.TryParse(s, out v))
-									logSettings.consoleLevel = IntToLevel(v);
+									ConsoleLevel = IntToLevel(v);
 							}
 						}
 						else if (s.StartsWith("--logfile="))
 						{
 							s = s.Substring(10);
 							if (s.Length > 0)
-							{
-								OpenLogFile(s, true);
-							}
+								fileName = s;
 						}
 						else if (s.StartsWith("--loglevel="))
 						{
@@ -210,512 +254,52 @@ namespace SpringCard.LibCs
 							{
 								int v;
 								if (int.TryParse(s, out v))
-									logSettings.logFileLevel = IntToLevel(v);
+									fileLevel = IntToLevel(v);
 							}
 						}
+						else if (s.StartsWith("--syslog="))
+                        {
+							s = s.Substring(9);
+							if (s.Length > 0)
+								OpenSysLog(s);
+						}
+						else if (s.StartsWith("--syslog"))
+                        {
+							OpenSysLog(null);
+                        }
+						else if (s == "--gelf-springcard-dev")
+						{
+							AddSink(GelfLogSink.CreateSpringCardDev(Level.All, Environment.MachineName, null), false);
+						}
+						else if (s == "--gelf-springcard-prod")
+						{
+							AddSink(GelfLogSink.CreateSpringCardProd(Level.All, Environment.MachineName, null), false);
+						}
+						else if (s == "--gelf-springcard-infra")
+						{
+							AddSink(GelfLogSink.CreateSpringCardInfra(Level.All, Environment.MachineName, null), false);
+						}
 					}
 				}
+
+				if (!string.IsNullOrEmpty(fileName) && (fileLevel > Level.None))
+                {
+					OpenLogFile(fileLevel, fileName);
+                }
 			}
 			catch { }
 		}
 
 #endregion
 
-#region Console		
-
-		private void sendToConsole(DateTime when, Level level, string context, string message)
+		private static void Core(Level level, string context, string instance, string message, params object[] args)
 		{
-			try
-			{
-				lock (ConsoleLock)
-				{
-					if (logSettings.consoleUseColors)
-					{
-						switch (Console.BackgroundColor)
-						{
-							case ConsoleColor.Black:
-							case ConsoleColor.DarkGreen:
-							case ConsoleColor.DarkRed:
-							case ConsoleColor.DarkBlue:
-							case ConsoleColor.DarkCyan:
-							case ConsoleColor.DarkMagenta:
-							case ConsoleColor.DarkYellow:
-								break;
-
-							default:
-								Console.BackgroundColor = ConsoleColor.Black;
-								break;
-						}
-
-
-						Console.ForegroundColor = ConsoleColor.Gray;
-					}
-
-					if (message.Contains("\b"))
-					{
-						Console.SetCursorPosition(0, Console.CursorTop - 1);
-					}
-
-					if (logSettings.consoleShowTime)
-					{
-						Console.Write("{0:D02}:{1:D02}:{2:D02}.{3:D03} ", when.Hour, when.Minute, when.Second, when.Millisecond);
-					}
-
-					if (logSettings.consoleShowContext && !string.IsNullOrEmpty(context))
-					{
-						if (logSettings.consoleUseColors)
-						{
-							Console.ForegroundColor = ConsoleColor.DarkGray;
-						}
-
-						if (context.EndsWith(":"))
-							Console.Write(context);
-						else
-							Console.Write("{0} ", context);
-					}
-
-					if (logSettings.consoleUseColors)
-					{
-						switch (level)
-						{
-							case Level.Fatal:
-								Console.BackgroundColor = ConsoleColor.Red;
-								Console.ForegroundColor = ConsoleColor.White;
-								break;
-							case Level.Error:
-								Console.BackgroundColor = ConsoleColor.Red;
-								Console.ForegroundColor = ConsoleColor.Yellow;
-								break;
-							case Level.Warning:
-								Console.ForegroundColor = ConsoleColor.Yellow;
-								break;
-							case Level.Info:
-								Console.ForegroundColor = ConsoleColor.Cyan;
-								break;
-							case Level.Trace:
-								Console.ForegroundColor = ConsoleColor.White;
-								break;
-							case Level.Debug:
-								Console.ForegroundColor = ConsoleColor.Gray;
-								break;
-						}
-					}
-
-					Console.Write(message);
-
-					if (logSettings.consoleUseColors)
-					{
-						Console.BackgroundColor = InitialBackgroundColor;
-						Console.ForegroundColor = InitialForegroundColor;
-					}
-
-					Console.WriteLine();
-				}
-			}
-			catch { }
-		}
-
-#endregion
-
-#region SysLog		
-
-		private static SysLog.Severity LevelToSeverity(Level level)
-		{
-			SysLog.Severity result;
-
-			switch (level)
-			{
-				case Level.Trace:
-					result = SysLog.Severity.Informational;
-					break;
-				case Level.Info:
-					result = SysLog.Severity.Notice;
-					break;
-				case Level.Warning:
-					result = SysLog.Severity.Warning;
-					break;
-				case Level.Error:
-					result = SysLog.Severity.Error;
-					break;
-				case Level.Fatal:
-					result = SysLog.Severity.Critical;
-					break;
-				case Level.All:
-				case Level.Debug:
-				default:
-					result = SysLog.Severity.Debug;
-					break;
-			}
-
-			return result;
-		}
-
-		public void openSysLog(SysLog.Facility facility, string hostName, string applicationName, string serverAddr, int serverPort = 514, bool useRfc5424 = false)
-		{
-			try
-			{
-				logSettings.sysLogFacility = facility;
-
-				if (string.IsNullOrEmpty(hostName))
-					logSettings.sysLogMachineName = Environment.MachineName;
-				else
-					logSettings.sysLogMachineName = hostName;
-
-				if (string.IsNullOrEmpty(applicationName))
-					logSettings.sysLogApplicationName = System.AppDomain.CurrentDomain.FriendlyName;
-				else
-					logSettings.sysLogApplicationName = applicationName;
-
-				logSettings.sysLogApplicationName += string.Format("[{0}]", Process.GetCurrentProcess().Id);
-				if (useRfc5424)
-					sysLogSerializer = new SyslogRfc5424MessageSerializer();
-				else
-					sysLogSerializer = new SyslogRfc3164MessageSerializer();
-				sysLogSender = new SyslogUdpSender(serverAddr, serverPort);
-			}
-			catch (Exception e)
-			{
-				sysLogSender = null;
-				sysLogSerializer = null;
-				warning("Failed to create Syslog sender ({0})", e.Message);
-			}
-		}
-
-		public void openSysLog(Level level, SysLog.Facility facility, string hostName, string applicationName, string serverAddr, int serverPort = 514, bool useRfc5424 = false)
-		{
-			openSysLog(facility, hostName, applicationName, serverAddr, serverPort, useRfc5424);
-			logSettings.sysLogLevel = level;
-		}
-
-		public void openSysLog(SysLog.Facility facility, Level level, string applicationName, string serverAddr, int serverPort = 514, bool useRfc5424 = false)
-		{
-			openSysLog(facility, null, applicationName, serverAddr, serverPort, useRfc5424);
-			logSettings.sysLogLevel = level;
-		}
-
-		public void openSysLog(SysLog.Facility facility, string ServerAddr, int ServerPort = 514, bool useRfc5424 = false)
-		{
-			openSysLog(facility, null, null, ServerAddr, ServerPort, useRfc5424);
-		}
-
-		public void openSysLog(SysLog.Facility facility, Level level, string ServerAddr, int ServerPort = 514, bool useRfc5424 = false)
-		{
-			openSysLog(facility, null, null, ServerAddr, ServerPort, useRfc5424);
-			logSettings.sysLogLevel = level;
-		}
-
-		public void openSysLog(string ServerAddr, int ServerPort = 514, bool useRfc5424 = false)
-		{
-			openSysLog(SysLog.Facility.LocalUse0, ServerAddr, ServerPort, useRfc5424);
-		}
-
-		public void openSysLog(Level level, string ServerAddr, int ServerPort = 514, bool useRfc5424 = false)
-		{
-			openSysLog(SysLog.Facility.LocalUse0, ServerAddr, ServerPort, useRfc5424);
-			logSettings.sysLogLevel = level;
-		}
-
-		public Level sysLogLevel
-		{
-			get => logSettings.sysLogLevel;
-			set => logSettings.sysLogLevel = value;
-		}
-
-		private void sendToSysLog(Level level, string context, string message)
-		{
-			if ((sysLogSender == null) || (sysLogSerializer == null))
-				return;
-			SysLog.Severity severity = LevelToSeverity(level);
-			string sysLogText = RemoveDiacritics(message);
-			if (!string.IsNullOrEmpty(context))
-			{
-				sysLogText = string.Format("{0}\t{1}", RemoveDiacritics(context), sysLogText);
-			}
-			SysLog.Message sysLogMessage = new SysLog.Message(DateTimeOffset.Now, logSettings.sysLogFacility, severity, logSettings.sysLogMachineName, logSettings.sysLogApplicationName, sysLogText);
-
-			try
-			{
-				sysLogSender.Send(sysLogMessage, sysLogSerializer);
-			}
-			catch (Exception e)
-			{
-				sendToConsole(DateTime.UtcNow, Level.Warning, "SysLog", String.Format("Failed to send to remote server ({0})", e.Message));
-				Console.WriteLine(String.Format("Failed to send to remote server ({0})", e.Message));
-			}
-		}
-
-#endregion
-
-#region Gelf
-
-		private Dictionary<string, string> gelfConstants;
-		private GelfTcpSender gelfSender = null;
-
-		/**
-		 * \brief Configure the Logger to send its messages to a GrayLog server
-		 */
-		public void openGelf(Level level, string hostName, string applicationName, string serverName, int serverPort = 2202)
-		{
-			try
-			{
-				sendToConsole(DateTime.UtcNow, Level.Debug, "Gelf", "Sending to server " + serverName + ":" + serverPort);
-				logSettings.gelfLevel = level;
-				gelfSender = new GelfTcpSender(serverName, serverPort);
-				gelfConstants = new Dictionary<string, string>();
-				gelfConstants["version"] = "1.1";
-				if (String.IsNullOrEmpty(hostName))
-					hostName = Environment.MachineName;
-				gelfConstants["host"] = hostName;
-				gelfConstants["_machine"] = Environment.MachineName;
-				gelfConstants["_user"] = Environment.UserName + "@" + Environment.UserDomainName;
-				if (String.IsNullOrEmpty(applicationName))
-					applicationName = System.AppDomain.CurrentDomain.FriendlyName;
-				gelfConstants["_application"] = applicationName;
-				gelfConstants["_process_id"] = String.Format("{0}", Process.GetCurrentProcess().Id);
-			}
-			catch (Exception e)
-			{
-				gelfSender = null;
-				Log(Level.Warning, String.Format("Failed to create Gelf sender ({0})", e.Message));
-			}
-		}
-
-		/**
-		 * \brief Set a GrayLog constant parameter
-		 */
-		public void setGelfConstant(string Name, string Value)
-		{
-			gelfConstants[Name] = Value;
-		}
-
-		private void sendToGelf(Level level, string context, string message)
-		{
-			if (gelfSender == null)
-				return;
-
-			SysLog.Severity severity = LevelToSeverity(level);
-
-			JSON json = new JSON();
-
-			foreach (KeyValuePair<string, string> constant in gelfConstants)
-				json.Add(constant.Key, constant.Value);
-
-			if (context != null)
-				message = context + ":" + message;
-
-			json.Add("level", (int)severity);
-			json.Add("short_message", message);
-
-			try
-			{
-				gelfSender.Send(json.AsString());
-			}
-			catch (Exception e)
-			{
-				sendToConsole(DateTime.UtcNow, Level.Warning, "Gelf", String.Format("Failed to send to remote server ({0})", e.Message));
-			}
-		}
-
-#endregion
-
-#region LogFile
-
-		private DateTime fileRetentionCheck = DateTime.Now.AddMinutes(10);
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public void openLogFile(string fileName, bool useDate = false)
-		{
-			logSettings.logFileName = fileName;
-			logSettings.logFileNameWithDate = useDate;
-			logSettings.logFileRetentionWeeks = 0;
-
-			string logFilePath = Path.GetDirectoryName(fileName);
-			logFilePath = logFilePath.TrimEnd(Path.DirectorySeparatorChar);
-
-			if (!String.IsNullOrEmpty(logFilePath))
-				if (!Directory.Exists(logFilePath))
-					Directory.CreateDirectory(logFilePath);
-			if (LogFileMutex == null)
-				LogFileMutex = new Mutex();
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public void openLogFile(Level level, string fileName, bool useDate = false)
-		{
-			logSettings.logFileLevel = level;
-			openLogFile(fileName, useDate);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public void openLogFile(string fileName, bool useDate, int retentionWeeks)
-		{
-			openLogFile(fileName, useDate);
-			logSettings.logFileRetentionWeeks = retentionWeeks;
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public void openLogFile(Level level, string fileName, bool useDate, int retentionWeeks)
-		{
-			openLogFile(level, fileName, useDate);
-			logSettings.logFileRetentionWeeks = retentionWeeks;
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public void openLogFile(string fileName, int retentionWeeks)
-		{
-			openLogFile(fileName, true, retentionWeeks);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public void openLogFile(Level level, string fileName, int retentionWeeks)
-		{
-			openLogFile(level, fileName, true, retentionWeeks);
-		}
-
-		public Level logFileLevel
-		{
-			get => logSettings.logFileLevel;
-			set => logSettings.logFileLevel = value;
-		}
-
-		private void FileRetentionPurge()
-		{
-			if (logSettings.logFileRetentionWeeks <= 0)
-				return;
-
-			string logFilePath = Path.GetDirectoryName(logSettings.logFileName);
-			if (!Directory.Exists(logFilePath))
-				return;
-
-			DateTime deleteBeforeTime = DateTime.Now.AddDays(-7 * logSettings.logFileRetentionWeeks);
-
-			string[] files = Directory.GetFiles(logFilePath);
-			foreach (string file in files)
-			{
-				FileInfo fi = new FileInfo(file);
-				if (fi.LastAccessTime < deleteBeforeTime)
-				{
-					try
-					{
-						fi.Delete();
-					}
-					catch { }
-				}
-			}
-		}
-
-		private static string FileNameWithDate(string fileName)
-		{
-			DateTime now = DateTime.Now;
-			string str_now = String.Format("{0:D04}{1:D02}{2:D02}", now.Year, now.Month, now.Day);
-
-			string[] parts = fileName.Split('.');
-
-			string result = "";
-			for (int i = 0; i < parts.Length; i++)
-			{
-				if (i > 0)
-					result += ".";
-				result += parts[i];
-				if (i == parts.Length - 2)
-					result += "-" + str_now;
-			}
-
-			return result;
-		}
-
-		private void sendToFile(DateTime when, Level level, string context, string message)
-		{
-			if (logSettings.logFileName == null)
-				return;
-
-			string aFileName = logSettings.logFileName;
-			if (logSettings.logFileNameWithDate)
-				aFileName = FileNameWithDate(aFileName);
-
-			string[] aMessage = message.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-			bool fMutexOwner = false;
-
-			try
-			{
-				if (LogFileMutex != null)
-				{
-					fMutexOwner = LogFileMutex.WaitOne(500);
-					if (!fMutexOwner)
-						return;
-				}
-
-				string s = when.ToString("yyyy-MM-dd HH:mm:ss.fff") + "\t" + level.ToString() + "\t";
-
-				if (!string.IsNullOrEmpty(context))
-					s = s + context + "\t";
-				else
-					s = s + "\t";
-
-				foreach (string m in aMessage)
-				{
-					File.AppendAllText(aFileName, s + m + Environment.NewLine);
-				}
-			}
-			catch
-			{
-
-			}
-			finally
-			{
-				if (logSettings.logFileRetentionWeeks > 0)
-				{
-					if (DateTime.Now >= fileRetentionCheck)
-					{
-						FileRetentionPurge();
-						fileRetentionCheck = DateTime.Now.AddHours(24);
-					}
-				}
-
-
-				if (fMutexOwner)
-					LogFileMutex.ReleaseMutex();
-			}
-
-		}
-
-#endregion
-
-
-		/**
-		 * \brief Log a message
-		 */
-		private void loggerCore(DateTime when, string context, Level level, string message, params object[] args)
-		{
-			if (level == Level.None)
-				return;
-			if (message == null)
-				return;
-			if (string.IsNullOrEmpty(context))
-				context = logSettings.context;
-			if (string.IsNullOrEmpty(context))
-				context = guessContext();
-
-			LogObject logObject = new LogObject();
-			logObject.instance = this;
-			logObject.when = when;
-			logObject.level = level;
-			logObject.context = context;
-			logObject.message = message;
-			logObject.args = args;
+			if (context == null)
+				context = "";
+			if (instance != null)
+				context += "#" + instance;
+
+			Entry entry = new Entry(level, context, message, args);
 
 			if (LogFifo != null)
 			{
@@ -723,130 +307,82 @@ namespace SpringCard.LibCs
 				{
 					lock (LogFifo)
 					{
-						LogFifo.Add(logObject);
+						LogFifo.Add(entry);
 					}
 				}
 				catch { }
 			}
 			else
 			{
-				loggerCore(logObject);
+				Core(entry);
 			}
 		}
 
-		private void loggerCore(string context, Level level, string message, params object[] args)
+        private void core(Level level, string message, params object[] args)
 		{
-			loggerCore(DateTime.UtcNow, context, level, message, args);
-		}
-
-		private void loggerCore(Level level, string message, params object[] args)
-		{
-			loggerCore(DateTime.UtcNow, null, level, message, args);
+            if (level > this.level)
+                return;
+			Core(level, this.context, this.instance, message, args);
 		}
 
 		/**
 		 * \brief Log a message
 		 */
-		private void loggerCore(LogObject logObject)
+		private static void Core(Entry entry)
 		{
 			try
 			{
-				string message;
-
-				if (logObject == null)
+				if (entry == null)
 					return;
 
-				if (logObject.args != null)
-					message = string.Format(logObject.message, logObject.args);
-				else
-					message = logObject.message;
-
-				if ((logObject.level <= logSettings.debugLevel) || (logObject.level <= defaultInstance.logSettings.debugLevel))
+				if (entry.level <= DebugLevel)
 				{
 #if !NET5_0_OR_GREATER
 					if (System.Diagnostics.Debug.Listeners.Count > 0)
 					{
-						System.Diagnostics.Debug.WriteLine(message);
+						System.Diagnostics.Debug.WriteLine(entry.message);
 					}
 #else
 					/* no debug in netcore 5. */
 					if (System.Diagnostics.Trace.Listeners.Count > 0)
 					{
-						System.Diagnostics.Trace.WriteLine(message);
+						System.Diagnostics.Trace.WriteLine(entry.message);
 					}
 #endif
 				}
-				else if ((logObject.level <= logSettings.traceLevel) || (logObject.level <= defaultInstance.logSettings.traceLevel))
+				else if (entry.level <= TraceLevel)
 				{
 					if (System.Diagnostics.Trace.Listeners.Count > 0)
 					{
-						System.Diagnostics.Trace.WriteLine(message);
+						System.Diagnostics.Trace.WriteLine(entry.message);
 					}
 				}
 
-#if !NET5_0_OR_GREATER
-				if ((logObject.level <= logSettings.eventLogLevel) || (logObject.level <= defaultInstance.logSettings.eventLogLevel))
+				lock (sinks)
 				{
-					if (eventLog != null)
-						sendToEventLog(logObject.level, logObject.context, message);
-				}
-#endif
-				if ((logObject.level <= logSettings.sysLogLevel) || (logObject.level <= defaultInstance.logSettings.sysLogLevel))
-				{
-					if (sysLogSender != null)
-						sendToSysLog(logObject.level, logObject.context, message);
-				}
-
-				if ((logObject.level <= logSettings.gelfLevel) || (logObject.level <= defaultInstance.logSettings.gelfLevel))
-				{
-					if (gelfSender != null)
-						sendToGelf(logObject.level, logObject.context, message);
-				}
-
-				if ((logObject.level <= logSettings.logFileLevel) || (logObject.level <= defaultInstance.logSettings.logFileLevel))
-				{
-					if (!string.IsNullOrEmpty(logSettings.logFileName))
-						sendToFile(logObject.when, logObject.level, logObject.context, message);
-				}
-
-				if ((logObject.level <= logSettings.consoleLevel) || (logObject.level <= defaultInstance.logSettings.consoleLevel))
-				{
-					sendToConsole(logObject.when, logObject.level, logObject.context, message);
+					foreach (Sink sink in sinks)
+					{
+						if (entry.level <= sink.level)
+							sink.Send(entry);
+					}
 				}
 
 				if (LogCallback != null)
 				{
-					if (logObject.context == null)
+					if (entry.context == null)
 					{
-						LogCallback(logObject.level, message);
+						LogCallback(entry.level, entry.message);
 					}
 					else
 					{
-						LogCallback(logObject.level, logObject.context + ": " + message);
+						LogCallback(entry.level, entry.context + ": " + entry.message);
 					}
 				}
 			}
-			catch { }
-		}
-
-
-		private string guessContext()
-		{
-			StackFrame[] frames = new StackTrace().GetFrames();
-			string thisAssembly = frames[0].GetMethod().Module.Assembly.FullName;
-			foreach (StackFrame frame in frames)
+			catch (Exception e)
 			{
-				string otherAssembly = frame.GetMethod().ReflectedType.Assembly.FullName;
-				if (otherAssembly != thisAssembly)
-				{
-					string[] t = otherAssembly.Split(',');
-					if (t[0].ToLower() == "mscorlib")
-						return null;
-					return t[0];
-				}
+				consoleSink.Send(Level.Warning, Context, e.Message);
 			}
-
-			return null;
 		}
 
 
@@ -871,55 +407,112 @@ namespace SpringCard.LibCs
 				string r = System.Text.Encoding.UTF8.GetString(b);
 				return r;
 			}
-			catch(Exception ex)
+			catch (Exception e)
             {
-				Console.WriteLine(String.Format("Failed RemoveDiacritics ({0})", ex.Message));
+				Console.WriteLine("Failed RemoveDiacritics ({0})", e.Message);
 			}
 			return null;
 		}
 
 #region Constructors
 
-        public Logger(Logger parent, string context, string instance)
-		{
-			if (parent == null)
-				parent = defaultInstance;
+		private string CreateContext()
+        {
+			StackFrame[] frames = new StackTrace().GetFrames();
+			string thisAssembly = frames[0].GetMethod().Module.Assembly.FullName;
+			foreach (StackFrame frame in frames)
+			{
+				string otherAssembly = frame.GetMethod().ReflectedType.Assembly.FullName;
+				if (otherAssembly != thisAssembly)
+				{
+					string[] t = otherAssembly.Split(',');
+					if (t[0].ToLower() == "mscorlib")
+						return null;
+					return t[0];
+				}
+			}
 
+			return null;
+		}
+
+		private void Create(Logger parent, string context, string instance)
+        {
 			if (parent != null)
 			{
-				if (parent.logSettings != null)
-					this.logSettings = (LogSettings)parent.logSettings.Clone();
-#if !NET5_0_OR_GREATER
-				this.eventLog = parent.eventLog;
-#endif
-				this.sysLogSerializer = parent.sysLogSerializer;
-				this.sysLogSender = parent.sysLogSender;
+				level = parent.level;
+				context = parent.context;
+				instance = parent.instance;
 			}
 
-			if (!string.IsNullOrEmpty(context))
-            {
-				this.logSettings.context = context;
-				if (this.logSettings.context.ToLower().StartsWith("springcard."))
-					this.logSettings.context = this.logSettings.context.Substring(11);
-			}
-			if (!string.IsNullOrEmpty(instance))
+			if (context != null)
 			{
-				this.logSettings.context += "#" + instance;
+				if (context.ToLower().StartsWith("springcard."))
+					context = context.Substring(11);
+				this.context = context;
+			}
+
+			if (this.context == null)
+            {
+				this.context = CreateContext();
+            }
+
+			if (instance != null)
+			{
+				this.instance = instance;
 			}
 		}
 
-		public Logger(Logger parent, object owner, string instance) : this(parent, owner.GetType().FullName, instance) {}
-		public Logger(Logger parent, string context) : this(parent, context, "") {}
-		public Logger(Logger parent, object owner) : this(parent, owner.GetType().FullName, "") { }
-		public Logger(Logger parent) : this(parent, "", "") { }
+		public Logger(Logger parent, string context, string instance)
+		{
+			Create(parent, context, instance);
+		}
+
+		public Logger(Logger parent, object owner, string instance)
+		{
+			Create(parent, owner.GetType().FullName, instance);
+		}
+
+		public Logger(Logger parent, string context)
+		{
+			Create(parent, context, null);
+		}
+
+		public Logger(Logger parent, object owner)
+		{
+			Create(parent, owner.GetType().FullName, null);
+		}
+
+		public Logger(Logger parent)
+		{
+			Create(parent, null, null);
+		}
 
 
+		public Logger()
+        {
+			Create(null, null, null);
+		}
 
-		public Logger() : this(defaultInstance) { }
-		public Logger(string context) : this(defaultInstance, context) { }
-		public Logger(string context, string instance) : this(defaultInstance, context, instance) { }
-		public Logger(object owner) : this(defaultInstance, owner) { }
-		public Logger(object owner, string instance) : this(defaultInstance, owner, instance) { }
+		public Logger(string context)
+        {
+			Create(null, context, null);
+		}
+
+		public Logger(string context, string instance)
+        {
+			Create(null, context, instance);
+		}
+
+		public Logger(object owner)
+        {
+			Create(null, owner.GetType().FullName, null);
+		}
+
+		public Logger(object owner, string instance)
+        {
+			Create(null, owner.GetType().FullName, instance);
+		}
+
 #endregion
 
         /**
@@ -1031,18 +624,7 @@ namespace SpringCard.LibCs
 		 */
 		public void log(Level level, string message, params object[] args)
 		{
-			loggerCore(level, message, args);
-		}
-
-		public void openLogFile(string fileName)
-		{
-			logSettings.logFileName = fileName;
-		}
-
-		public void openLogFile(Level level, string fileName)
-		{
-			logSettings.logFileLevel = level;
-			logSettings.logFileName = fileName;
+			core(level, message, args);
 		}
 
 #region Utilities
@@ -1078,7 +660,7 @@ namespace SpringCard.LibCs
 		/**
 		 * \brief Translate a text value into a valid Level enum value
 		 */
-		public static Level StringToLevel(string strLevel)
+		public static Level StringToLevel(string strLevel, bool exact = false)
 		{
 			if (strLevel == null)
 				return Level.Info;
@@ -1116,6 +698,9 @@ namespace SpringCard.LibCs
 					return Level.All;
 			}
 
+			if (exact)
+				throw new ArgumentOutOfRangeException("Invalid level");
+
 			return Level.Info;
 		}
 
@@ -1137,7 +722,7 @@ namespace SpringCard.LibCs
 				{
 					if (LogFifo == null)
 					{
-						LogFifo = new ObservableCollection<LogObject>();
+						LogFifo = new ObservableCollection<Entry>();
 						LogFifo.CollectionChanged += LogFifo_CollectionChanged;
 					}
 				}
@@ -1196,249 +781,58 @@ namespace SpringCard.LibCs
 
 #region Default instance and exports
 
-		private static Logger defaultInstance = new Logger();
-
+#if !NET5_0_OR_GREATER
 		/**
-		 * \brief Level of details directed to Visual Studio's debug window if the program (or the library) is compiled with DEBUG active, and is launched from the IDE
+		 * \brief Load the Logger settings from the application's registry branch.
 		 */
-		public static Level DebugLevel
+		public static void LoadConfigFromRegistry(string CompanyName, string ProductName)
 		{
-			get => defaultInstance.logSettings.debugLevel;
-			set => defaultInstance.logSettings.debugLevel = value;
-		}
-
-		/**
-		 * \brief Level of details directed to Visual Studio's output window if the program (or the library) is compiled with TRACE active, and is launched from the IDE
-		 */
-		public static Level TraceLevel
-		{
-			get => defaultInstance.logSettings.traceLevel;
-			set => defaultInstance.logSettings.traceLevel = value;
-		}
-
-		/**
-		 * \brief Level of details directed the console (stdout)
-		 */
-		public static Level ConsoleLevel
-		{
-			get => defaultInstance.logSettings.consoleLevel;
-			set => defaultInstance.logSettings.consoleLevel = value;
-		}
-
-		/**
-		 * \brief Include the time of execution in the console output
-		 */
-		public static bool ConsoleShowTime
-		{
-			get => defaultInstance.logSettings.consoleShowTime;
-			set => defaultInstance.logSettings.consoleShowTime = value;
-		}
-
-		/**
-		 * \brief Include the class and method (if this information is available) in the console output
-		 */
-		public static bool ConsoleShowContext
-		{
-			get => defaultInstance.logSettings.consoleShowContext;
-			set => defaultInstance.logSettings.consoleShowContext = value;
-		}
-
-		/**
-		 * \brief Use colors to decorate the console output
-		 */
-		public static bool ConsoleUseColors
-		{
-			get => defaultInstance.logSettings.consoleUseColors;
-			set => defaultInstance.logSettings.consoleUseColors = value;
-		}
-
-		/**
-		 * \brief Short cut to disable all log outputs -but console- if the program is undergoing unit tests
-		 */
-		public static bool ConsoleOnly
-		{
-			set
+			try
 			{
-				if (value)
+				Level level = Level.None;
+
+				RegistryKey k = Registry.CurrentUser.OpenSubKey("SOFTWARE\\" + CompanyName + "\\" + ProductName, false);
+				string s = (string)k.GetValue("VerboseLevel", "");
+
+				int i;
+				if (int.TryParse(s, out i))
 				{
-					defaultInstance.logSettings.debugLevel = Level.None;
-					defaultInstance.logSettings.traceLevel = Level.None;
-					defaultInstance.logSettings.eventLogLevel = Level.None;
-					defaultInstance.logSettings.sysLogLevel = Level.None;
-					defaultInstance.logSettings.gelfLevel = Level.None;
-					defaultInstance.logSettings.logFileLevel = Level.None;
+					level = IntToLevel(i);
+				}
+				else
+				{
+					for (i = (int)Level.Debug; i > (int)Level.None; i--)
+					{
+						if (s.ToLower() == ((Level)i).ToString().ToLower())
+						{
+							level = (Level)i;
+							break;
+						}
+					}
+				}
+
+				consoleSink.SetLevel(level);
+
+				string fileName = (string)k.GetValue("VerboseFile");
+				if (!string.IsNullOrEmpty(fileName))
+				{
+					bool useDate = false;
+					s = (string)k.GetValue("VerboseFileDate", "0");
+					if (int.TryParse(s, out i))
+					{
+						if (i != 0)
+						{
+							useDate = true;
+						}
+					}
+					OpenLogFile(level, fileName, useDate);
 				}
 			}
+			catch
+			{
+			}
 		}
-
-		/**
-		 * \brief Load the Logger settings from the program's command line
-		 */
-		public static void ReadArgs(string[] args)
-		{
-			defaultInstance.readArgs(args);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a GrayLog server
-		 */
-		public static void OpenGelf(Level level, string hostName, string applicationName, string serverName, int serverPort = 2202)
-		{
-			defaultInstance.openGelf(level, hostName, applicationName, serverName, serverPort);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a GrayLog server
-		 */
-		public static void OpenGelf(Level level, string applicationName, string serverAddr, int serverPort = 2202)
-		{
-			OpenGelf(level, null, applicationName, serverAddr, serverPort);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a GrayLog server
-		 */
-		public static void OpenGelf(Level level, string serverAddr, int serverPort = 2202)
-		{
-			OpenGelf(level, null, null, serverAddr, serverPort);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to SpringCard's GrayLog server
-		 *
-		 * \warning Do not use this feature in your own application!
-		 */
-		public static void OpenGelf_SpringCardNet(Level level, string hostName, string applicationName)
-		{
-			OpenGelf(level, hostName, applicationName, "discover.logs.ovh.com", 2202);
-			SetGelfConstant("X-OVH-TOKEN", "03154cce-3aa3-480e-96d0-893d51ffabdb");
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to SpringCard's GrayLog server
-		 *
-		 * \warning Do not use this feature in your own application!
-		 */
-		public static void OpenGelf_SpringCardNet(Level level, string applicationName)
-		{
-			OpenGelf_SpringCardNet(level, null, applicationName);
-		}
-
-		/**
-		 * \brief Set a GrayLog constant parameter
-		 */
-		public static void SetGelfConstant(string Name, string Value)
-		{
-			defaultInstance.gelfConstants[Name] = Value;
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a SysLog server
-		 */
-		public static void OpenSysLog(SysLog.Facility facility, string hostName, string applicationName, string serverAddr, int serverPort = 514, bool useRfc5424 = false)
-		{
-			defaultInstance.openSysLog(facility, hostName, applicationName, serverAddr, serverPort, useRfc5424);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a SysLog server
-		 */
-		public static void OpenSysLog(SysLog.Facility facility, Level level, string applicationName, string serverAddr, int serverPort = 514, bool useRfc5424 = false)
-		{
-			OpenSysLog(facility, null, applicationName, serverAddr, serverPort, useRfc5424);
-			defaultInstance.sysLogLevel = level;
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a SysLog server
-		 */
-		public static void OpenSysLog(SysLog.Facility facility, string ServerAddr, int ServerPort = 514, bool useRfc5424 = false)
-		{
-			OpenSysLog(facility, null, null, ServerAddr, ServerPort, useRfc5424);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a SysLog server
-		 */
-		public static void OpenSysLog(SysLog.Facility facility, Level level, string ServerAddr, int ServerPort = 514, bool useRfc5424 = false)
-		{
-			OpenSysLog(facility, null, null, ServerAddr, ServerPort, useRfc5424);
-			defaultInstance.sysLogLevel = level;
-		}
-
-		/**
-		 * \brief Configure the Logger to send messages to a SysLog server
-		 */
-		public static void OpenSysLog(string ServerAddr, int ServerPort = 514, bool useRfc5424 = false)
-		{
-			OpenSysLog(SysLog.Facility.LocalUse0, ServerAddr, ServerPort, useRfc5424);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a SysLog server
-		 */
-		public static void OpenSysLog(Level level, string ServerAddr, int ServerPort = 514, bool useRfc5424 = false)
-		{
-			OpenSysLog(SysLog.Facility.LocalUse0, ServerAddr, ServerPort, useRfc5424);
-			defaultInstance.sysLogLevel = level;
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public static void OpenLogFile(string fileName, bool useDate = false)
-		{
-			defaultInstance.openLogFile(fileName, useDate);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public static void OpenLogFile(Level level, string fileName, bool useDate = false)
-		{
-			defaultInstance.openLogFile(level, fileName, useDate);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public static void OpenLogFile(string fileName, bool useDate, int retentionWeeks)
-		{
-			defaultInstance.openLogFile(fileName, useDate, retentionWeeks);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public static void OpenLogFile(Level level, string fileName, bool useDate, int retentionWeeks)
-		{
-			defaultInstance.openLogFile(level, fileName, useDate, retentionWeeks);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public static void OpenLogFile(string fileName, int retentionWeeks)
-		{
-			defaultInstance.openLogFile(fileName, retentionWeeks);
-		}
-
-		/**
-		 * \brief Configure the Logger to send its messages to a file
-		 */
-		public static void OpenLogFile(Level level, string fileName, int retentionWeeks)
-		{
-			defaultInstance.openLogFile(level, fileName, retentionWeeks);
-		}
-
-		/**
-		 * \brief Level of details directed the file
-		 */
-		public static Level FileLogLevel
-		{
-			get => defaultInstance.logSettings.logFileLevel;
-			set => defaultInstance.logSettings.logFileLevel = value;
-		}
+#endif
 
 		/**
 		 * \brief Log a Debug-level message
@@ -1635,7 +1029,7 @@ namespace SpringCard.LibCs
 		 */
 		public static void Log(Level level, string message, params object[] args)
 		{
-			defaultInstance.loggerCore(null, level, message, args);
+			Core(level, null, null, message, args);
 		}
 
 		/**
@@ -1643,16 +1037,16 @@ namespace SpringCard.LibCs
 		 */
 		public static void LogEx(string context, Level level, string message)
 		{
-			defaultInstance.loggerCore(context, level, message, null);
-		}
+            Core(level, context, null, message, null);
+        }
 
 		/**
 		 * \brief Log a message (with context)
 		 */
 		public static void LogEx(string context, Level level, string message, params object[] args)
 		{
-			defaultInstance.loggerCore(context, level, message, args);
-		}
+            Core(level, context, null, message, args);
+        }
 
 #endregion
 	}

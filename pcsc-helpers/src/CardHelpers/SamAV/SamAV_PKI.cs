@@ -805,8 +805,27 @@ namespace SpringCard.PCSC.CardHelpers
             if (Command(INS.PKIGenerateSignature, P1, 0x00, data, ExpectE.Success) != ResultE.Success)
                 return false;
 
-            if (Command(INS.PKISendSignature, 0x00, 0x00, out Signature, ExpectE.Success) != ResultE.Success)
-                return false;
+            Signature = new byte[0];
+            for (; ; )
+            {
+                ResultE result;
+
+                result = Command(INS.PKISendSignature, 0x00, 0x00, out data, ExpectE.SuccessOrContinue);
+
+                if ((result != ResultE.Success) && (result != ResultE.Continue))
+                    return false;
+
+                if (data == null)
+                {
+                    LastError = ResultE.InvalidResponseData;
+                    return false;
+                }
+
+                Signature = BinUtils.Concat(Signature, data);
+
+                if (result != ResultE.Continue)
+                    break;
+            }
 
             return true;
         }

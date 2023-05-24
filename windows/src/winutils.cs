@@ -12,20 +12,22 @@ namespace SpringCard.LibCs.Windows
 {
 	public class WinUtils
     {
-        public static bool Debug = false;
+		private static Logger logger = new Logger(typeof(WinUtils).FullName);
+
+		public static bool Debug = false;
 
 #if !NET5_0_OR_GREATER
 
         public static void FatalError(string message, string title = "Internal error")
 		{
-			Logger.Fatal("{0}: {1}", title, message);
+			logger.fatal("{0}: {1}", title, message);
 			MessageBox.Show(message + "\n\n" + T._("This is a fatal error. The application will now terminate."), title);
 			Environment.Exit(0);
 		}
 
 		public static void ShowMessage(string message)
 		{
-			Logger.Info(message);
+			logger.info(message);
 			MessageBox.Show(message);
 		}
 

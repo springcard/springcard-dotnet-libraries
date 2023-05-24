@@ -9,6 +9,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany ("SpringCard")]
 [assembly: AssemblyProduct ("SpringCard.LibCs")]
 [assembly: AssemblyCopyright ("Copyright © SpringCard SAS, France, 2014-2022 all rights reserved")]
-[assembly: AssemblyVersion ("22.12.*")]
+[assembly: AssemblyVersion ("23.22.*")]
 [assembly: AssemblyCulture ("")]
 [assembly: Guid ("42b2fc7c-2628-48ad-9989-8b3678984065")]

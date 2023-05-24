@@ -37,8 +37,6 @@ namespace SpringCard.LibCs.Windows.Forms
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplashForm));
-            this.imgSplashRed = new System.Windows.Forms.PictureBox();
             this.AutoCloseTimer = new System.Windows.Forms.Timer(this.components);
             this.lbVersion = new System.Windows.Forms.Label();
             this.lbDisclaimer1 = new System.Windows.Forms.Label();
@@ -46,28 +44,13 @@ namespace SpringCard.LibCs.Windows.Forms
             this.lbDisclaimer2 = new System.Windows.Forms.Label();
             this.lbProduct = new System.Windows.Forms.Label();
             this.lbCopyright = new System.Windows.Forms.Label();
-            this.imgSplashMarroon = new System.Windows.Forms.PictureBox();
-            this.imgSplashLight = new System.Windows.Forms.PictureBox();
-            this.imgSplashWhite = new System.Windows.Forms.PictureBox();
-            this.pBottomWhite = new System.Windows.Forms.Panel();
+            this.pBottom = new System.Windows.Forms.Panel();
             this.lbPrivate = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.imgSplashRed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imgSplashMarroon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imgSplashLight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imgSplashWhite)).BeginInit();
+            this.imgLogoColor = new System.Windows.Forms.PictureBox();
+            this.imgLogoWhite = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.imgLogoColor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgLogoWhite)).BeginInit();
             this.SuspendLayout();
-            // 
-            // imgSplashRed
-            // 
-            this.imgSplashRed.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imgSplashRed.Image = ((System.Drawing.Image)(resources.GetObject("imgSplashRed.Image")));
-            this.imgSplashRed.Location = new System.Drawing.Point(0, 0);
-            this.imgSplashRed.Name = "imgSplashRed";
-            this.imgSplashRed.Size = new System.Drawing.Size(600, 374);
-            this.imgSplashRed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.imgSplashRed.TabIndex = 0;
-            this.imgSplashRed.TabStop = false;
-            this.imgSplashRed.Click += new System.EventHandler(this.SplashFormClose);
             // 
             // AutoCloseTimer
             // 
@@ -88,7 +71,7 @@ namespace SpringCard.LibCs.Windows.Forms
             // lbDisclaimer1
             // 
             this.lbDisclaimer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(216)))), ((int)(((byte)(10)))), ((int)(((byte)(29)))));
-            this.lbDisclaimer1.Font = new System.Drawing.Font("Calibri Light", 11.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbDisclaimer1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbDisclaimer1.ForeColor = System.Drawing.Color.Black;
             this.lbDisclaimer1.Location = new System.Drawing.Point(0, 294);
             this.lbDisclaimer1.Name = "lbDisclaimer1";
@@ -99,7 +82,7 @@ namespace SpringCard.LibCs.Windows.Forms
             // lbDisclaimer3
             // 
             this.lbDisclaimer3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(216)))), ((int)(((byte)(10)))), ((int)(((byte)(29)))));
-            this.lbDisclaimer3.Font = new System.Drawing.Font("Calibri Light", 11.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbDisclaimer3.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbDisclaimer3.ForeColor = System.Drawing.Color.Black;
             this.lbDisclaimer3.Location = new System.Drawing.Point(0, 346);
             this.lbDisclaimer3.Name = "lbDisclaimer3";
@@ -111,7 +94,7 @@ namespace SpringCard.LibCs.Windows.Forms
             // lbDisclaimer2
             // 
             this.lbDisclaimer2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(216)))), ((int)(((byte)(10)))), ((int)(((byte)(29)))));
-            this.lbDisclaimer2.Font = new System.Drawing.Font("Calibri Light", 11.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbDisclaimer2.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbDisclaimer2.ForeColor = System.Drawing.Color.Black;
             this.lbDisclaimer2.Location = new System.Drawing.Point(0, 320);
             this.lbDisclaimer2.Name = "lbDisclaimer2";
@@ -123,7 +106,7 @@ namespace SpringCard.LibCs.Windows.Forms
             // lbProduct
             // 
             this.lbProduct.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(216)))), ((int)(((byte)(10)))), ((int)(((byte)(29)))));
-            this.lbProduct.Font = new System.Drawing.Font("Calibri Light", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbProduct.Font = new System.Drawing.Font("Segoe UI Semilight", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbProduct.ForeColor = System.Drawing.Color.Black;
             this.lbProduct.Location = new System.Drawing.Point(0, 130);
             this.lbProduct.Name = "lbProduct";
@@ -142,62 +125,46 @@ namespace SpringCard.LibCs.Windows.Forms
             this.lbCopyright.TabIndex = 6;
             this.lbCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // imgSplashMarroon
+            // pBottom
             // 
-            this.imgSplashMarroon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imgSplashMarroon.Image = ((System.Drawing.Image)(resources.GetObject("imgSplashMarroon.Image")));
-            this.imgSplashMarroon.Location = new System.Drawing.Point(0, 0);
-            this.imgSplashMarroon.Name = "imgSplashMarroon";
-            this.imgSplashMarroon.Size = new System.Drawing.Size(600, 374);
-            this.imgSplashMarroon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.imgSplashMarroon.TabIndex = 7;
-            this.imgSplashMarroon.TabStop = false;
-            // 
-            // imgSplashLight
-            // 
-            this.imgSplashLight.BackColor = System.Drawing.Color.White;
-            this.imgSplashLight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imgSplashLight.Image = ((System.Drawing.Image)(resources.GetObject("imgSplashLight.Image")));
-            this.imgSplashLight.Location = new System.Drawing.Point(0, 0);
-            this.imgSplashLight.Name = "imgSplashLight";
-            this.imgSplashLight.Size = new System.Drawing.Size(600, 374);
-            this.imgSplashLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.imgSplashLight.TabIndex = 8;
-            this.imgSplashLight.TabStop = false;
-            // 
-            // imgSplashWhite
-            // 
-            this.imgSplashWhite.BackColor = System.Drawing.Color.White;
-            this.imgSplashWhite.Image = ((System.Drawing.Image)(resources.GetObject("imgSplashWhite.Image")));
-            this.imgSplashWhite.Location = new System.Drawing.Point(165, 22);
-            this.imgSplashWhite.Name = "imgSplashWhite";
-            this.imgSplashWhite.Size = new System.Drawing.Size(278, 56);
-            this.imgSplashWhite.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.imgSplashWhite.TabIndex = 9;
-            this.imgSplashWhite.TabStop = false;
-            this.imgSplashWhite.Visible = false;
-            // 
-            // pBottomWhite
-            // 
-            this.pBottomWhite.BackColor = System.Drawing.Color.Black;
-            this.pBottomWhite.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pBottomWhite.Location = new System.Drawing.Point(0, 374);
-            this.pBottomWhite.Name = "pBottomWhite";
-            this.pBottomWhite.Size = new System.Drawing.Size(600, 26);
-            this.pBottomWhite.TabIndex = 10;
-            this.pBottomWhite.Visible = false;
+            this.pBottom.BackColor = System.Drawing.Color.Black;
+            this.pBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pBottom.Location = new System.Drawing.Point(0, 374);
+            this.pBottom.Name = "pBottom";
+            this.pBottom.Size = new System.Drawing.Size(600, 26);
+            this.pBottom.TabIndex = 10;
             // 
             // lbPrivate
             // 
             this.lbPrivate.AutoSize = true;
             this.lbPrivate.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
             this.lbPrivate.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lbPrivate.Location = new System.Drawing.Point(221, 294);
+            this.lbPrivate.Location = new System.Drawing.Point(221, 281);
             this.lbPrivate.Name = "lbPrivate";
             this.lbPrivate.Size = new System.Drawing.Size(158, 13);
             this.lbPrivate.TabIndex = 16;
             this.lbPrivate.Text = "SPRINGCARD PRIVATE MODE";
             this.lbPrivate.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // imgLogoColor
+            // 
+            this.imgLogoColor.Image = global::SpringCard.LibCs.Windows.Forms.Properties.Resources.logoColor;
+            this.imgLogoColor.Location = new System.Drawing.Point(150, 12);
+            this.imgLogoColor.Name = "imgLogoColor";
+            this.imgLogoColor.Size = new System.Drawing.Size(299, 58);
+            this.imgLogoColor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgLogoColor.TabIndex = 17;
+            this.imgLogoColor.TabStop = false;
+            // 
+            // imgLogoWhite
+            // 
+            this.imgLogoWhite.Image = global::SpringCard.LibCs.Windows.Forms.Properties.Resources.logoWhite;
+            this.imgLogoWhite.Location = new System.Drawing.Point(150, 12);
+            this.imgLogoWhite.Name = "imgLogoWhite";
+            this.imgLogoWhite.Size = new System.Drawing.Size(299, 58);
+            this.imgLogoWhite.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgLogoWhite.TabIndex = 18;
+            this.imgLogoWhite.TabStop = false;
             // 
             // SplashForm
             // 
@@ -205,18 +172,17 @@ namespace SpringCard.LibCs.Windows.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(600, 400);
+            this.Controls.Add(this.imgLogoWhite);
             this.Controls.Add(this.lbPrivate);
-            this.Controls.Add(this.imgSplashWhite);
+            this.Controls.Add(this.imgLogoColor);
             this.Controls.Add(this.lbCopyright);
             this.Controls.Add(this.lbProduct);
             this.Controls.Add(this.lbDisclaimer2);
             this.Controls.Add(this.lbDisclaimer3);
             this.Controls.Add(this.lbDisclaimer1);
             this.Controls.Add(this.lbVersion);
-            this.Controls.Add(this.imgSplashRed);
-            this.Controls.Add(this.imgSplashMarroon);
-            this.Controls.Add(this.imgSplashLight);
-            this.Controls.Add(this.pBottomWhite);
+            this.Controls.Add(this.pBottom);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -229,26 +195,22 @@ namespace SpringCard.LibCs.Windows.Forms
             this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SplashForm_FormClosed);
             this.Click += new System.EventHandler(this.SplashFormClose);
-            ((System.ComponentModel.ISupportInitialize)(this.imgSplashRed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imgSplashMarroon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imgSplashLight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imgSplashWhite)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgLogoColor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgLogoWhite)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
 		}
 		private System.Windows.Forms.Label lbVersion;
 		private System.Windows.Forms.Timer AutoCloseTimer;
-		private System.Windows.Forms.PictureBox imgSplashRed;
         private System.Windows.Forms.Label lbDisclaimer1;
         private System.Windows.Forms.Label lbDisclaimer3;
         private System.Windows.Forms.Label lbDisclaimer2;
         private System.Windows.Forms.Label lbProduct;
         private System.Windows.Forms.Label lbCopyright;
-        private System.Windows.Forms.PictureBox imgSplashMarroon;
-        private System.Windows.Forms.PictureBox imgSplashLight;
-        private System.Windows.Forms.PictureBox imgSplashWhite;
-        private System.Windows.Forms.Panel pBottomWhite;
+        private System.Windows.Forms.Panel pBottom;
         private System.Windows.Forms.Label lbPrivate;
+        private System.Windows.Forms.PictureBox imgLogoColor;
+        private System.Windows.Forms.PictureBox imgLogoWhite;
     }
 }

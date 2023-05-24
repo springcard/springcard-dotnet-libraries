@@ -34,15 +34,138 @@ namespace SpringCard.LibCs
 	 */
 	public partial class Logger
 	{
-		[field: NonSerialized]
-		private EventLog eventLog = null;
-
-		/**
-		 * \brief Configure the Logger to send its messages to Windows' event log
-		 */
-		public static void OpenEventLog(string log, string source)
+		public class EventLogSink : Sink
 		{
-			defaultInstance.openEventLog(log, source);
+			EventLog eventLog = null;
+			object locker = new object();
+			string log;
+			string source;
+
+			public EventLogSink(Level level, string log, string source) : base(level)
+            {
+				this.log = log;
+				this.source = source;
+				lock (locker)
+				{
+					Open();
+				}
+            }
+
+			internal override void Send(Entry entry)
+            {
+#if !NET5_0_OR_GREATER
+				bool reset = false;
+				lock (locker)
+				{
+					if (eventLog != null)
+					{
+						try
+						{
+							string s = "";
+
+							if (!string.IsNullOrEmpty(entry.context))
+								s = s + entry.context + "\n";
+							s = s + entry.message;
+
+							switch (entry.level)
+							{
+								case Level.Fatal:
+								case Level.Error:
+									eventLog.WriteEntry(s, EventLogEntryType.Error);
+									break;
+								case Level.Warning:
+									eventLog.WriteEntry(s, EventLogEntryType.Warning);
+									break;
+								case Level.Info:
+									eventLog.WriteEntry(s, EventLogEntryType.Information);
+									break;
+								case Level.Trace:
+									eventLog.WriteEntry(s + "\n(Trace)", EventLogEntryType.Information);
+									break;
+								case Level.Debug:
+									eventLog.WriteEntry(s + "\n(Debug)", EventLogEntryType.Information);
+									break;
+								default:
+									break;
+							}
+						}
+						catch (Exception e)
+						{
+							consoleSink.Send(Level.Warning, Context, string.Format("Failed to write into EventLog ({0})", e.Message));
+							reset = true;
+						}
+					}
+				}
+				if (reset)
+                {
+					Reset();
+                }
+#endif
+			}
+
+			private void Open()
+			{
+#if !NET5_0_OR_GREATER
+				try
+				{
+					if (!EventLog.SourceExists(source))
+					{
+						EventLog.CreateEventSource(source, log);
+					}
+
+					eventLog = new EventLog();
+					eventLog.Log = log;
+					eventLog.Source = source;
+				}
+				catch (Exception e)
+				{
+					eventLog = null;
+					consoleSink.Send(Level.Warning, Context, string.Format("Failed to open EventLog ({0})", e.Message));
+				}
+#endif
+			}
+
+			private void Reset()
+			{
+#if !NET5_0_OR_GREATER
+				lock (locker)
+				{
+					if (eventLog != null)
+					{
+						try
+						{
+							eventLog.Clear();
+							eventLog = null;
+							Open();
+							eventLog.Clear();
+						}
+						catch (Exception e)
+						{
+							consoleSink.Send(Level.Warning, Context, string.Format("Failed to reset EventLog ({0})", e.Message));
+						}
+					}
+					else
+					{
+						Open();
+					}
+				}
+			}
+#endif
+		}
+
+		public static Level EventLogLevel
+		{
+			set
+			{
+				lock (sinks)
+				{
+					foreach (Sink sink in sinks)
+					{
+						if (sink is EventLogSink)
+							sink.level = value;
+					}
+				}
+			}
 		}
 
 		/**
@@ -50,161 +173,16 @@ namespace SpringCard.LibCs
 		 */
 		public static void OpenEventLog(Level level, string log, string source)
 		{
-			defaultInstance.openEventLog(log, source);
-			defaultInstance.eventLogLevel = level;
+			AddSink(new EventLogSink(level, log, source), true);
 		}
 
 
 		/**
-		 * \brief Load the Logger settings from the application's registry branch.
+		 * \brief Configure the Logger to send its messages to Windows' event log
 		 */
-		public void loadConfigFromRegistry(string CompanyName, string ProductName)
+		public static void OpenEventLog(string log, string source)
 		{
-			try
-			{
-				Level verboseLevel = Level.None;
-
-				RegistryKey k = Registry.CurrentUser.OpenSubKey("SOFTWARE\\" + CompanyName + "\\" + ProductName, false);
-				string s = (string)k.GetValue("VerboseLevel", "");
-
-				int i;
-				if (int.TryParse(s, out i))
-				{
-					verboseLevel = IntToLevel(i);
-				}
-				else
-				{
-					for (i = (int)Level.Debug; i > (int)Level.None; i--)
-					{
-						if (s.ToLower() == ((Level)i).ToString().ToLower())
-						{
-							verboseLevel = (Level)i;
-							break;
-						}
-					}
-				}
-
-				logSettings.consoleLevel = verboseLevel;
-
-				s = (string)k.GetValue("VerboseFile");
-				if (!string.IsNullOrEmpty(s))
-				{
-					logSettings.logFileName = s;
-					if (LogFileMutex == null)
-						LogFileMutex = new Mutex();
-				}
-
-				s = (string)k.GetValue("VerboseFileDate", "0");
-				if (int.TryParse(s, out i))
-				{
-					if (i != 0)
-					{
-						logSettings.logFileNameWithDate = true;
-					}
-				}
-
-			}
-			catch
-			{
-			}
-		}
-
-		public void openEventLog(string log, string source)
-		{
-			try
-			{
-				if (!EventLog.SourceExists(source))
-				{
-					EventLog.CreateEventSource(source, log);
-				}
-
-				eventLog = new EventLog();
-				eventLog.Log = log;
-				eventLog.Source = source;
-			}
-			catch (Exception e)
-			{
-				eventLog = null;
-				warning("Failed to open Event Log ({0})", e.Message);
-			}
-		}
-
-		public void openEventLog(Level level, string log, string source)
-		{
-			openEventLog(log, source);
-			logSettings.eventLogLevel = level;
-		}
-
-		public Level eventLogLevel
-		{
-			get => logSettings.eventLogLevel;
-			set => logSettings.eventLogLevel = value;
-		}
-
-		private void sendToEventLog(Level level, string context, string message)
-		{
-			if (eventLog != null)
-			{
-				try
-				{
-					lock (eventLog)
-					{
-						string s = "";
-
-						if (!string.IsNullOrEmpty(context))
-							s = s + context + "\n";
-						s = s + message;
-
-						switch (level)
-						{
-							case Level.Fatal:
-							case Level.Error:
-								eventLog.WriteEntry(s, EventLogEntryType.Error);
-								break;
-							case Level.Warning:
-								eventLog.WriteEntry(s, EventLogEntryType.Warning);
-								break;
-							case Level.Info:
-								eventLog.WriteEntry(s, EventLogEntryType.Information);
-								break;
-							case Level.Trace:
-								eventLog.WriteEntry(s + "\n(Trace)", EventLogEntryType.Information);
-								break;
-							case Level.Debug:
-								eventLog.WriteEntry(s + "\n(Debug)", EventLogEntryType.Information);
-								break;
-							default:
-								break;
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					sendToConsole(DateTime.UtcNow, Level.Warning, "EventLog", string.Format("Failed to write into Event Log ({0})", e.Message));
-					resetEventLog();
-					eventLog.WriteEntry("(Clear log)", EventLogEntryType.Error);
-				}
-			}
-		}
-
-		private void resetEventLog()
-		{
-			if (eventLog != null)
-			{
-				try
-				{
-					lock (eventLog)
-					{
-						string log = eventLog.Log;
-						string source = eventLog.Source;
-						eventLog.Clear();
-						eventLog = null;
-						openEventLog(log, source);
-						eventLog.Clear();
-					}
-				}
-				catch { }
-			}
+			OpenEventLog(Level.Info, log, source);
 		}
 	}
 }

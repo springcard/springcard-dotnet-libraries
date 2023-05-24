@@ -46,16 +46,6 @@ namespace SpringCard.LibCs.Windows.Forms
 
 			Assembly programAssembly = Assembly.GetEntryAssembly();
 
-			tabLibraries.Text = T._("Libraries");
-			tabDrivers.Text = T._("Drivers");
-			tabSystem.Text = T._("System");
-			tabLicense.Text = T._("License");
-			tabTrademarks.Text = T._("Trademarks");
-			tabCredits.Text = T._("Credits");
-			tabMore.Text = T._("More...");
-
-			btnCopyInfo.Text = T._("Copy information to clipboard");
-
             string formTitle = T._("About...");
 
             try
@@ -445,5 +435,10 @@ namespace SpringCard.LibCs.Windows.Forms
 		{
 			instance = null;
 		}
-	}
+
+        private void imgLogoColor_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

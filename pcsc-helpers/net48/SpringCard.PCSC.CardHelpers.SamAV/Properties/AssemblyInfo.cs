@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 // Les informations générales relatives à un assembly dépendent de
@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SpringCard SAS, France")]
 [assembly: AssemblyProduct("SpringCard.PCSC (.NET framework 4.8)")]
-[assembly: AssemblyCopyright("Copyright © SpringCard 2019-2022")]
+[assembly: AssemblyCopyright("Copyright © SpringCard 2019-2023")]
 [assembly: AssemblyTrademark ("This program is an unsupported sample software from SpringCard's SDK. You may use it freely, but only together with a genuine SpringCard device. Please read the associated LICENSE.txt file for further information.")]
 [assembly: AssemblyCulture("")]
 // Les informations de version pour un assembly se composent des quatre valeurs suivantes :
@@ -21,4 +21,4 @@ using System.Runtime.InteropServices;
 //
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de build et de révision par défaut
 // en utilisant '*', comme indiqué ci-dessous :
-[assembly: AssemblyVersion("22.9.*")]
+[assembly: AssemblyVersion("23.02.*")]

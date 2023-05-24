@@ -25,16 +25,21 @@ namespace SpringCard.LibCs
     {
         private static bool doneVerifyAssemblies = false;
         private static List<Assembly> loadedAssemblies = new List<Assembly>();
-        private static List<AssemblyName> missingAssemblies = new List<AssemblyName>();
+        private static List<string> missingAssemblyNames = new List<string>();
 
         public static bool VerifyAssemblies(bool missingAssemblyIsFatal)
+        {
+            return VerifyAssemblies(true, missingAssemblyIsFatal);
+        }
+
+        public static bool VerifyAssemblies(bool withVersions, bool missingAssemblyIsFatal)
         {
             if (doneVerifyAssemblies)
                 return true;
 
             bool result = true;
             loadedAssemblies.Clear();
-            missingAssemblies.Clear();
+            missingAssemblyNames.Clear();
             List<string> loadedAssemblyNames = new List<string>();
             Queue<Assembly> assembliesToCheck = new Queue<Assembly>();
 
@@ -43,38 +48,44 @@ namespace SpringCard.LibCs
             while (assembliesToCheck.Count > 0)
             {
                 Assembly assemblyToCheck = assembliesToCheck.Dequeue();
-                foreach (AssemblyName assemblyName in assemblyToCheck.GetReferencedAssemblies())
+                foreach (AssemblyName assemblyEntry in assemblyToCheck.GetReferencedAssemblies())
                 {
-                    if (!loadedAssemblyNames.Contains(assemblyName.FullName))
+                    string assemblyName;
+                    if (withVersions)
+                        assemblyName = assemblyEntry.FullName;
+                    else
+                        assemblyName = assemblyEntry.Name;
+
+                    if (!loadedAssemblyNames.Contains(assemblyName))
                     {
                         try
                         {
-                            Assembly loadedAssembly = Assembly.Load(assemblyName);
+                            Assembly loadedAssembly = Assembly.Load(assemblyEntry);
                             assembliesToCheck.Enqueue(loadedAssembly);
                             loadedAssemblies.Add(loadedAssembly);
-                            loadedAssemblyNames.Add(assemblyName.FullName);
+                            loadedAssemblyNames.Add(assemblyName);
                         }
                         catch (Exception e)
                         {
                             bool acceptMissing = false;
                             bool silentMissing = false;
-                            if (assemblyName.FullName.StartsWith("System"))
+                            if (assemblyName.StartsWith("System"))
                                 acceptMissing = true;
-                            if (assemblyName.FullName.StartsWith("Microsoft"))
+                            if (assemblyName.StartsWith("Microsoft"))
                                 acceptMissing = true;
-                            if (assemblyName.FullName.StartsWith("Windows"))
+                            if (assemblyName.StartsWith("Windows"))
                                 acceptMissing = true;
                             if (!assemblyToCheck.FullName.StartsWith("SpringCard"))
                                 silentMissing = true;
-                            if ((assemblyName.Version.Major == 255) && (assemblyName.Version.Minor == 255) && (assemblyName.Version.Revision == 255) && (assemblyName.Version.Build == 255))
+                            if ((assemblyEntry.Version.Major == 255) && (assemblyEntry.Version.Minor == 255) && (assemblyEntry.Version.Revision == 255) && (assemblyEntry.Version.Build == 255))
                                 silentMissing = true;
 
                             if (!acceptMissing)
                             {
                                 result = false;
                                 Logger.Fatal("Assembly {0} referenced by {1} is missing", assemblyName, assemblyToCheck.FullName);
-                                if (!missingAssemblies.Contains(assemblyName))
-                                    missingAssemblies.Add(assemblyName);
+                                if (!missingAssemblyNames.Contains(assemblyName))
+                                    missingAssemblyNames.Add(assemblyName);
                                 if (missingAssemblyIsFatal) throw e;
                             }
                             else if (!silentMissing)
@@ -110,15 +121,7 @@ namespace SpringCard.LibCs
 
         public static string[] GetMissingAssemblyNames()
         {
-            List<string> result = new List<string>();
-
-            foreach (AssemblyName name in missingAssemblies)
-            {
-                if (!result.Contains(name.FullName))
-                    result.Add(name.FullName);
-            }
-
-            return result.ToArray();
+            return missingAssemblyNames.ToArray();
         }
 
 

@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace SpringCard.LibCs.Windows
 {
-    public class Kernel32
+    public static class KERNEL32
     {
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern SafeFileHandle CreateFile(String lpFileName, UInt32 dwDesiredAccess, Int32 dwShareMode, IntPtr lpSecurityAttributes, Int32 dwCreationDisposition, Int32 dwFlagsAndAttributes, Int32 hTemplateFile);
@@ -19,6 +19,9 @@ namespace SpringCard.LibCs.Windows
         public const Int32 INVALID_HANDLE_VALUE = -1;
         public const Int32 OPEN_EXISTING = 3;
 
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern bool DeviceIoControl(SafeFileHandle hDevice, int dwIoControlCode, IntPtr lpInBuffer, int nInBufferSize, IntPtr lpOutBuffer, int nOutBufferSize, out int lpBytesReturned, IntPtr lpOverlapped);
+
 
         [DllImport("kernel32")]
         public static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
@@ -26,7 +29,7 @@ namespace SpringCard.LibCs.Windows
         [DllImport("kernel32")]
         public static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
 
-        public string IniReadValue(string filePath, string section, string key, string def)
+        public static string IniReadValue(string filePath, string section, string key, string def)
         {
             StringBuilder temp = new StringBuilder(255);
 

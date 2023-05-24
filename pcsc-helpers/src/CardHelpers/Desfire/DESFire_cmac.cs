@@ -14,6 +14,7 @@ namespace SpringCard.PCSC.CardHelpers
     /// <summary>
     /// Description of DESFire_core.
     /// </summary>
+    
     public partial class Desfire
     {
         int XferCmacSend(bool append)

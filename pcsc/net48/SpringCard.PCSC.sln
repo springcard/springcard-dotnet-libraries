@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.PCSC.ZeroDriver"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.PCSC.Forms", "SpringCard.PCSC.Forms\SpringCard.PCSC.Forms.csproj", "{AF872A31-915B-4DFF-978E-16D5017FFEFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.PCSC.ZeroDriver.Forms", "SpringCard.PCSC.ZeroDriver.Forms\SpringCard.PCSC.ZeroDriver.Forms.csproj", "{29134778-A466-4A77-B268-C8FAC016C1B2}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringCard.PCSC.Bridges", "SpringCard.PCSC.Bridges\SpringCard.PCSC.Bridges.csproj", "{BA8C3B84-3F97-4252-BE4A-4051EAEA8445}"
 EndProject
 Global
@@ -29,6 +31,10 @@ Global
 		{AF872A31-915B-4DFF-978E-16D5017FFEFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF872A31-915B-4DFF-978E-16D5017FFEFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF872A31-915B-4DFF-978E-16D5017FFEFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29134778-A466-4A77-B268-C8FAC016C1B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29134778-A466-4A77-B268-C8FAC016C1B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29134778-A466-4A77-B268-C8FAC016C1B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29134778-A466-4A77-B268-C8FAC016C1B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA8C3B84-3F97-4252-BE4A-4051EAEA8445}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA8C3B84-3F97-4252-BE4A-4051EAEA8445}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA8C3B84-3F97-4252-BE4A-4051EAEA8445}.Release|Any CPU.ActiveCfg = Release|Any CPU

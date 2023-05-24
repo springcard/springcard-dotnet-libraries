@@ -156,6 +156,20 @@
       <Link>ToastForm.designer.cs</Link>
       <DependentUpon>ToastForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\..\src\Forms\ViewLogForm.cs">
+      <Link>ViewLogForm.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ViewLogForm.Designer.cs">
+      <Link>ViewLogForm.Designer.cs</Link>
+      <DependentUpon>ViewLogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ViewLogFilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\src\Forms\ViewLogFilterForm.Designer.cs">
+      <DependentUpon>ViewLogFilterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\..\src\Forms\WizardChildForm.cs">
       <Link>WizardChildForm.cs</Link>
     </Compile>
@@ -227,6 +241,10 @@
       <Link>ToastForm.resx</Link>
       <DependentUpon>ToastForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\ViewLogForm.resx">
+      <Link>ViewLogForm.resx</Link>
+      <DependentUpon>ViewLogForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\src\Forms\WizardParentForm.resx">
       <Link>WizardParentForm.resx</Link>
       <DependentUpon>WizardParentForm.cs</DependentUpon>
@@ -234,6 +252,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\src\Forms\ViewLogFilterForm.resx">
+      <DependentUpon>ViewLogFilterForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +266,60 @@
   <ItemGroup>
     <Folder Include="IPAddressControl\" />
     <Folder Include="NewFolder1\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LogoRed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logoWhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\filter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\filter-filled-tool-symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\all-inclusive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\open-folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\diskette.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dark-mode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\office-push-pin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\notepad.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

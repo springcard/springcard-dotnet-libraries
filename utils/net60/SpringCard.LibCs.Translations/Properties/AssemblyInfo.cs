@@ -1,4 +1,4 @@
-﻿#region Using directives
+#region Using directives
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -9,4 +9,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany ("SpringCard")]
 [assembly: AssemblyProduct ("SpringCard.LibCs (.NET framework 6.0)")]
 [assembly: AssemblyCopyright ("Copyright © SpringCard SAS, France, 2014-2022 all rights reserved")]
-[assembly: AssemblyVersion ("22.12.*")]
+[assembly: AssemblyVersion ("23.05.*")]

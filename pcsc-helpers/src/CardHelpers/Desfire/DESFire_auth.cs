@@ -1043,9 +1043,9 @@ namespace SpringCard.PCSC.CardHelpers
         void DeCipherSP80038A(byte[] cipher_key, ref byte[] data, ref UInt32 length, bool random_iv = false)
         {
             byte[] buffer;
-            byte[] dummy_iv;
+            byte[] dummy_iv = new byte[16] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             UInt16 block_count;
-            UInt32 i, j;
+            UInt32 i, j;      
 
             if (data == null)
                 return;
@@ -1068,10 +1068,6 @@ namespace SpringCard.PCSC.CardHelpers
                 RefreshVectorEv2(false);
                 //init_vector = new byte[16] { 0xC9, 0x13, 0xB4, 0x53, 0x11, 0xA4, 0x99, 0x59, 0xDF, 0x94, 0x60, 0x12, 0x6D, 0xFD, 0x52, 0x7F };
             }
-
-            dummy_iv = new byte[16];
-            for (int k = 0; k < 16; k++)
-                dummy_iv[k] = 0;
 
 #if _VERBOSE
       Console.WriteLine("DeCipherSP80038A " + BinConvert.ToHex(data, length));
@@ -1113,7 +1109,7 @@ namespace SpringCard.PCSC.CardHelpers
             uint block_size;
             uint block_count;
             uint i, j;
-            byte[] dummy_iv;
+            byte[] dummy_iv = new byte[16] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 
             if (input == null)
@@ -1166,10 +1162,6 @@ namespace SpringCard.PCSC.CardHelpers
 
             block_count = (actual_length / block_size);
 
-            /* dummy and init vector used */
-            dummy_iv = new byte[16];
-            for (int k = 0; k < 16; k++)
-                dummy_iv[k] = 0;
 
             /* Keep last IV */
             for (i = 0; i < block_count; i++)
@@ -1216,7 +1208,8 @@ namespace SpringCard.PCSC.CardHelpers
             UInt32 block_size;
             UInt32 block_count;
             UInt32 i, j;
-            byte[] dummy_iv;
+            /* dummy and init vector used */
+            byte[] dummy_iv = new byte[16] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 
             if (data == null)
@@ -1242,19 +1235,13 @@ namespace SpringCard.PCSC.CardHelpers
 
             block_count = (actual_length / block_size);
 
-            /* dummy and init vector used */
-            dummy_iv = new byte[16];
-            for (int k = 0; k < 16; k++)
-                dummy_iv[k] = 0;
-
-
             /* Keep last IV */
             for (i = 0; i < block_count; i++)
             {
 
 #if _VERBOSE
-      Console.WriteLine(string.Format("IN Block {0} {1} ", i, BinConvert.ToHex(data, (int)(16 * i), 16)));
-      Console.WriteLine(string.Format("CIPHER Block {0} {1} ", i, BinConvert.ToHex(cipher_IV, 0, 16)));
+    Console.WriteLine(string.Format("IN Block {0} {1} ", i, BinConvert.ToHex(data, (int)(16 * i), 16)));
+    Console.WriteLine(string.Format("CIPHER Block {0} {1} ", i, BinConvert.ToHex(cipher_IV, 0, 16)));
 #endif
                 /* P  <- P XOR IV for first */
                 /* P  <- P XOR P(n-1) for other */
@@ -1266,7 +1253,7 @@ namespace SpringCard.PCSC.CardHelpers
                 Array.ConstrainedCopy(data, (int)(16 * i), tmp, 0, (int)block_size);
 
 #if _VERBOSE
-        Console.WriteLine(string.Format("XORED Block {0} {1} ", i, BinConvert.ToHex(tmp, 16)));
+    Console.WriteLine(string.Format("XORED Block {0} {1} ", i, BinConvert.ToHex(tmp, 16)));
 #endif
 
                 if ((xor_last_block != null) && (i == (block_count - 1)))
@@ -1274,23 +1261,23 @@ namespace SpringCard.PCSC.CardHelpers
                     for (j = 0; j < 16; j++)
                         tmp[j] ^= (byte)(xor_last_block[j]);
 #if _VERBOSE
-          Console.WriteLine("SUBMAC " + BinConvert.ToHex(tmp, 16));
+    Console.WriteLine("SUBMAC " + BinConvert.ToHex(tmp, 16));
 #endif
                 }
 
                 //3. P  <- IV  
-                cipher_IV = DesfireCrypto.AES_Encrypt(tmp, cipher_key, dummy_iv);
+                cipher_IV = DesfireCrypto.AES_Encrypt(tmp, cipher_key,  dummy_iv);
                 Array.ConstrainedCopy(cipher_IV, 0, data, (int)(16 * i), 16);
 
 #if _VERBOSE
-        Console.WriteLine(string.Format("OUT Block {0} {1} ", i, BinConvert.ToHex(cipher_IV, 16)));
+    Console.WriteLine(string.Format("OUT Block {0} {1} ", i, BinConvert.ToHex(cipher_IV, 16)));
 #endif
             }
 
             length = actual_length;
 
 #if _VERBOSE
-      Console.WriteLine(string.Format("Cipher result {0} {1} ", i, BinConvert.ToHex(data, length)));
+    Console.WriteLine(string.Format("Cipher result {0} {1} ", i, BinConvert.ToHex(data, length)));
 #endif
         }
 
@@ -1373,7 +1360,7 @@ namespace SpringCard.PCSC.CardHelpers
 
             /* Create the command string consisting of the command byte and the parameter byte. */
             xfer_length = 0;
-            xfer_buffer[xfer_length++] = DF_AUTHENTICATHE_EV2_FIRST;
+            xfer_buffer[xfer_length++] = DF_AUTHENTICATE_EV2_FIRST;
             xfer_buffer[xfer_length++] = bKeyNumber;
             xfer_buffer[xfer_length++] = LenCaps;
 
@@ -1762,8 +1749,11 @@ namespace SpringCard.PCSC.CardHelpers
 
             // 5. Calculate CMAC
             byte[] CMAC_IV = new byte[16];
-            byte[] CMAC = DesfireCrypto.CalculateCMAC(pbAccessKey, CMAC_IV, SV1);
-            byte[] ENC = DesfireCrypto.CalculateCMAC(pbAccessKey, CMAC_IV, SV2);
+            byte[] CMAC = new byte[16];
+            byte[] ENC = new byte[16];
+
+            CalculateCMACEV2(pbAccessKey, CMAC_IV, SV2, ref CMAC);
+            CalculateCMACEV2(pbAccessKey, CMAC_IV, SV1, ref ENC);
 
             SetSesAuthMACKey(CMAC);
             SetSesAuthENCKey(ENC);

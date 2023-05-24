@@ -98,24 +98,24 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // pBottom
             // 
+            resources.ApplyResources(this.pBottom, "pBottom");
             this.pBottom.BackColor = System.Drawing.SystemColors.Control;
             this.pBottom.Controls.Add(this.btnOK);
             this.pBottom.Controls.Add(this.linkSpringCard);
-            resources.ApplyResources(this.pBottom, "pBottom");
             this.pBottom.Name = "pBottom";
             // 
             // btnOK
             // 
-            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             resources.ApplyResources(this.btnOK, "btnOK");
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnOK.Name = "btnOK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // linkSpringCard
             // 
-            this.linkSpringCard.ActiveLinkColor = System.Drawing.SystemColors.HotTrack;
             resources.ApplyResources(this.linkSpringCard, "linkSpringCard");
+            this.linkSpringCard.ActiveLinkColor = System.Drawing.SystemColors.HotTrack;
             this.linkSpringCard.DisabledLinkColor = System.Drawing.SystemColors.HotTrack;
             this.linkSpringCard.LinkColor = System.Drawing.SystemColors.HotTrack;
             this.linkSpringCard.Name = "linkSpringCard";
@@ -125,13 +125,14 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // pMain
             // 
+            resources.ApplyResources(this.pMain, "pMain");
             this.pMain.BackColor = System.Drawing.SystemColors.Control;
             this.pMain.Controls.Add(this.tabs);
-            resources.ApplyResources(this.pMain, "pMain");
             this.pMain.Name = "pMain";
             // 
             // tabs
             // 
+            resources.ApplyResources(this.tabs, "tabs");
             this.tabs.Controls.Add(this.tabLibraries);
             this.tabs.Controls.Add(this.tabDrivers);
             this.tabs.Controls.Add(this.tabSystem);
@@ -139,26 +140,25 @@ namespace SpringCard.LibCs.Windows.Forms
             this.tabs.Controls.Add(this.tabTrademarks);
             this.tabs.Controls.Add(this.tabCredits);
             this.tabs.Controls.Add(this.tabMore);
-            resources.ApplyResources(this.tabs, "tabs");
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
             // 
             // tabLibraries
             // 
+            resources.ApplyResources(this.tabLibraries, "tabLibraries");
             this.tabLibraries.BackColor = System.Drawing.SystemColors.Control;
             this.tabLibraries.Controls.Add(this.lvLibraries);
-            resources.ApplyResources(this.tabLibraries, "tabLibraries");
             this.tabLibraries.Name = "tabLibraries";
             // 
             // lvLibraries
             // 
+            resources.ApplyResources(this.lvLibraries, "lvLibraries");
             this.lvLibraries.BackColor = System.Drawing.SystemColors.Control;
             this.lvLibraries.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lvLibraries.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3});
-            resources.ApplyResources(this.lvLibraries, "lvLibraries");
             this.lvLibraries.FullRowSelect = true;
             this.lvLibraries.GridLines = true;
             this.lvLibraries.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -183,13 +183,14 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // tabDrivers
             // 
-            this.tabDrivers.Controls.Add(this.lvDrivers);
             resources.ApplyResources(this.tabDrivers, "tabDrivers");
+            this.tabDrivers.Controls.Add(this.lvDrivers);
             this.tabDrivers.Name = "tabDrivers";
             this.tabDrivers.UseVisualStyleBackColor = true;
             // 
             // lvDrivers
             // 
+            resources.ApplyResources(this.lvDrivers, "lvDrivers");
             this.lvDrivers.BackColor = System.Drawing.SystemColors.Control;
             this.lvDrivers.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lvDrivers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -199,7 +200,6 @@ namespace SpringCard.LibCs.Windows.Forms
             this.columnHeader9,
             this.columnHeader10,
             this.columnHeader11});
-            resources.ApplyResources(this.lvDrivers, "lvDrivers");
             this.lvDrivers.FullRowSelect = true;
             this.lvDrivers.GridLines = true;
             this.lvDrivers.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -236,19 +236,19 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // tabSystem
             // 
+            resources.ApplyResources(this.tabSystem, "tabSystem");
             this.tabSystem.BackColor = System.Drawing.SystemColors.Control;
             this.tabSystem.Controls.Add(this.lvSystem);
-            resources.ApplyResources(this.tabSystem, "tabSystem");
             this.tabSystem.Name = "tabSystem";
             // 
             // lvSystem
             // 
+            resources.ApplyResources(this.lvSystem, "lvSystem");
             this.lvSystem.BackColor = System.Drawing.SystemColors.Control;
             this.lvSystem.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lvSystem.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader4,
             this.columnHeader5});
-            resources.ApplyResources(this.lvSystem, "lvSystem");
             this.lvSystem.FullRowSelect = true;
             this.lvSystem.GridLines = true;
             this.lvSystem.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -269,10 +269,10 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // tabLicense
             // 
+            resources.ApplyResources(this.tabLicense, "tabLicense");
             this.tabLicense.BackColor = System.Drawing.SystemColors.Control;
             this.tabLicense.Controls.Add(this.lbLicense);
             this.tabLicense.Controls.Add(this.linkLabel1);
-            resources.ApplyResources(this.tabLicense, "tabLicense");
             this.tabLicense.Name = "tabLicense";
             // 
             // lbLicense
@@ -284,8 +284,8 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // linkLabel1
             // 
-            this.linkLabel1.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(5)))), ((int)(((byte)(15)))));
             resources.ApplyResources(this.linkLabel1, "linkLabel1");
+            this.linkLabel1.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(5)))), ((int)(((byte)(15)))));
             this.linkLabel1.DisabledLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(5)))), ((int)(((byte)(15)))));
             this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(5)))), ((int)(((byte)(15)))));
             this.linkLabel1.Name = "linkLabel1";
@@ -294,9 +294,9 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // tabTrademarks
             // 
+            resources.ApplyResources(this.tabTrademarks, "tabTrademarks");
             this.tabTrademarks.BackColor = System.Drawing.SystemColors.Control;
             this.tabTrademarks.Controls.Add(this.lbTrademarks);
-            resources.ApplyResources(this.tabTrademarks, "tabTrademarks");
             this.tabTrademarks.Name = "tabTrademarks";
             // 
             // lbTrademarks
@@ -308,9 +308,9 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // tabCredits
             // 
+            resources.ApplyResources(this.tabCredits, "tabCredits");
             this.tabCredits.BackColor = System.Drawing.SystemColors.Control;
             this.tabCredits.Controls.Add(this.lbCredits);
-            resources.ApplyResources(this.tabCredits, "tabCredits");
             this.tabCredits.Name = "tabCredits";
             // 
             // lbCredits
@@ -322,9 +322,9 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // tabMore
             // 
+            resources.ApplyResources(this.tabMore, "tabMore");
             this.tabMore.BackColor = System.Drawing.SystemColors.Control;
             this.tabMore.Controls.Add(this.lbMore);
-            resources.ApplyResources(this.tabMore, "tabMore");
             this.tabMore.Name = "tabMore";
             // 
             // lbMore
@@ -353,10 +353,10 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // pHeader
             // 
+            resources.ApplyResources(this.pHeader, "pHeader");
             this.pHeader.BackColor = System.Drawing.Color.White;
             this.pHeader.Controls.Add(this.lbProductBig);
             this.pHeader.Controls.Add(this.pLogo);
-            resources.ApplyResources(this.pHeader, "pHeader");
             this.pHeader.Name = "pHeader";
             // 
             // lbProductBig
@@ -367,31 +367,33 @@ namespace SpringCard.LibCs.Windows.Forms
             // 
             // pLogo
             // 
+            resources.ApplyResources(this.pLogo, "pLogo");
             this.pLogo.Controls.Add(this.imgLogoWhite);
             this.pLogo.Controls.Add(this.imgLogoColor);
-            resources.ApplyResources(this.pLogo, "pLogo");
             this.pLogo.Name = "pLogo";
             // 
             // imgLogoWhite
             // 
             resources.ApplyResources(this.imgLogoWhite, "imgLogoWhite");
+            this.imgLogoWhite.Image = global::SpringCard.LibCs.Windows.Forms.Properties.Resources.logoWhite;
             this.imgLogoWhite.Name = "imgLogoWhite";
             this.imgLogoWhite.TabStop = false;
             // 
             // imgLogoColor
             // 
             resources.ApplyResources(this.imgLogoColor, "imgLogoColor");
+            this.imgLogoColor.Image = global::SpringCard.LibCs.Windows.Forms.Properties.Resources.logoColor;
             this.imgLogoColor.Name = "imgLogoColor";
             this.imgLogoColor.TabStop = false;
             // 
             // pTop
             // 
+            resources.ApplyResources(this.pTop, "pTop");
             this.pTop.Controls.Add(this.lbPrivate);
             this.pTop.Controls.Add(this.btnCopyInfo);
             this.pTop.Controls.Add(this.lbCompanyProduct);
             this.pTop.Controls.Add(this.lbCopyright);
             this.pTop.Controls.Add(this.lbVersion);
-            resources.ApplyResources(this.pTop, "pTop");
             this.pTop.Name = "pTop";
             // 
             // lbPrivate
@@ -409,10 +411,10 @@ namespace SpringCard.LibCs.Windows.Forms
             // AboutForm
             // 
             this.AcceptButton = this.btnOK;
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.btnOK;
-            resources.ApplyResources(this, "$this");
             this.Controls.Add(this.pMain);
             this.Controls.Add(this.pBottom);
             this.Controls.Add(this.pTop);
@@ -453,7 +455,6 @@ namespace SpringCard.LibCs.Windows.Forms
 		}
 		private System.Windows.Forms.LinkLabel linkLabel1;
 		private System.Windows.Forms.LinkLabel linkSpringCard;
-		private System.Windows.Forms.PictureBox imgLogoWhite;
 		private System.Windows.Forms.Panel pLogo;
 		private System.Windows.Forms.Panel pHeader;
 		private System.Windows.Forms.Label lbCompanyProduct;
@@ -483,7 +484,6 @@ namespace SpringCard.LibCs.Windows.Forms
         private System.Windows.Forms.Panel pTop;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCopyInfo;
-        private System.Windows.Forms.PictureBox imgLogoColor;
         private System.Windows.Forms.TabPage tabDrivers;
         private System.Windows.Forms.ListView lvDrivers;
         private System.Windows.Forms.ColumnHeader columnHeader6;
@@ -493,5 +493,7 @@ namespace SpringCard.LibCs.Windows.Forms
         private System.Windows.Forms.ColumnHeader columnHeader10;
         private System.Windows.Forms.ColumnHeader columnHeader11;
         private System.Windows.Forms.Label lbPrivate;
+        private System.Windows.Forms.PictureBox imgLogoColor;
+        private System.Windows.Forms.PictureBox imgLogoWhite;
     }
 }

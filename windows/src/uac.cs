@@ -539,7 +539,7 @@ namespace SpringCard.LibCs.Windows
             }
 			catch (Exception e)
 			{
-                logger.debug("Elevation error {0}", e.Message);
+                logger.error("Elevation error {0}", e.Message);
             }
 
             elevatedSuccess = false;

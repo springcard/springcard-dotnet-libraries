@@ -37,6 +37,12 @@
     <Compile Include="..\..\src\jsonconfig.cs" Link="jsonconfig.cs" />
     <Compile Include="..\..\src\keyvalue.cs" Link="keyvalue.cs" />
     <Compile Include="..\..\src\LICENSE.cs" Link="LICENSE.cs" />
+    <Compile Include="..\..\src\logger-console.cs" Link="logger-console.cs" />
+    <Compile Include="..\..\src\logger-file.cs" Link="logger-file.cs" />
+    <Compile Include="..\..\src\logger-gelf.cs" Link="logger-gelf.cs" />
+    <Compile Include="..\..\src\logger-sink.cs" Link="logger-sink.cs" />
+    <Compile Include="..\..\src\logger-syslog.cs" Link="logger-syslog.cs" />
+    <Compile Include="..\..\src\logger-win.cs" Link="logger-win.cs" />
     <Compile Include="..\..\src\logger.cs" Link="logger.cs" />
     <Compile Include="..\..\src\phpdefinefile.cs" Link="phpdefinefile.cs" />
     <Compile Include="..\..\src\ping.cs" Link="ping.cs" />

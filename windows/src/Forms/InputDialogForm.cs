@@ -18,6 +18,8 @@ namespace SpringCard.LibCs.Windows.Forms
 	/// </summary>
 	public partial class InputDialogForm : Form
 	{
+		private static Logger logger = new Logger(typeof(InputDialogForm).FullName);
+
 		public InputDialogForm()
 		{
 			InitializeComponent();
@@ -62,48 +64,48 @@ namespace SpringCard.LibCs.Windows.Forms
 			DialogResult result;
 			if (parentForm != null)
 			{
-				Logger.Debug("InputDialogForm.ShowDialog (with parent)");
+				logger.debug("InputDialogForm.ShowDialog (with parent)");
 				form.StartPosition = FormStartPosition.CenterParent;
 				result = form.ShowDialog(parentForm);
 			}
 			else
 			{
-				Logger.Debug("InputDialogForm.ShowDialog (detached)");
+				logger.debug("InputDialogForm.ShowDialog (detached)");
 				form.StartPosition = FormStartPosition.CenterScreen;
 				result = form.ShowDialog();
 			}
-			Logger.Debug("InputDialogForm.ShowDialog -> {0}", result.ToString());
+			logger.debug("InputDialogForm.ShowDialog -> {0}", result.ToString());
 
 			if (result == DialogResult.OK)
 			{
 				Result = form.eInput.Text;
-				Logger.Debug("InputDialogForm->input is '{0}', returning true", Result);
+				logger.debug("InputDialogForm->input is '{0}', returning true", Result);
 				return true;
 			}
 			else
 			{
 				Result = null;
-				Logger.Debug("InputDialogForm->returning false", Result);
+				logger.debug("InputDialogForm->returning false", Result);
 				return false;
 			}
 		}
 			
 		void BtnOKClick(object sender, EventArgs e)
 		{
-			Logger.Debug("InputDialogForm:OK");
+			logger.debug("InputDialogForm:OK");
 			DialogResult = DialogResult.OK;
 			Close();	
 		}
 
 		private void InputDialogForm_Shown(object sender, EventArgs e)
 		{
-			Logger.Debug("InputDialogForm:Shown");
+			logger.debug("InputDialogForm:Shown");
 			eInput.Focus();
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
-			Logger.Debug("InputDialogForm:Cancel");
+			logger.debug("InputDialogForm:Cancel");
 			DialogResult = DialogResult.Cancel;
 			Close();
 		}

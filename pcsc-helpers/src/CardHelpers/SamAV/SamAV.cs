@@ -160,11 +160,19 @@ namespace SpringCard.PCSC.CardHelpers
 
         private bool OnStatusWordError(ushort sw)
         {
-            Logger.Warning("Status word={0:X04}", sw);
+            Logger.Warning("SAM SW={0:X04}", sw);
             userInteraction.Warning(string.Format("The SAM has returned an error (SW={0:X04})", sw));
             LastError = ResultE.UnexpectedStatusWord;
 
             _StatusWord = sw;
+            return false;
+        }
+
+        private bool OnPiccStatusWordError(ushort sw)
+        {
+            Logger.Warning("PICC SW={0:X04}", sw);
+            userInteraction.Warning(string.Format("The PICC has returned an error (SW={0:X04})", sw));
+            LastError = ResultE.UnexpectedStatusWord;
             return false;
         }
 

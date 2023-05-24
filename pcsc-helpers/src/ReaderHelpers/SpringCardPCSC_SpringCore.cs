@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace SpringCard.PCSC.ReaderHelpers
 {
-    public partial class SpringCore
+    public partial class SpringCore : SpringCardReader
     {
         public enum Sequences : byte
         {
@@ -34,5 +34,10 @@ namespace SpringCard.PCSC.ReaderHelpers
             NfcRfidTagRead,
             NfcRfidFailure
         };
+
+        public SpringCore(SCardChannel channel) : base(channel)
+        {
+            IsSpringCore = true;
+        }
     }
 }

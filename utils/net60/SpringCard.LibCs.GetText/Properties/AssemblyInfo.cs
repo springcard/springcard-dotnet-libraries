@@ -1,4 +1,4 @@
-﻿#region Using directives
+#region Using directives
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -9,5 +9,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany ("SpringCard")]
 [assembly: AssemblyProduct ("SpringCard.LibCs (.NET 6.0)")]
 [assembly: AssemblyCopyright ("Copyright © SpringCard SAS, France, 2014-2022 for the integration - Source code is under MIT License")]
-[assembly: AssemblyVersion ("22.12.*")]
+[assembly: AssemblyVersion ("23.05.*")]
 [assembly: AssemblyTrademark ("This library is a derivative work of NGetText, © 2012 by Vitaly Zilnik (MIT License).")]

@@ -5,15 +5,15 @@ using System.IO.Ports;
 
 namespace SpringCard.LibCs.Windows
 {
-	public static class Serial
+	public static class SERIAL
 	{
-		private static Logger logger = new Logger(typeof(Serial).FullName);
+		private static Logger logger = new Logger(typeof(SERIAL).FullName);
 
-		public class CommPortInfo
+		public class DeviceInfo
 		{
 			ManagementObject device;
 			
-			public CommPortInfo(ManagementObject device)
+			public DeviceInfo(ManagementObject device)
 			{
 				this.device = device;
 			}
@@ -44,21 +44,21 @@ namespace SpringCard.LibCs.Windows
 					return name;
 				}				
 			}						
-			public string DeviceID
+			public string DeviceId
 			{
 				get
 				{
 					return (string)device.GetPropertyValue("DeviceID");
 				}				
 			}						
-			public string PNPDeviceID
+			public string PnpDeviceId
 			{
 				get
 				{
 					return (string)device.GetPropertyValue("PNPDeviceID");
 				}				
 			}			
-			public string[] HardwareIDs
+			public string[] HardwareIds
 			{
 				get
 				{
@@ -68,9 +68,9 @@ namespace SpringCard.LibCs.Windows
 			
 		}
     
-		public static List<CommPortInfo> EnumCommPorts()
+		public static List<DeviceInfo> EnumCommPorts()
 		{
-			List<CommPortInfo> commPorts = new List<CommPortInfo>();
+			List<DeviceInfo> commPorts = new List<DeviceInfo>();
 			
 			try
 			{
@@ -78,7 +78,7 @@ namespace SpringCard.LibCs.Windows
 				
 				foreach (ManagementObject queryObj in searcher.Get())
 				{
-					CommPortInfo deviceObj = new CommPortInfo(queryObj);					
+					DeviceInfo deviceObj = new DeviceInfo(queryObj);					
 					if (deviceObj.PortName.StartsWith("LPT")) continue;
                     if (WinUtils.Debug)
                         logger.debug("Found a comm. port: " + deviceObj.PortName);
@@ -102,7 +102,7 @@ namespace SpringCard.LibCs.Windows
 			return result;
 		}
 
-		public static string GetDeviceCommPortName(WMI.DeviceInfo device)
+		public static string GetDeviceCommPortName(USB.DeviceInfo device)
 		{
 			if (device == null)
 				return null;
@@ -114,7 +114,7 @@ namespace SpringCard.LibCs.Windows
 				try
 				{
 					string[] e;
-					FtdiLookup = device.PnpDeviceID;
+					FtdiLookup = device.PnpDeviceId;
 					FtdiLookup = FtdiLookup.Replace("USB", "FTDIBUS");
 					e = FtdiLookup.Split(new char[] { '&' }, 2);
 					FtdiLookup = e[0] + "+" + e[1];
@@ -127,16 +127,16 @@ namespace SpringCard.LibCs.Windows
 				}
 			}
 
-			foreach (CommPortInfo commPortInfo in EnumCommPorts())
+			foreach (DeviceInfo commPortInfo in EnumCommPorts())
 			{
-				if (commPortInfo.PNPDeviceID == device.PnpDeviceID)
+				if (commPortInfo.PnpDeviceId == device.PnpDeviceId)
 				{
 					return commPortInfo.PortName;
 				}
 
 				if (FtdiLookup != null)
 				{
-					if (commPortInfo.PNPDeviceID.StartsWith(FtdiLookup))
+					if (commPortInfo.PnpDeviceId.StartsWith(FtdiLookup))
 					{
 						return commPortInfo.PortName;
 					}
@@ -144,7 +144,6 @@ namespace SpringCard.LibCs.Windows
 			}
 
 			return null;
-
 		}
 
 

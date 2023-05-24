@@ -20,6 +20,147 @@ namespace SpringCard.PCSC.ReaderHelpers
             this.channel = channel;
         }
 
+        public bool SendControlApdu(byte P1, byte P2, byte[] Data = null)
+        {
+            CAPDU capdu = new CAPDU(0xFF, 0xFB, P1, P2, Data);
+            RAPDU rapdu = channel.Transmit(capdu);
+            if (rapdu == null)
+                return false;
+            if (rapdu.SW != 0x9000)
+                return false;
+            return true;
+        }
+
+        public bool ResumeCardTracking()
+        {
+            return SendControlApdu(0x00, 0x00);
+        }
+
+        public bool SuspendCardTracking()
+        {
+            return SendControlApdu(0x01, 0x00);
+        }
+
+        public bool RFFieldOff()
+        {
+            return SendControlApdu(0x10, 0x00);
+        }
+
+        public bool RFFieldOn()
+        {
+            return SendControlApdu(0x10, 0x01);
+        }
+
+        public bool RFFieldReset()
+        {
+            return SendControlApdu(0x10, 0x02);
+        }
+
+        public bool RFFieldResetOnRemoval()
+        {
+            return SendControlApdu(0x10, 0x03);
+        }
+
+        public bool IsoAHalt()
+        {
+            return SendControlApdu(0x12, 0x01);
+        }
+
+        public bool IsoASelectAgain()
+        {
+            return SendControlApdu(0x13, 0x01);
+        }
+
+        public bool IsoVQuiet()
+        {
+            return SendControlApdu(0x12, 0x04);
+        }
+
+        public bool IsoVSelect()
+        {
+            return SendControlApdu(0x14, 0x04);
+        }
+
+        public bool TclDeselect()
+        {
+            return SendControlApdu(0x20, 0x00);
+        }
+
+        public bool TclARats()
+        {
+            return SendControlApdu(0x20, 0x01);
+        }
+
+        public bool TclBAttrib()
+        {
+            return SendControlApdu(0x20, 0x02);
+        }
+
+        public bool TclReset()
+        {
+            return SendControlApdu(0x20, 0x03);
+        }
+
+        public bool TclDisableOnce()
+        {
+            return SendControlApdu(0x20, 0x04);
+        }
+
+        public bool TclDisableForever()
+        {
+            return SendControlApdu(0x20, 0x05);
+        }
+
+        public bool TclEnable()
+        {
+            return SendControlApdu(0x20, 0x06);
+        }
+
+        public bool TclGotoRaw()
+        {
+            return SendControlApdu(0x20, 0x07);
+        }
+
+        public bool NfcFSetReadServiceCode(ushort ServiceCode)
+        {
+            return SendControlApdu(0xFC, 0x01, BinUtils.FromWord(ServiceCode));
+        }
+
+        public bool NfcFSetWriteServiceCode(ushort ServiceCode)
+        {
+            return SendControlApdu(0xFC, 0x02, BinUtils.FromWord(ServiceCode));
+        }
+
+        public bool NfcFSetSystemCode(ushort SystemCode)
+        {
+            return SendControlApdu(0xFC, 0x10, BinUtils.FromWord(SystemCode));
+        }
+
+        public bool NfcFSetRequestCode(byte RequestCode)
+        {
+            return SendControlApdu(0xFC, 0x10, new byte[1] { RequestCode });
+        }
+
+        public bool NfcVSetReadWriteOptions(byte[] ReadWriteOptions)
+        {
+            return SendControlApdu(0xFD, 0x00, ReadWriteOptions);
+        }
+
+        public bool NfcVUseBroadcastMode()
+        {
+            return SendControlApdu(0xFD, 0x10);
+        }
+
+        public bool NfcVUseAddressedMode()
+        {
+            return SendControlApdu(0xFD, 0x11);
+        }
+
+        public bool NfcVUseSelectedMode()
+        {
+            return SendControlApdu(0xFD, 0x12);
+        }
+
         public string GetTextData(byte index)
         {
             byte[] data = channel.Control(new byte[] { 0x58, 0x20, index });

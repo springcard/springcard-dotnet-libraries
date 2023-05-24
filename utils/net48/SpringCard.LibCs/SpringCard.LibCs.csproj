@@ -111,6 +111,24 @@
     <Compile Include="..\..\src\LICENSE.cs">
       <Link>LICENSE.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\logger-console.cs">
+      <Link>logger-console.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\logger-file.cs">
+      <Link>logger-file.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\logger-gelf.cs">
+      <Link>logger-gelf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\logger-reader.cs">
+      <Link>logger-reader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\logger-sink.cs">
+      <Link>logger-sink.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\logger-syslog.cs">
+      <Link>logger-syslog.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\logger-win.cs">
       <Link>logger-win.cs</Link>
     </Compile>

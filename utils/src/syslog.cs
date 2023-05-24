@@ -462,6 +462,13 @@ namespace SpringCard.LibCs
 
 		private class UdpBroadcaster : UdpClient
 		{
+			public UdpBroadcaster() : base()
+			{
+				Socket s = this.Client;
+				s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
+				s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontRoute, 1);
+			}
+
 			public UdpBroadcaster(int port) : base(port)
 			{
 				Socket s = this.Client;
@@ -474,12 +481,12 @@ namespace SpringCard.LibCs
 		{
 			if (string.IsNullOrEmpty(serverName))
 			{
-				udpClient = new UdpBroadcaster(udpPort);
+				udpClient = new UdpBroadcaster();
 				udpTarget = new IPEndPoint(IPAddress.Broadcast, udpPort);
 			}
 			else
 			{
-				udpClient = new UdpClient(udpPort);
+				udpClient = new UdpClient();
 				IPAddress[] serverAddrs = Dns.GetHostAddresses(serverName);
 				if ((serverAddrs != null) && (serverAddrs.Length >= 1))
 					udpTarget = new IPEndPoint(serverAddrs[0], udpPort);

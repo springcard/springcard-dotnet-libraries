@@ -188,23 +188,44 @@ namespace SpringCard.LibCs
 			{
 				string strLine = Line.Trim();
 
-                if (strLine.Contains(";"))
+				if (string.IsNullOrEmpty(strLine))
+					continue;
+
+				string[] e = strLine.Split(new char[] { '=' }, 2);
+				string name = e[0];
+				string value = (e.Length > 1) ? e[1] : "";
+
+				if (name.Contains(";"))
                 {
-                    strLine = strLine.Substring(0, strLine.IndexOf(';'));
-                    strLine = strLine.Trim();
+					e = name.Split(';');
+					name = e[0].Trim();
+					value = "";
                 }
-
-                if (strLine != "")
+				else if (value.StartsWith("\"") && value.EndsWith("\"") && (value.Length >= 2))
+                {
+					value = value.Substring(1, value.Length - 2);
+                }
+				else if (value.StartsWith("\'") && value.EndsWith("\'") && (value.Length >= 2))
 				{
-					Entry e = new Entry();
+					value = value.Substring(1, value.Length - 2);
+				}
+				else if (value.Contains(";"))
+                {
+					e = value.Split(';');
+					value = e[0].Trim();
+				}
 
-					string[] t = strLine.Split(new char[] { '=' }, 2);
-					e.Name = t[0].Trim();
-					e.Value = null;
-					if (t.Length > 1)
-						e.Value = t[1].Trim();
+				if (name.Length != 0)
+				{
+					Entry entry = new Entry();
 
-					Entries.Add(e);
+					if (value.Length == 0)
+						value = null;
+
+					entry.Name = name;
+					entry.Value = value;
+
+					Entries.Add(entry);
 				}
 			}
 			return true;
@@ -215,62 +236,16 @@ namespace SpringCard.LibCs
 		 */				
 		public bool Load()
 		{
-			bool Result = true;
-			TextReader cfgFile = null;
-			string strLine = null;
-
 			Entries.Clear();
 
 			if (File.Exists(FileName))
 			{
-				try
-				{
-					cfgFile = new StreamReader(FileName, FileEncoding);
-
-					strLine = cfgFile.ReadLine();
-
-					while (strLine != null)
-					{
-						strLine = strLine.Trim();
-
-						if (strLine.Contains(";"))
-							strLine = strLine.Substring(0, strLine.IndexOf(';'));
-
-						Entry e = new Entry();
-
-						string[] t = strLine.Split(new char[] { '=' }, 2);
-						e.Name = t[0].Trim();
-						e.Value = null;
-						if (t.Length > 1)
-							e.Value = t[1].Trim();
-
-						Entries.Add(e);
-
-						strLine = cfgFile.ReadLine();
-					}
-					cfgFile.Close();
-					cfgFile.Dispose();
-				}
-				catch
-				{
-					Result = false;
-				}
-				finally
-				{
-					if (cfgFile != null)
-					{
-						cfgFile.Close();
-						cfgFile.Dispose();
-					}
-				}
-
-			}
-			else
-			{
-				Result = false;
+				string[] lines = File.ReadAllLines(FileName);
+				if (lines != null)
+					return Populate(lines);
 			}
 
-			return Result;
+			return false;
 		}
 
 		/**

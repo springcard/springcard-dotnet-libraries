@@ -13,195 +13,53 @@ namespace SpringCard.LibCs.Windows
 
         public class DeviceInfo
         {
-            ManagementObject device; /* Right-click References on the right and manually add System.Management. Even though I included it in the using statement I still had to do this. Once I did, all worked fine. */
+            ManagementObject managementObject; /* Right-click References on the right and manually add System.Management. Even though I included it in the using statement I still had to do this. Once I did, all worked fine. */
 
-            public string HardwareID { get; private set; } = "";
-            private string OverrideName = "";
-            public string FriendlyName { get; private set; } = "";
-            public string Type { get; private set; } = "";
-            public string ParentPnpDeviceId { get; private set; } = "";
+            public string HardwareId { get; private set; } = "";
 
-            private void RecognizeDevice()
+            internal ManagementObject GetManagementObject()
             {
-                if (this.wVendorID == USB.SpringCard_VendorIDw)
-                {
-                    switch (this.wProductID & 0xFF00)
-                    {
-                        case 0x7000: /* CSB6 generation */
-                        case 0x7100: /* CSB6 generation */
-                        case 0x7200: /* CSB6 generation */
-                        case 0x8000: /* H512 generation */
-                        case 0x8100: /* H512 generation */
-                        case 0x8200: /* H512 generation */
-                        case 0x9000: /* H663 generaton */
-                        case 0x9100: /* H663 generaton */
-                        case 0x9200: /* H663 generaton */
-
-                            switch (this.wProductID)
-                            {
-                                case 0x7241:
-                                    FriendlyName = "SpringCard RFID Scanner";
-                                    break;
-                                case 0x9241:
-                                    FriendlyName = "SpringCard RFID Scanner HSP";
-                                    break;
-                                default:
-                                    break;
-                            }
-                            switch (this.wProductID & 0x0F00)
-                            {
-                                case 0x0000:
-                                    Type = "VCP";
-                                    break;
-                                case 0x0100:
-                                    Type = "PC/SC";
-                                    break;
-                                case 0x0200:
-                                    Type = "RFID Scanner";
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-
-                        case 0x6000:
-                            /* SpringCore ? */
-                            OverrideName = "SpringCore";
-                            switch (this.wProductID & 0x000F)
-                            {
-                                case 0x0000:
-                                case 0x0007:
-                                    Type = "Direct";
-                                    break;
-                                case 0x0001:
-                                case 0x0004:
-                                    Type = "VCP";
-                                    break;
-                                case 0x0002:
-                                case 0x000A:
-                                    Type = "PC/SC";
-                                    break;
-                                case 0x0003:
-                                    Type = "RFID Scanner";
-                                    break;
-                                default:
-                                    Type = "Unknown";
-                                    break;
-                            }
-                            break;
-
-                        case 0x6100:
-                            /* SpringCore'18 generation */
-                            switch (this.wProductID & 0x00F0)
-                            {
-                                case 0x0010:
-                                    OverrideName = "E518";
-                                    break;
-                                case 0x0020:
-                                    OverrideName = "H518";
-                                    break;
-                                case 0x0030:
-                                    OverrideName = "Puck";
-                                    break;
-                                default:
-                                    OverrideName = "SpringCore";
-                                    break;
-                            }
-                            switch (this.wProductID & 0x000F)
-                            {
-                                case 0x0000:
-                                case 0x0007:
-                                    Type = "Direct";
-                                    break;
-                                case 0x0001:
-                                case 0x0004:
-                                    Type = "VCP";
-                                    break;
-                                case 0x0002:
-                                case 0x000A:
-                                    Type = "PC/SC";
-                                    break;
-                                case 0x0003:
-                                    Type = "RFID Scanner";
-                                    break;
-                                default:
-                                    Type = "Unknown";
-                                    break;
-                            }
-                            break;
-
-                        case 0xAB00:
-                            switch (this.wProductID & 0x00F0)
-                            {
-                                /* ABC SmartCard device */
-                                case 0x00C0:
-                                    Type = "PC/SC";
-                                    break;
-                            }
-                            break;
-
-                        case 0xAF00:
-                            switch (this.wProductID & 0x00F0)
-                            {
-                                /* AFCare/Doctolib device */
-                                case 0x00C0:
-                                    Type = "PC/SC";
-                                    break;
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                else if ((this.wVendorID == 0x03EB) && (this.wProductID == 0x2FF6))
-                {
-                    Type = "Atmel DFU";
-                }
+                return managementObject;
             }
 
-            public DeviceInfo(ManagementObject device, string parent = null)
+
+            public DeviceInfo(ManagementObject managementObject)
             {
-                this.device = device;
-                this.ParentPnpDeviceId = parent;
+                this.managementObject = managementObject;
 
                 try
                 {
-                    string[] s = (string[])device.GetPropertyValue("HardwareID");
-                    HardwareID = s[0];
+                    string[] s = (string[])managementObject.GetPropertyValue("HardwareID");
+                    HardwareId = s[0];
                 } catch { }
-                if (string.IsNullOrEmpty(HardwareID))
+                if (string.IsNullOrEmpty(HardwareId))
                 {
                     try
                     {
-                        HardwareID = (string)device.GetPropertyValue("HardwareID");
+                        HardwareId = (string)managementObject.GetPropertyValue("HardwareID");
                     }
                     catch { }
                 }
 
-                if (HardwareID == null)
+                if (HardwareId == null)
                 {
-                    HardwareID = device.Path.Path;
-                    HardwareID = HardwareID.Replace("\\\\", "\\");
+                    HardwareId = managementObject.Path.Path;
+                    HardwareId = HardwareId.Replace("\\\\", "\\");
                     string C = "DeviceID=";
-                    if (HardwareID.Contains(C))
+                    if (HardwareId.Contains(C))
                     {
-                        HardwareID = HardwareID.Substring(HardwareID.IndexOf(C) + C.Length);
-                        if (HardwareID.StartsWith("\"") && HardwareID.EndsWith("\"") && (HardwareID.Length >= 2))
-                            HardwareID = HardwareID.Substring(1, HardwareID.Length - 2);
+                        HardwareId = HardwareId.Substring(HardwareId.IndexOf(C) + C.Length);
+                        if (HardwareId.StartsWith("\"") && HardwareId.EndsWith("\"") && (HardwareId.Length >= 2))
+                            HardwareId = HardwareId.Substring(1, HardwareId.Length - 2);
                     }
                 }
-
-                FriendlyName = (string)device.GetPropertyValue("Caption");
-
-                RecognizeDevice();
             }
 
             private string GetProperty(string name)
             {
                 try
                 {
-                    return (string)device.GetPropertyValue(name);
+                    return (string)managementObject.GetPropertyValue(name);
                 }
                 catch
                 {
@@ -209,7 +67,7 @@ namespace SpringCard.LibCs.Windows
                 }
             }
 
-            public string DeviceID
+            public string DeviceId
             {
                 get
                 {
@@ -217,7 +75,7 @@ namespace SpringCard.LibCs.Windows
                 }
             }
 
-            public string PnpDeviceID
+            public string PnpDeviceId
             {
                 get
                 {
@@ -237,8 +95,6 @@ namespace SpringCard.LibCs.Windows
             {
                 get
                 {
-                    if (!string.IsNullOrEmpty(OverrideName))
-                        return OverrideName;
                     return GetProperty("Name");
                 }
             }
@@ -275,123 +131,58 @@ namespace SpringCard.LibCs.Windows
                 }
             }
 
-            public string HidInstance
+            public string GetHidInstanceId()
             {
-                get
-                {
-                    string result = PnpDeviceID;
-                    result = result.ToLower();
-                    result = result.Replace(@"\", @"#");
-                    return result;
-                }
+                return HID.GetInstanceId(this);
             }
+        }
 
+        public static void Dump(ManagementObject managementObject, int depth = 0)
+        {
+            string prefix = "";
+            for (int i = 0; i < depth; i++)
+                prefix += "\t";
 
-            public string VendorID
+            foreach (PropertyData data in managementObject.Properties)
             {
-                get
+                string name = data.Name;
+                List<string> values = new List<string>();
+
+                if (data.Value != null)
                 {
-                    string s = PnpDeviceID.ToUpper();
-                    if (s.Contains("USB") && s.Contains("VID_"))
+                    if (data.Value is string)
                     {
-                        s = s.Substring(s.IndexOf("VID_") + 4, 4);
-                        return s;
+                        values.Add(data.Value as string);
                     }
-                    s = HardwareID.ToUpper();
-                    if (s.Contains("USB") && s.Contains("VID_"))
+                    else if (data.Value is string[])
                     {
-                        s = s.Substring(s.IndexOf("VID_") + 4, 4);
-                        return s;
+                        foreach (string s in data.Value as string[])
+                            values.Add(s);
                     }
-                    return "0000";
-                }
-            }
-
-            public ushort wProductID
-            {
-                get
-                {
-                    return BinConvert.ParseHexW(ProductID);
-                }
-            }
-
-            public string ProductID
-            {
-                get
-                {
-                    string s = PnpDeviceID.ToUpper();
-                    if (s.Contains("USB") && s.Contains("PID_"))
+                    else if (data.Value is byte[])
                     {
-                        s = s.Substring(s.IndexOf("PID_") + 4, 4);
-                        return s;
+                        values.Add(BinConvert.ToHex(data.Value as byte[]));
                     }
-                    s = HardwareID.ToUpper();
-                    if (s.Contains("USB") && s.Contains("PID_"))
+                    else
                     {
-                        s = s.Substring(s.IndexOf("PID_") + 4, 4);
-                        return s;
+                        values.Add(data.Value.ToString());
                     }
-                    return "0000";
                 }
-            }
 
-            public string VersionID
-            {
-                get
+                if (values.Count == 0)
                 {
-                    string s = PnpDeviceID.ToUpper();
-                    if (s.Contains("USB") && s.Contains("REV_"))
+                    // Skip
+                }
+                else if (values.Count == 1)
+                {
+                    Console.WriteLine(prefix + "{0}: {1}", name, values[0]);
+                }
+                else
+                {
+                    for (int i = 0; i < values.Count; i++)
                     {
-                        s = s.Substring(s.IndexOf("REV_") + 4, 4);
-                        return s;
+                        Console.WriteLine(prefix + "{0}#{1}: {2}", name, i, values[i]);
                     }
-                    s = HardwareID.ToUpper();
-                    if (s.Contains("USB") && s.Contains("REV_"))
-                    {
-                        s = s.Substring(s.IndexOf("REV_") + 4, 4);
-                        return s;
-                    }
-                    return "0000";
-                }
-            }
-
-            public string Version
-            {
-                get
-                {
-                    string s = VersionID;
-                    s = s.Substring(0, 2) + "." + s.Substring(2, 2);
-                    if (s.StartsWith("0")) s = s.Substring(1);
-                    return s;
-                }
-            }
-
-            public ushort wVendorID
-            {
-                get
-                {
-                    return BinConvert.ParseHexW(VendorID);
-                }
-            }
-
-            public string SerialNumber
-            {
-                get
-                {
-                    string[] s = PnpDeviceID.ToUpper().Split('\\');
-                    if (s.Length > 2)
-                    {
-                        return s[s.Length - 1];
-                    }
-                    return "";
-                }
-            }
-
-            public byte[] abSerialNumber
-            {
-                get
-                {
-                    return BinConvert.ParseHex(SerialNumber);
                 }
             }
         }
@@ -404,7 +195,9 @@ namespace SpringCard.LibCs.Windows
 		public delegate bool EnumDeviceFilter(DeviceInfo device);
 		public static List<DeviceInfo> EnumDevices(string table, string where, EnumDeviceFilter filter)
 		{
-			List<DeviceInfo> devices = new List<DeviceInfo>();
+            logger.debug("WMI:EnumDevices");
+
+            List<DeviceInfo> devices = new List<DeviceInfo>();
 			
 			try
 			{
@@ -422,33 +215,43 @@ namespace SpringCard.LibCs.Windows
 				
 				if (collection != null)
 				{
-					foreach (ManagementObject md in collection)
+					foreach (ManagementObject managementObject in collection)
 					{
 						try
 						{						
-							DeviceInfo ud = new DeviceInfo(md);
+							DeviceInfo deviceInfo = new DeviceInfo(managementObject);
 
                             if (filter != null)
                             {
-                                if (!filter(ud))
+                                if (!filter(deviceInfo))
                                 {
                                     if (WinUtils.Debug)
-                                        logger.debug("WMI:Discarding {0}", ud.FriendlyName);
+                                        logger.debug("WMI:Discarding {0}", deviceInfo.Description);
                                     continue;
                                 }
                             }
 
                             if (WinUtils.Debug)
-                                logger.debug("WMI:Adding {0}", ud.FriendlyName);
-                            devices.Add(ud);
+                                logger.debug("WMI:Adding {0}", deviceInfo.Description);
+                            devices.Add(deviceInfo);
 						}
-						catch {}						
+						catch (Exception e)
+                        {
+                            logger.warning("WMI:" + e.Message);
+                        }
 					}
 					
 					collection.Dispose();
 				}
+                else
+                {
+                    logger.debug("WMI:Empty");
+                }
 			}
-			catch {}
+			catch (Exception e)
+            {
+                logger.warning("WMI:" + e.Message);
+            }
 			
 			return devices;			
 		}

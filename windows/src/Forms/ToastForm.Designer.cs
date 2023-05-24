@@ -109,6 +109,7 @@ namespace SpringCard.LibCs.Windows.Forms
             this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ToastForm_FormClosed);
             this.Shown += new System.EventHandler(this.ToastForm_Shown);
+            this.Click += new System.EventHandler(this.ToastForm_Click);
             ((System.ComponentModel.ISupportInitialize)(this.imgIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

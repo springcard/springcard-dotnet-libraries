@@ -28,7 +28,8 @@ namespace SpringCard.LibCs.Windows
 	 */
     public class RegistryCfgFile : IConfigReader, IConfigWriter
     {
-        private Logger logger;
+        private static Logger logger = new Logger(typeof(RegistryCfgFile).FullName);
+
         private RegistryCfgFile(string keyString)
         {
             logger = new Logger(this, keyString);
@@ -372,12 +373,12 @@ namespace SpringCard.LibCs.Windows
         {
             if (Key == null)
             {
-                Logger.Error("RegistryCfgFile.Open: Key parameter is null");
+                logger.error("RegistryCfgFile.Open: Key parameter is null");
                 return null;
             }
             if (string.IsNullOrEmpty(Key.Name))
             {
-                Logger.Error("RegistryCfgFile.Open: Key.Name is null");
+                logger.error("RegistryCfgFile.Open: Key.Name is null");
                 return null;
             }
             RegistryCfgFile result = new RegistryCfgFile(Key.Name);
@@ -418,7 +419,7 @@ namespace SpringCard.LibCs.Windows
                 }
                 if (result.registryKey == null)
                 {
-                    result.logger.warning(@"Failed opening HKCU\{0} ({1})", FullPath, Writable ? "read/write" : "read only");
+                    logger.warning(@"Failed opening HKCU\{0} ({1})", FullPath, Writable ? "read/write" : "read only");
                 }
             }
             else if (Root == RegistryRoot.LocalMachine)
@@ -433,12 +434,12 @@ namespace SpringCard.LibCs.Windows
                 }
                 if (result.registryKey == null)
                 {
-                    result.logger.warning(@"Failed opening HKLM\{0} ({1})", FullPath, Writable ? "read/write" : "read only");
+                    logger.warning(@"Failed opening HKLM\{0} ({1})", FullPath, Writable ? "read/write" : "read only");
                 }
             }
             else
             {
-                result.logger.error("Invalid root");
+                logger.error("Invalid root");
                 throw new Exception("Invalid root for RegistryCfgFile");
             }
 

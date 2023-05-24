@@ -61,20 +61,30 @@ namespace SpringCard.PCSC.CardHelpers
         
         if (native_buflen > 1)
         {
+#if _SYLVAIN
           iso_buffer[4] = (byte) (native_buflen-1);            /* LC   : length of command params    */
           if (native_buflen>1)                                 /* Data : Desfire command parameters  */ 
             Array.ConstrainedCopy(native_buffer, 1, iso_buffer, 5, (int)  (native_buflen - 1));
           iso_buffer[5+native_buflen-1] = 0;                   /* LE   : accept any length in return */
           iso_buflen   = 5+native_buflen;
+#else
+          native_buflen -= 1;
+          iso_buffer[4] = (byte)(native_buflen);            /* LC   : length of command params    */
+
+          if (native_buflen > (MAX_ISO_EXCHANGE - 11))
+          {
+            iso_buffer[4] = (byte)(MAX_ISO_EXCHANGE - 11);            /* LC   : length of command params    */
+          }
+          Array.ConstrainedCopy( native_buffer, 1, iso_buffer, 5, (int)(iso_buffer[4]));
+          iso_buffer[5 + (int)(iso_buffer[4])] = 0;                   /* LE   : accept any length in return */
+          iso_buflen = 5 + (uint)(iso_buffer[4]) + 1;
+#endif
         } else
         {
           iso_buffer[4] = 0x00;                                /* LE   : accept any length in return */        
           iso_buflen   = 5;
-        }  
-        
-    
-      }
-      
+        }
+      }      
       return true;
     }
   }

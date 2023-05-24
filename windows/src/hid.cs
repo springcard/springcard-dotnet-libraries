@@ -645,5 +645,22 @@ namespace SpringCard.LibCs.Windows
         {
             return WMI.EnumDevices("Win32_PnPEntity", @"PNPDeviceID LIKE 'HID\\%'", null);
         }
-    }
+
+		public static string GetInstanceId(WMI.DeviceInfo deviceInfo)
+        {
+			string result = deviceInfo.PnpDeviceId;
+			result = result.ToLower();
+			result = result.Replace(@"\", @"#");
+			return result;
+		}
+
+		public static string GetHidInstance(USB.DeviceInfo deviceInfo)
+		{
+			string result = deviceInfo.PnpDeviceId;
+			result = result.ToLower();
+			result = result.Replace(@"\", @"#");
+			return result;
+		}
+
+	}
 }

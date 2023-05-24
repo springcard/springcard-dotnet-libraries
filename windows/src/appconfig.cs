@@ -124,8 +124,15 @@ namespace SpringCard.LibCs.Windows
 			{
                 if (WinUtils.Debug)
                     logger.debug("Save form {0} aspect: maximized", f.Name);
+
 				WriteSectionSettingBool(section, "Maximized", true);
-			} else
+
+				WriteSectionSettingInt(section, "Left", f.Left + 10);
+				WriteSectionSettingInt(section, "Top", f.Top + 10);
+				WriteSectionSettingInt(section, "Height", f.Height - 20);
+				WriteSectionSettingInt(section, "Width", f.Width - 20);
+			}
+			else
 			{
                 if (WinUtils.Debug)
                     logger.debug("Save form {0} aspect: left={1}, top={2}, height={3}, width={4}", f.Name, f.Left, f.Top, f.Height, f.Width);

@@ -1,4 +1,4 @@
-﻿#region Using directives
+#region Using directives
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SpringCard SAS, France")]
 [assembly: AssemblyProduct("SpringCard.Bluetooth")]
-[assembly: AssemblyCopyright("© SpringCard SAS, France, 2018-2022")]
+[assembly: AssemblyCopyright("© SpringCard SAS, France, 2018-2023")]
 [assembly: AssemblyTrademark("This program is an unsupported software library from SpringCard's SDK. You may use it freely, but only together with a genuine SpringCard device. Please read the associated LICENSE.txt file for further information.")]
 [assembly: AssemblyCulture("")]
 // The assembly version has following format :
@@ -20,4 +20,4 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can use the default the Revision and
 // Build Numbers by using the '*' as shown below:
-[assembly: AssemblyVersion("22.9.*")]
+[assembly: AssemblyVersion("22.09.*")]

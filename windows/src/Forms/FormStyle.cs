@@ -13,6 +13,7 @@
 /*
  * Read LICENSE.txt for license details and restrictions.
  */
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -24,9 +25,15 @@ namespace SpringCard.LibCs.Windows.Forms
 		Classical = 0,
         Modern,
 		ModernRed,
+        [Obsolete("New color chart does not use Marroon anymore")]
         ModernMarroon,
-        ModernWhite
-	}
+        ModernWhite,
+        ModernBlack,
+        ModernAccent1,
+        ModernAccent2,
+        ModernAccent1Red,
+        ModernAccent2Red
+    }
 
     public enum ControlType
     {
@@ -43,21 +50,26 @@ namespace SpringCard.LibCs.Windows.Forms
 
         private static FontFamily FixedFontFamily = new FontFamily("Consolas");
 
-        private static Font ModernDefaultFont = new Font("Calibri Light", 10, FontStyle.Regular);
-        private static Font ModernHeadingFont = new Font("Calibri Light", 24, FontStyle.Regular);
+        private static Font OldTextFont = new Font("Microsoft Sans Serif", 8, FontStyle.Regular);
+        private static Font OldHeadingFont = new Font("Microsoft Sans Serif", 12, FontStyle.Bold);
 
         public static Color BlackColor = Color.FromArgb(0, 0, 0);
+        public static Color GreyColor = Color.FromArgb(64, 64, 64);
+
         public static Color WhiteColor = Color.FromArgb(255, 255, 255);
         public static Color DarkWhiteColor = Color.FromArgb(240, 240, 240);
 
         public static Color ClassicColor = Color.FromArgb(240, 240, 240);
         public static Color DarkClassicColor = Color.FromArgb(218, 218, 218);
 
-        public static Color RedColor = Color.FromArgb(216, 10, 29);
-        public static Color MarroonColor = Color.FromArgb(174, 141, 128);
+        public static Color RedColor = Color.FromArgb(0xD8, 0x0A, 0x1D);
+        public static Color MarroonColor = Color.FromArgb(0xAE, 0x8D, 0x80);
 
         public static Color DarkRedColor = Color.FromArgb(153, 7, 20);
         public static Color DarkMarroonColor = Color.FromArgb(123, 100, 91);
+
+        public static Color Accent1Color = Color.FromArgb(0x10, 0x2C, 0x43);
+        public static Color Accent2Color = Color.FromArgb(0x2C, 0x4D, 0x60);
 
 
         public static ControlType GuessControlType(Control control)
@@ -91,16 +103,16 @@ namespace SpringCard.LibCs.Windows.Forms
         {
             Font result = null;
 
-            if (style >= FormStyle.Modern)
+            if (style < FormStyle.Modern)
             {
                 switch (controlType)
                 {
                     case ControlType.Basic:
                     case ControlType.Link:
-                        result = ModernDefaultFont;
+                        result = OldTextFont;
                         break;
                     case ControlType.Heading:
-                        result = ModernHeadingFont;
+                        result = OldHeadingFont;
                         break;
                 }
             }
@@ -127,15 +139,52 @@ namespace SpringCard.LibCs.Windows.Forms
                                 result = RedColor;
                                 break;
 
+                            case FormStyle.ModernAccent1:
+                            case FormStyle.ModernAccent1Red:
+                            case FormStyle.ModernAccent2:
+                            case FormStyle.ModernAccent2Red:
+                                result = WhiteColor;
+                                break;
+
                             case FormStyle.ModernRed:
                             case FormStyle.ModernMarroon:
+                            case FormStyle.ModernBlack:
                                 result = WhiteColor;
+                                break;
+
+                            case FormStyle.ModernWhite:
+                                result = BlackColor;
                                 break;
                         }
                         break;
 
                     case ControlType.Link:
-                        result = RedColor;
+                        switch (style)
+                        {
+                            case FormStyle.Modern:
+                            case FormStyle.ModernRed:
+                                result = RedColor;
+                                break;
+
+                            case FormStyle.ModernAccent1Red:
+                            case FormStyle.ModernAccent1:
+                                result = Accent1Color;
+                                break;
+
+                            case FormStyle.ModernAccent2Red:
+                            case FormStyle.ModernAccent2:
+                                result = Accent2Color;
+                                break;
+
+                            case FormStyle.ModernMarroon:
+                                result = DarkMarroonColor;
+                                break;
+
+                            case FormStyle.ModernWhite:
+                            case FormStyle.ModernBlack:
+                                result = GreyColor;
+                                break;
+                        }
                         break;
                 }
             }
@@ -155,6 +204,20 @@ namespace SpringCard.LibCs.Windows.Forms
 
                 case FormStyle.ModernMarroon:
                     result = MarroonColor;
+                    break;
+
+                case FormStyle.ModernBlack:
+                    result = BlackColor;
+                    break;
+
+                case FormStyle.ModernAccent1:
+                case FormStyle.ModernAccent1Red:
+                    result = Accent1Color;
+                    break;
+
+                case FormStyle.ModernAccent2:
+                case FormStyle.ModernAccent2Red:
+                    result = Accent2Color;
                     break;
             }
 
@@ -183,6 +246,9 @@ namespace SpringCard.LibCs.Windows.Forms
                         {
                             case FormStyle.ModernRed:
                             case FormStyle.ModernMarroon:
+                            case FormStyle.ModernBlack:
+                            case FormStyle.ModernAccent1:
+                            case FormStyle.ModernAccent2:
                                 control.Visible = true;
                                 break;
                             default:
@@ -197,6 +263,9 @@ namespace SpringCard.LibCs.Windows.Forms
                         {
                             case FormStyle.ModernRed:
                             case FormStyle.ModernMarroon:
+                            case FormStyle.ModernBlack:
+                            case FormStyle.ModernAccent1:
+                            case FormStyle.ModernAccent2:
                                 control.Visible = false;
                                 break;
                             default:
@@ -209,15 +278,13 @@ namespace SpringCard.LibCs.Windows.Forms
                 ControlType type = GuessControlType(control);
 
                 Font font = GetTextFont(style, type);
-                Color foreColor = GetTextColor(style, type);
 
                 if (font != null)
                 {
                     control.Font = font;
-                    /* Correct Y position */
-                    if ((type == ControlType.Heading) && (style >= FormStyle.Modern))
-                        control.Top -= 6;
                 }
+
+                Color foreColor = GetTextColor(style, type);
 
                 if (foreColor != Color.Transparent)
                 {

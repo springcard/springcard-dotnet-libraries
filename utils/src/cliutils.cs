@@ -42,6 +42,8 @@ namespace SpringCard.LibCs
             Title,
             Banner,
             Header,
+            Highlight,
+            Accent,
             Normal
         }
 
@@ -90,6 +92,14 @@ namespace SpringCard.LibCs
                 case ConsoleColorScheme.Header:
                     backgroundColor = System.ConsoleColor.DarkGray;
                     foregroundColor = System.ConsoleColor.Black;
+                    break;
+                case ConsoleColorScheme.Highlight:
+                    backgroundColor = System.ConsoleColor.DarkBlue;
+                    foregroundColor = System.ConsoleColor.White;
+                    break;
+                case ConsoleColorScheme.Accent:
+                    backgroundColor = System.ConsoleColor.DarkBlue;
+                    foregroundColor = System.ConsoleColor.Cyan;
                     break;
 
                 case ConsoleColorScheme.Normal:
@@ -142,6 +152,46 @@ namespace SpringCard.LibCs
             ConsoleColor(System.ConsoleColor.Red);
             ConsoleWriteLine(text);
             ConsoleColor();
+        }
+
+        public void Color()
+        {
+            ConsoleColor(DefaultBackgroundColor, DefaultForegroundColor);
+        }
+
+        public void Color(ConsoleColorScheme colorScheme)
+        {
+            ConsoleColor(colorScheme);
+        }
+
+        public void Write(string message, params object[] args)
+        {
+            Console.Write(message, args);
+        }
+
+        public void Write(ConsoleColorScheme colorScheme, string message, params object[] args)
+        {
+            ConsoleColor(colorScheme);
+            Console.Write(message, args);
+            ConsoleColor();
+        }
+
+        public void WriteLine(string message, params object[] args)
+        {
+            Console.WriteLine(message, args);
+        }
+
+        public void WriteLine(ConsoleColorScheme colorScheme, string message, params object[] args)
+        {
+            ConsoleColor(colorScheme);
+            Console.Write(message, args);
+            ConsoleColor();
+            Console.WriteLine();
+        }
+
+        public void WriteLine()
+        {
+            Console.WriteLine();
         }
     }
 }

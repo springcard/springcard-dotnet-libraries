@@ -42,6 +42,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
+    <OutputPath>..\..\..\_output\net48\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;_VERBOSE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
@@ -127,6 +129,16 @@
     <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_write.cs">
       <Link>DESFire_write.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_iso.cs">
+      <Link>DDESFire_iso.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_virtual.cs">
+      <Link>DESFire_virtual.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\CardHelpers\Desfire\DESFire_sign.cs">
+      <Link>DESFire_sign.cs</Link>
+    </Compile>
+    <Compile Include="Desfire_config.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

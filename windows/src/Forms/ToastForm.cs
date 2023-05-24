@@ -19,6 +19,8 @@ namespace SpringCard.LibCs.Windows.Forms
 	/// </summary>
 	public partial class ToastForm : Form
 	{
+		private static Logger logger = new Logger(typeof(ToastForm).FullName);
+
 		static List<ToastForm> _forms = new List<ToastForm>();
 		public static int PositionY = -30;
 		public static int PositionX = 20;
@@ -48,10 +50,25 @@ namespace SpringCard.LibCs.Windows.Forms
 			}
 		}
 
-		public static void Display(Form parent, string text, string caption, MessageBoxIcon icon, int autoClose)
+		public static void Display(Form parent, string text, int autoClose = 3)
+        {
+			Display(parent, text, null, MessageBoxIcon.None, autoClose);
+        }
+
+		public static void Display(Form parent, string text, string caption, MessageBoxIcon icon, int autoClose = 3)
         {
 			ToastForm f = new ToastForm();
-			f.Text = caption;
+
+			if (!string.IsNullOrEmpty(caption))
+			{
+				f.Text = caption;
+				f.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+			}
+			else
+            {
+				f.FormBorderStyle = FormBorderStyle.None;
+			}
+
 			f.lbMessage.Text = text;
 
 			Bitmap b = null;
@@ -71,7 +88,14 @@ namespace SpringCard.LibCs.Windows.Forms
 					break;
 			}
 			if (b != null)
+			{
 				f.imgIcon.Image = b;
+			}
+			else
+            {
+				f.imgIcon.Visible = false;
+				f.lbMessage.Left = f.imgIcon.Left;
+			}
 
 			f.Hash = BinConvert.ToHex(MD5.Hash(text + "|" + caption));
 
@@ -157,7 +181,7 @@ namespace SpringCard.LibCs.Windows.Forms
 		
 		private void ToastForm_Shown(object sender, EventArgs e)
 		{
-			Logger.Debug("ToastForm:Shown");
+			logger.debug("ToastForm:Shown");
 		}
 
         private void tmrAutoClose_Tick(object sender, EventArgs e)
@@ -175,5 +199,9 @@ namespace SpringCard.LibCs.Windows.Forms
 			}
 		}
 
+        private void ToastForm_Click(object sender, EventArgs e)
+        {
+			Close();
+        }
     }
 }

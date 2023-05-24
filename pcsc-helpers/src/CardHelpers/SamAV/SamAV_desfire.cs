@@ -11,6 +11,271 @@ namespace SpringCard.PCSC.CardHelpers
     {
         const int max_length_frame = 54;
 
+        public bool SelectApplication(uint aid)
+        {
+            byte[] t = new byte[3];
+            t[0] = (byte)(aid & 0x000000FF);
+            t[1] = (byte)(aid & 0x000000FF);
+            t[2] = (byte)(aid & 0x000000FF);
+            CAPDU capdu = new CAPDU(CLA, (byte)INS.SelectApplication, 0x00, 0x00, t);
+            RAPDU rapdu = Transmit(capdu);
+            if (rapdu == null)
+                return false;
+            if (rapdu.SW != 0x9000)
+            {
+                OnStatusWordError(rapdu.SW);
+                return false;
+            }
+            return true;
+        }
+
+        public class CAuthenticatePiccParameters
+        {
+            public bool EVxAuthentication = false;
+            public bool EVxAuthNonFirst = false;
+            public bool SuppressSecureMessaging = false;
+            public enum EDivMode : byte
+            {
+                AV1TwoRounds = 0x00,
+                AV1OneRound = 0x01,
+                AV2 = 0x02
+            }
+            public EDivMode DivMode = EDivMode.AV1OneRound;
+            public bool SelectDesfireKey = false;
+            public bool EnableDiv = false;
+            public byte KeyIdx;
+            public byte KeyVersion;
+            public bool EVxLRPnotEV2 = false;
+            public byte[] DivInput = null;
+        }
+
+        public bool AuthenticatePicc1(CAuthenticatePiccParameters AuthenticatePiccParameters, byte[] PiccChal, out byte[] SamChal)
+        {
+            byte p1 = 0x00;
+            byte p2 = 0x00;
+
+            if (AuthenticatePiccParameters.EnableDiv && ((AuthenticatePiccParameters.DivInput == null) || (AuthenticatePiccParameters.DivInput.Length == 0)))
+                throw new ArgumentException("UseKeyDiversification and DivInput are not coherent");
+
+            if (AuthenticatePiccParameters.EVxAuthentication)
+            {
+                p1 |= 0x80;
+                if (AuthenticatePiccParameters.EVxAuthNonFirst)
+                    p1 |= 0x40;
+            }
+            if (AuthenticatePiccParameters.SuppressSecureMessaging)
+            {
+                p1 |= 0x20;
+            }
+            if (AuthenticatePiccParameters.EnableDiv)
+            {
+                switch (AuthenticatePiccParameters.DivMode)
+                {
+                    case CAuthenticatePiccParameters.EDivMode.AV1TwoRounds:
+                        break;
+                    case CAuthenticatePiccParameters.EDivMode.AV1OneRound:
+                        p1 |= 0x08;
+                        break;
+                    case CAuthenticatePiccParameters.EDivMode.AV2:
+                        p1 |= 0x10;
+                        break;
+                }
+            }
+            if (AuthenticatePiccParameters.SelectDesfireKey)
+                p1 |= 0x02;
+            if (AuthenticatePiccParameters.EnableDiv)
+                p1 |= 0x01;
+
+            byte[] t = new byte[2];
+
+            t[0] = AuthenticatePiccParameters.KeyIdx;
+            t[1] = AuthenticatePiccParameters.KeyVersion;
+
+            if (AuthenticatePiccParameters.EVxAuthentication)
+            {
+                if (AuthenticatePiccParameters.EVxLRPnotEV2)
+                {
+                    t = BinUtils.Concat(t, 0x01);
+                }
+                else
+                {
+                    t = BinUtils.Concat(t, 0x00);
+                }
+            }
+
+            t = BinUtils.Concat(t, PiccChal);
+
+            if (AuthenticatePiccParameters.DivInput != null)
+                t = BinUtils.Concat(t, AuthenticatePiccParameters.DivInput);
+
+            SamChal = null;
+            CAPDU capdu = new CAPDU(CLA, (byte)INS.AuthenticatePicc, p1, p2, t, 0x00);
+            RAPDU rapdu = Transmit(capdu);
+            if (rapdu == null)
+                return false;
+            if (rapdu.SW != 0x90AF)
+            {
+                OnStatusWordError(rapdu.SW);
+                return false;
+            }
+            SamChal = rapdu.DataBytes;
+            return true;
+        }
+
+        public bool AuthenticatePicc2(byte[] PiccResp)
+        {
+            CAPDU capdu = new CAPDU(CLA, (byte)INS.AuthenticatePicc, 0x00, 0x00, PiccResp);
+            RAPDU rapdu = Transmit(capdu);
+            if (rapdu == null)
+                return false;
+            if (rapdu.SW != 0x9000)
+            {
+                OnStatusWordError(rapdu.SW);
+                return false;
+            }
+            return true;
+        }
+
+        public bool DesfireAuthenticatePicc(ICardApduTransmitter DesfireCard,
+            CAuthenticatePiccParameters AuthenticatePiccParameters,
+            byte DesfireAuthCommand,
+            byte DesfireKeyIdx)
+        {
+            CAPDU capdu;
+            RAPDU rapdu;
+
+            /* Send Authenticate AES command to the Desfire card */
+            /* ------------------------------------------------- */
+
+            capdu = new CAPDU(Desfire.CLA, DesfireAuthCommand, 0x00, 0x00, new byte[] { DesfireKeyIdx }, 0x00);
+            Logger.Debug("Desfire<{0}", capdu.ToString());
+            rapdu = DesfireCard.Transmit(capdu);
+            if (rapdu == null)
+            {
+                return false;
+            }
+            Logger.Debug("Desfire>{0}", rapdu.ToString());
+            if (rapdu.SW != 0x91AF)
+            {
+                OnPiccStatusWordError(rapdu.SW);
+                return false;
+            }
+
+            byte[] PiccChal = rapdu.DataBytes;
+
+            /* Send SAM_AuthenticatePICC command to the SAM */
+            /* -------------------------------------------- */
+
+            if (!AuthenticatePicc1(AuthenticatePiccParameters, PiccChal, out byte[] SamChal))
+            {
+                return false;
+            }
+
+            /* Forward SAM's response to the card */
+            /* ---------------------------------- */
+
+            capdu = new CAPDU(Desfire.CLA, 0xAF, 0x00, 0x00, SamChal, 0x00);
+            Logger.Debug("Desfire<{0}", capdu.ToString());
+            rapdu = DesfireCard.Transmit(capdu);
+            if (rapdu == null)
+            {
+                return false;
+            }
+            Logger.Debug("Desfire>{0}", rapdu.ToString());
+            if (rapdu.SW != 0x9100)
+            {
+                OnPiccStatusWordError(rapdu.SW);
+                return false;
+            }
+
+            byte[] PiccResp = rapdu.DataBytes;
+
+            /* Forward card's response to the SAM */
+            /* ---------------------------------- */
+
+            return AuthenticatePicc2(PiccResp);
+        }
+
+        public bool DesfireAuthenticateAes(ICardApduTransmitter DesfireCard,
+            byte DesfireKeyIdx,
+            byte SamKeyIdx,
+            byte KeyVersion,
+            byte[] DivInput)
+        {
+            CAuthenticatePiccParameters AuthenticatePiccParameters = new CAuthenticatePiccParameters();
+            AuthenticatePiccParameters.KeyIdx = SamKeyIdx;
+            AuthenticatePiccParameters.KeyVersion = KeyVersion;
+            if (DivInput != null)
+            {
+                AuthenticatePiccParameters.EnableDiv = true;
+                AuthenticatePiccParameters.DivMode = CAuthenticatePiccParameters.EDivMode.AV2;
+                AuthenticatePiccParameters.DivInput = DivInput;
+            }
+
+            return DesfireAuthenticatePicc(DesfireCard, AuthenticatePiccParameters, Desfire.DF_AUTHENTICATE_AES, DesfireKeyIdx);
+        }
+
+        public bool DesfireAuthenticateEV2First(ICardApduTransmitter DesfireCard,
+            byte DesfireKeyIdx,
+            byte SamKeyIdx,
+            byte KeyVersion,
+            byte[] DivInput)
+        {
+            CAuthenticatePiccParameters AuthenticatePiccParameters = new CAuthenticatePiccParameters();
+            AuthenticatePiccParameters.KeyIdx = SamKeyIdx;
+            AuthenticatePiccParameters.KeyVersion = KeyVersion;
+            AuthenticatePiccParameters.EVxAuthentication = true;
+            if (DivInput != null)
+            {
+                AuthenticatePiccParameters.EnableDiv = true;
+                AuthenticatePiccParameters.DivMode = CAuthenticatePiccParameters.EDivMode.AV2;
+                AuthenticatePiccParameters.DivInput = DivInput;
+            }
+
+            return DesfireAuthenticatePicc(DesfireCard, AuthenticatePiccParameters, Desfire.DF_AUTHENTICATE_EV2_FIRST, DesfireKeyIdx);
+        }
+
+        public bool DesfireAuthenticateAes(ICardApduTransmitter DesfireCard,
+            byte DesfireKeyIdx,
+            byte KeyVersion,
+            byte[] DivInput)
+        {
+            CAuthenticatePiccParameters AuthenticatePiccParameters = new CAuthenticatePiccParameters();
+            AuthenticatePiccParameters.SelectDesfireKey = true;
+            AuthenticatePiccParameters.KeyIdx = DesfireKeyIdx;
+            AuthenticatePiccParameters.KeyVersion = KeyVersion;
+            if (DivInput != null)
+            {
+                AuthenticatePiccParameters.EnableDiv = true;
+                AuthenticatePiccParameters.DivMode = CAuthenticatePiccParameters.EDivMode.AV2;
+                AuthenticatePiccParameters.DivInput = DivInput;
+            }
+
+            return DesfireAuthenticatePicc(DesfireCard, AuthenticatePiccParameters, Desfire.DF_AUTHENTICATE_AES, DesfireKeyIdx);
+        }
+
+        public bool DesfireAuthenticateEV2First(ICardApduTransmitter DesfireCard,
+            byte DesfireKeyIdx,
+            byte KeyVersion,
+            byte[] DivInput)
+        {
+            CAuthenticatePiccParameters AuthenticatePiccParameters = new CAuthenticatePiccParameters();
+            AuthenticatePiccParameters.SelectDesfireKey = true;
+            AuthenticatePiccParameters.KeyIdx = DesfireKeyIdx;
+            AuthenticatePiccParameters.KeyVersion = KeyVersion;
+            AuthenticatePiccParameters.EVxAuthentication = true;
+            if (DivInput != null)
+            {
+                AuthenticatePiccParameters.EnableDiv = true;
+                AuthenticatePiccParameters.DivMode = CAuthenticatePiccParameters.EDivMode.AV2;
+                AuthenticatePiccParameters.DivInput = DivInput;
+            }
+
+            return DesfireAuthenticatePicc(DesfireCard, AuthenticatePiccParameters, Desfire.DF_AUTHENTICATE_EV2_FIRST, DesfireKeyIdx);
+        }
+
+
+
         public bool DesfireAuthenticateEx(ICardApduTransmitter DesfireCard,
             byte KeyMode,
             byte DesfireKeyIdx,
@@ -64,13 +329,12 @@ namespace SpringCard.PCSC.CardHelpers
             rapdu = DesfireCard.Transmit(capdu);
             if (rapdu == null)
             {
-                _StatusWord = rapdu.SW;
                 return false;
             }
             Logger.Debug("Desfire>{0}", rapdu.ToString());
             if (rapdu.SW != 0x91AF)
             {
-                _StatusWord = rapdu.SW;
+                OnPiccStatusWordError(rapdu.SW);
                 return false;
             }
 
@@ -89,17 +353,14 @@ namespace SpringCard.PCSC.CardHelpers
                 temp = BinUtils.Concat(temp, pbDivInp);
                 capdu = new CAPDU(CLA, (byte)INS.AuthenticatePicc, p1, 0x00, temp, 0x00);
             }
-            Logger.Debug("SAM<{0}", capdu.ToString());
             rapdu = Transmit(capdu);
             if (rapdu == null)
             {
-                _StatusWord = rapdu.SW;
                 return false;
             }
-            Logger.Debug("SAM>{0}", rapdu.ToString());
             if (rapdu.SW != 0x90AF)
             {
-                _StatusWord = rapdu.SW;
+                OnStatusWordError(rapdu.SW);
                 return false;
             }
 
@@ -112,13 +373,12 @@ namespace SpringCard.PCSC.CardHelpers
             rapdu = DesfireCard.Transmit(capdu);
             if (rapdu == null)
             {
-                _StatusWord = rapdu.SW;
                 return false;
             }
             Logger.Debug("Desfire>{0}", rapdu.ToString());
             if (rapdu.SW != 0x9100)
             {
-                _StatusWord = rapdu.SW;
+                OnPiccStatusWordError(rapdu.SW);
                 return false;
             }
 
@@ -127,17 +387,14 @@ namespace SpringCard.PCSC.CardHelpers
 
             temp = rapdu.DataBytes;
             capdu = new CAPDU(CLA, (byte)INS.AuthenticatePicc, 0x00, 0x00, temp);
-            Logger.Debug("SAM<{0}", capdu.ToString());
             rapdu = Transmit(capdu);
             if (rapdu == null)
             {
-                _StatusWord = rapdu.SW;
                 return false;
             }
-            Logger.Debug("SAM>{0}", rapdu.ToString());
             if (rapdu.SW != 0x9000)
             {
-                _StatusWord = rapdu.SW;
+                OnStatusWordError(rapdu.SW);
                 return false;
             }
 
@@ -198,13 +455,11 @@ namespace SpringCard.PCSC.CardHelpers
             temp[0] = Desfire.DF_GET_CARD_UID;
 
             capdu = new CAPDU(CLA, (byte)INS.GenerateMac, 0x00, 0x00, temp, 0x00);
-            Logger.Debug("SAM<{0}", capdu.ToString());
             rapdu = Transmit(capdu);
             if (rapdu == null)
             {
                 return false;
             }
-            Logger.Debug("SAM>{0}", rapdu.ToString());
             if (rapdu.SW != 0x9000)
             {
                 return false;
@@ -238,6 +493,15 @@ namespace SpringCard.PCSC.CardHelpers
 
         public bool DesfireReadData(ICardApduTransmitter DesfireCard, byte mode, byte FileId, uint Offset, uint Length, out byte[] Data)
         {
+            return DesfireReadDataEx(DesfireCard, Desfire.DF_READ_DATA, mode, FileId, Offset, Length, out Data);
+        }
+
+        public bool DesfireReadDataIso(ICardApduTransmitter DesfireCard, byte mode, byte FileId, uint Offset, uint Length, out byte[] Data)
+        {
+            return DesfireReadDataEx(DesfireCard, Desfire.DF_READ_DATA_ISO, mode, FileId, Offset, Length, out Data);
+        }
+        public bool DesfireReadDataEx(ICardApduTransmitter DesfireCard, byte read_command, byte mode, byte FileId, uint Offset, uint Length, out byte[] Data)
+        {
             CAPDU capdu;
             RAPDU rapdu;
             byte[] temp;
@@ -265,13 +529,11 @@ namespace SpringCard.PCSC.CardHelpers
             temp[7] = (byte)((Length >> 16) & 0x0FF);
 
             capdu = new CAPDU(CLA, (byte)INS.GenerateMac, 0x00, 0x00, temp, 0x00);
-            Logger.Debug("SAM<{0}", capdu.ToString());
             rapdu = Transmit(capdu);
             if (rapdu == null)
             {
                 return false;
             }
-            Logger.Debug("SAM>{0}", rapdu.ToString());
             if (rapdu.SW != 0x9000)
             {
                 return false;
@@ -556,13 +818,11 @@ namespace SpringCard.PCSC.CardHelpers
             temp[2] = (byte)(aid & 0x000000FF);
 
             capdu = new CAPDU(CLA, (byte)INS.SelectApplication, 0x00, 0x00, temp);
-            Logger.Debug("SAM<{0}", capdu.ToString());
             rapdu = Transmit(capdu);
             if (rapdu == null)
             {
                 return false;
             }
-            Logger.Debug("SAM>{0}", rapdu.ToString());
             if (rapdu.SW != 0x9000)
             {
                 return false;
@@ -617,13 +877,11 @@ namespace SpringCard.PCSC.CardHelpers
                     }*/
 
                     capdu = new CAPDU(CLA, (byte)INS.DecipherData, 0xAF, 0x00, temp, 0x00);
-                    Logger.Debug("SAM<{0}", capdu.ToString());
                     rapdu = Transmit(capdu);
                     if (rapdu == null)
                     {
                         return false;
                     }
-                    Logger.Debug("SAM>{0}", rapdu.ToString());
                     if (decipher_data == null)
                         decipher_data = rapdu.DataBytes;
                     else
@@ -656,13 +914,11 @@ namespace SpringCard.PCSC.CardHelpers
                 }
 
                 capdu = new CAPDU(CLA, (byte)INS.DecipherData, 0x00, 0x00, temp, 0x00);
-                Logger.Debug("SAM<{0}", capdu.ToString());
                 rapdu = Transmit(capdu);
                 if (rapdu == null)
                 {
                     return false;
                 }
-                Logger.Debug("SAM>{0}", rapdu.ToString());
                 if (decipher_data == null)
                     decipher_data = rapdu.DataBytes;
                 else
@@ -700,13 +956,11 @@ namespace SpringCard.PCSC.CardHelpers
                 }
                 
                 capdu = new CAPDU(CLA, (byte)INS.DecipherData, 0x00, 0x00, temp, 0x00);
-                Logger.Debug("SAM<{0}", capdu.ToString());
                 rapdu = Transmit(capdu);
                 if (rapdu == null)
                 {
                     return false;
                 }
-                Logger.Debug("SAM>{0}", rapdu.ToString());
                 decipher_data = rapdu.DataBytes;
                 if (rapdu.SW != 0x9000)
                 {
@@ -756,13 +1010,11 @@ namespace SpringCard.PCSC.CardHelpers
                         capdu = new CAPDU(CLA, (byte)INS.CipherData, 0xAF, 0x00, temp, 0x00);
                     }
 
-                    Logger.Debug("SAM<{0}", capdu.ToString());
                     rapdu = Transmit(capdu);
                     if (rapdu == null)
                     {
                         return false;
                     }
-                    Logger.Debug("SAM>{0}", rapdu.ToString());
 
                     ciphered_data = BinUtils.Concat(ciphered_data, rapdu.DataBytes);
                     if (rapdu.SW != 0x90AF)
@@ -780,13 +1032,11 @@ namespace SpringCard.PCSC.CardHelpers
                 Array.Copy(data_to_cipher, (data_to_cipher.Length - RemainingLength), temp, 0, temp.Length);
 
                 capdu = new CAPDU(CLA, (byte)INS.CipherData, 0x00, 0x00, temp, 0x00);
-                Logger.Debug("SAM<{0}", capdu.ToString());
                 rapdu = Transmit(capdu);
                 if (rapdu == null)
                 {
                     return false;
                 }
-                Logger.Debug("SAM>{0}", rapdu.ToString());
 
                 //ciphered_data = new byte[rapdu.DataBytes.Length];
                 // Array.Copy(rapdu.DataBytes, 0, ciphered_data, 0, rapdu.DataBytes.Length);
@@ -801,13 +1051,11 @@ namespace SpringCard.PCSC.CardHelpers
             else
             {
                 capdu = new CAPDU(CLA, (byte)INS.CipherData, 0x00, (byte)offset, data_to_cipher, 0x00);
-                Logger.Debug("SAM<{0}", capdu.ToString());
                 rapdu = Transmit(capdu);
                 if (rapdu == null)
                 {
                     return false;
                 }
-                Logger.Debug("SAM>{0}", rapdu.ToString());
 
                 ciphered_data = new byte[rapdu.DataBytes.Length];
                 Array.Copy(rapdu.DataBytes, 0, ciphered_data, 0, rapdu.DataBytes.Length);
@@ -835,13 +1083,11 @@ namespace SpringCard.PCSC.CardHelpers
             /* Ask the SAM to update its CMAC */
             /* ------------------------------ */
             capdu = new CAPDU(CLA, (byte)INS.GenerateMac, 0x00, 0x00, data_to_update_mac, 0x00);
-            Logger.Debug("SAM<{0}", capdu.ToString());
             rapdu = Transmit(capdu);
             if (rapdu == null)
             {
                 return false;
             }
-            Logger.Debug("SAM>{0}", rapdu.ToString());
             if (rapdu.SW != 0x9000)
             {
                 return false;
@@ -896,13 +1142,11 @@ namespace SpringCard.PCSC.CardHelpers
                     frame = new byte[255];
                     Array.Copy(temp, idx * 255, frame, 0, 255);
                     capdu = new CAPDU(CLA, (byte)INS.VerifyMac, 0xAF, 0x00, frame);
-                    Logger.Debug("SAM<{0}", capdu.ToString());
                     rapdu = Transmit(capdu);
                     if (rapdu == null)
                     {
                         return false;
                     }
-                    Logger.Debug("SAM>{0}", rapdu.ToString());
 
                     if (rapdu.SW != 0x90AF)
                     {
@@ -914,13 +1158,11 @@ namespace SpringCard.PCSC.CardHelpers
                 frame = new byte[RemainingLength];
                 Array.Copy(temp, idx * 255, frame, 0, RemainingLength);
                 capdu = new CAPDU(CLA, (byte)INS.VerifyMac, 0x00, (byte)MacLength, frame);
-                Logger.Debug("SAM<{0}", capdu.ToString());
                 rapdu = Transmit(capdu);
                 if (rapdu == null)
                 {
                     return false;
                 }
-                Logger.Debug("SAM>{0}", rapdu.ToString());
 
                 if (rapdu.SW != 0x9000)
                 {
@@ -948,13 +1190,11 @@ namespace SpringCard.PCSC.CardHelpers
                     Array.Copy(mac_to_check, 0, temp, 0, mac_to_check.Length);
                 }
                 capdu = new CAPDU(CLA, (byte)INS.VerifyMac, 0x00, 0x00, temp);
-                Logger.Debug("SAM<{0}", capdu.ToString());
                 rapdu = Transmit(capdu);
                 if (rapdu == null)
                 {
                     return false;
                 }
-                Logger.Debug("SAM>{0}", rapdu.ToString());
 
                 if (rapdu.SW != 0x9000)
                 {
@@ -1035,7 +1275,7 @@ namespace SpringCard.PCSC.CardHelpers
             /* when the ChangeKey key of the targeting application
              * is 0E, or the master key itself is changed)
              */
-            if (DesfireKeyIdx == 0x00)
+            if ((DesfireKeyIdx == 0x00) || (DesfireKeyIdx == 0x0E) )
             {
                 KeyCompMeth |= 0x01;
             }
@@ -1058,14 +1298,11 @@ namespace SpringCard.PCSC.CardHelpers
 
             capdu = new CAPDU(CLA, (byte)INS.ChangeKeyPicc, KeyCompMeth, Cfg, temp, 0x00);
 
-            Logger.Debug("SAM<{0}", capdu.ToString());
             rapdu = Transmit(capdu);
             if (rapdu == null)
             {
                 return false;
             }
-            Logger.Debug("SAM>{0}", rapdu.ToString());
-
             if (rapdu.SW != 0x9000)
             {
                 Logger.Debug("SAM> Card not authenticated");

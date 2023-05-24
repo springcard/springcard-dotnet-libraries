@@ -196,7 +196,7 @@ namespace SpringCard.LibCs.Windows
             {
                 if (Marshal.GetLastWin32Error() != ERROR_INSUFFICIENT_BUFFER)
                 {
-                    logger.debug("SetupDiGetDeviceRegistryProperty(size) failed with err.{0}", Marshal.GetLastWin32Error());
+                    logger.warning("SetupDiGetDeviceRegistryProperty(size) failed with err.{0}", Marshal.GetLastWin32Error());
                     return null;
                 }
             }
@@ -205,7 +205,7 @@ namespace SpringCard.LibCs.Windows
 
             if (!SetupDiGetDeviceRegistryProperty(deviceInfoSet, ref deviceInfoData, property, out regType, buffer, (uint)buffer.Length, out requiredSize))
             {
-                logger.debug("SetupDiGetDeviceRegistryProperty(content) failed with err.{0}", Marshal.GetLastWin32Error());
+                logger.warning("SetupDiGetDeviceRegistryProperty(content) failed with err.{0}", Marshal.GetLastWin32Error());
                 return null;
             }
 

@@ -141,15 +141,6 @@ namespace SpringCard.PCSC.Forms
 			UpdateDisplay();
 		}
 
-		/**
-		 * \brief Create the form, specifying the color of the header (default is SpringCard-red)
-		 */
-		public ReaderSelectAnyForm(Color headerColor) : this()
-		{
-			panel1.BackColor = headerColor;
-		}
-
-
 		void ReaderSelectAnyFormShown(object sender, EventArgs e)
 		{
 			if (btnRefresh.Visible)

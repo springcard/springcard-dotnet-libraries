@@ -20,8 +20,8 @@ namespace SpringCard.PCSC.CardHelpers
     { 
       long status;
 
-      if (xfer_length > DF_MAX_INFO_FRAME_SIZE)
-        return DFCARD_LIB_CALL_ERROR;
+      /*if (xfer_length > (max_frame_size-1))
+        return DFCARD_LIB_CALL_ERROR;*/
     
 
       /* ev1 mac is calculated but not send excet for certain command */
@@ -34,9 +34,9 @@ namespace SpringCard.PCSC.CardHelpers
       }
 #if _VERBOSE
       Console.WriteLine("Command CmdCtr {0} {1}", CmdCtr, inc_counter);
-#endif     
+#endif
       status = Exchange();
-
+      
       if (status != DF_OPERATION_OK)
       {
         /*The CmdCtr is increased between the command and response */
@@ -44,19 +44,29 @@ namespace SpringCard.PCSC.CardHelpers
           CmdCtr++;
 
         return status;
-      }        
-
-      /* Check whether the PICC's response consists of at least one byte.         */
-      /* If the response is empty, we can not even determine the PICC's status.   */
-      /* Therefore an empty response is always a length error.                    */
-      if ((xfer_length < 1) || (xfer_length > MAX_INFO_FRAME_SIZE))
-      {
-        /*The CmdCtr is increased between the command and response */
-        if (inc_counter == true)
-          CmdCtr++;
-        /* Error: block with inappropriate number of bytes received from the PICC. */
-        return DFCARD_WRONG_LENGTH;
       }
+
+            /* Check whether the PICC's response consists of at least one byte.         */
+            /* If the response is empty, we can not even determine the PICC's status.   */
+            /* Therefore an empty response is always a length error.                    */
+
+      if ( (flags & NO_CHECK_RESPONSE_LENGTH) != 0x00 )
+      {
+
+      }
+      else
+      {
+        if ( (xfer_length < 1) /* || (xfer_length > max_frame_size)*/)
+        {
+          /*The CmdCtr is increased between the command and response */
+          if (inc_counter == true)
+            CmdCtr++;
+          /* Error: block with inappropriate number of bytes received from the PICC. */
+          return DFCARD_WRONG_LENGTH;
+        }
+      }
+
+      
       
       /*  Check the status byte received from the PICC.
       Depending on which of the flags (sgbWANTS_OPERATION_OK and sgbWANTS_ADDITIONAL_FRAME)
@@ -294,14 +304,22 @@ namespace SpringCard.PCSC.CardHelpers
       /* Check whether the PICC's response consists of at least one byte.
       If the response is empty, we can not even determine the PICC's status.
       Therefore an empty response is always a length error. */
-      if ((xfer_length < 1) || (xfer_length > MAX_INFO_FRAME_SIZE))
+
+      if ((xfer_length < 1) /*|| (xfer_length > max_frame_size)*/)
       {
         /* Error: block with inappropriate number of bytes received from the PICC. */
         return DFCARD_WRONG_LENGTH;
       }
-      
+
       /* Copy the buffer */
-      xfer_buffer[0] = card_status;
+      if (card_status == DF_MORE_OPERATION_OK)
+      {
+        xfer_buffer[0] = DF_OPERATION_OK;
+      }
+      else
+      {
+        xfer_buffer[0] = card_status;
+      }
 
 #if _VERBOSE
       Console.WriteLine("Exchange " + BinConvert.ToHex(xfer_buffer, xfer_length));

@@ -43,13 +43,16 @@ namespace SpringCard.PCSC.CardHelpers
         byte[] cmac_subkey_1;
         byte[] cmac_subkey_2;
 
+        const UInt32 MAX_BUFFER_EXCHANGE = 256;
+        UInt32 MAX_ISO_EXCHANGE = MAX_INFO_FRAME_SIZE;
 
 
-        #region EV2
+    #region EV2
 
-        public enum SecureMode : byte
+    public enum SecureMode : byte
         {
-            EV0 = 0x00,
+            NO = 0x00,
+            EV0,
             EV1,
             EV2
         }
@@ -59,10 +62,13 @@ namespace SpringCard.PCSC.CardHelpers
         byte[] SesAuthMACKey;
         byte[] SesAuthENCKey;
 
+        UInt32 MAX_FSC = 64;// MAX_ISO_EXCHANGE;
+
         byte[] TransactionIdentifier;
         UInt16 CmdCtr;
         byte[] PDCaps2;
         byte[] PCDCaps2;
+
         #endregion //EV2
 
         ICardTransmitter transmitter;
@@ -155,7 +161,7 @@ namespace SpringCard.PCSC.CardHelpers
         {
             this.transmitter = transmitter;
             this.isoWrapping = DF_ISO_WRAPPING_OFF;
-            xfer_buffer = new byte[64];
+            xfer_buffer = new byte[MAX_BUFFER_EXCHANGE];
             init_vector = new byte[16];
         }
 
@@ -166,7 +172,7 @@ namespace SpringCard.PCSC.CardHelpers
         {
             this.transmitter = transmitter;
             this.isoWrapping = isoWrapping;
-            xfer_buffer = new byte[64];
+            xfer_buffer = new byte[MAX_BUFFER_EXCHANGE];
             init_vector = new byte[16];
         }
 
@@ -177,7 +183,7 @@ namespace SpringCard.PCSC.CardHelpers
         {
             this.transmitter = transmitter;
             this.isoWrapping = (byte) isoWrapping;
-            xfer_buffer = new byte[64];
+            xfer_buffer = new byte[MAX_BUFFER_EXCHANGE];
             init_vector = new byte[16];
         }
 
@@ -299,7 +305,7 @@ namespace SpringCard.PCSC.CardHelpers
                 default:
                     break;
             }
-            return ("Not a Desfire error code");
+            return ("Desfire : Not a Desfire error code");
         }
     }
 }

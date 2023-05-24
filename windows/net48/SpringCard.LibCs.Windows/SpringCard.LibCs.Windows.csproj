@@ -129,6 +129,9 @@
     <Compile Include="..\..\src\devicemanagement.cs">
       <Link>devicemanagement.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\disk.cs">
+      <Link>disk.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\drivers.cs">
       <Link>drivers.cs</Link>
     </Compile>
