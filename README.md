@@ -1,66 +1,16 @@
-# SpringCard (public) .NET libraries
+# SpringCard .NET libraries (archived)
 
-This repository stores all the .NET libraries that are referenced by SpringCard's SDK and related software.
+> **This repository is archived and is no longer maintained.**
 
-## Available libraries
+The current SpringCard libraries for .NET are available as NuGet packages:
 
-### Bluetooth
+**[Browse SpringCard packages on NuGet](https://www.nuget.org/profiles/SpringCard)**
 
-A library to access BLE devices from a WPF application.
-
-### PC/SC Helpers
-
-Various libraries to work with smart cards.
-
-### PC/SC
-
-Winscard wrapper for .NET. Gives access to PC/SC readers and smart cards. 
-
-### Utils
-
-Platform-agnostic utilities.
-
-### Windows
-
-Utilities for the Windows platform.
-
-## Target platforms
-
-All the libraries target .NET Framework 4.8 (`net48`).
-
-Some of the libraries target the .NET Core 6 (`net60`) as well.
-
-## Building the libraries
-
-## Net48 targets
-
-Every library comes with its project for the Microsoft Visual Studio IDE (.sln and .csproj) in a subdirectory named `net48`.
-
-Projects have been created with Visual Studio 2017, then updated with Visual Studio 2019, and finally have updated with Visual Studio 2022.
-
-Building from the command line is easy using `MSBUILD.EXE`. Use the `BUILD-NET48.CMD` file at the root to build all the projects in a row.
-
-### Net60 targets
-
-Every library comes with its project for the Microsoft Visual Studio IDE (.sln and .csproj) in a subdirectory named `net60`.
-
-Projects have been created with Visual Studio 2022.
-
-Building from the command line is easy using `DOTNET.EXE`. Use the `BUILD-NET60.CMD` file at the root to build all the projects in a row.
-
-## Obtaining pre-compiled binaries
-
-Most customers will prefer using pre-compiled binaries instead of having to build the libraries themselves.
-
-Pre-compiled binaries are regularly released on [github.com/springcard/springcard-dotnet-libraries/releases](https://github.com/springcard/springcard-dotnet-libraries/releases).
-
-Alternatively, the binaries could easily be found in the installation directory of the software that use them, namely the [SpringCard PC/SC QuickStart package](https://www.springcard.com/en/download/find/file/sq13163) and the [SpringCard SpringCore Tools set](https://www.springcard.com/fr/download/find/file/sq20029).
+For new projects and ongoing development, use the packages published on NuGet. This repository is retained for reference and access to legacy source code.
 
 ## Documentation
 
-All the libraries are self-documented using Doxygen.
-
-Official documentation is published by SpringCard on [docs.springcard.com/](https://docs.springcard.com/).
+Documentation is available at [docs.springcard.com](https://docs.springcard.com/).
 
 ## Legal disclaimer
 
@@ -77,9 +27,3 @@ Redistribution and use in source (source code) and binary (object code) forms, w
 3. Redistribution of any modified code must be clearly identified "Code derived from original SPRINGCARD copyrighted source code", with a description of the modification and the name of its author,
 4. Redistributed object code must reproduce the above copyright notice, this list of conditions and the disclaimer below in the documentation and/or other materials provided with the distribution,
 5. The name of SPRINGCARD may not be used to endorse or promote products derived from this software or in any other form without specific prior written permission from SPRINGCARD.
-
-Please read to `LICENSE.TXT` for the complete license statement. Please always place a copy of the `LICENSE.TXT` file together with the redistributed source code or object code.
-
-## How to contact us
-
-Retrieve all our contact details on [www.springcard.com/contact](https://www.springcard.com/en/contact).
